@@ -1,0 +1,43 @@
+{
+  "messages": {
+    "eventCreate": {
+      "game": "`//name//` is hosting an event for the game `//game//`. ",
+      "time": {
+        "set": "This event starts on `//date//` at `//time//`. ",
+        "none": "This event starts when the minimum amount of people have been reached. "
+      },
+      "join": {
+        "ip": "When the event starts you can join with the ip: `//ip//`. ",
+        "username": "When the event starts you can join with `//program//` the user `//username//`. "
+      },
+      "min": {
+        "set": "There need to be a minimum amount of `//min//` players. ",
+        "none": "There is no minimum amount of players. "
+      },
+      "max": {
+        "set": "There can only be `//max//` players. ",
+        "none": "There is no maximum amount of players. "
+      },
+      "late": "\n\nIf you want to join, but only later. Than you can tick one of the clocks as a reaction."
+    },
+    "eventStarting": {
+      "start": "The `//game//` event of `//name//` is starting right now! ",
+      "join": "You said you would join on time.",
+      "late15": "You said you would join about 15 minutes late.",
+      "late30": "You said you would join about 30 minutes late.",
+      "late45": "You said you would join about 45 minutes late."
+    },
+    "eventAboutToStart": {
+      "start": "The `//game//` event of `//name//` is starting in `//minutes//` minutes. ",
+      "join": "You said you would join on time, so be ready to join in `//joiningMinutes//`. ",
+      "late15": "You said you would join about 15 minutes late, so be ready to join in about `//joiningMinutes//`. ",
+      "late30": "You said you would join about 30 minutes late, so be ready to join in about `//joiningMinutes//`. ",
+      "late45": "You said you would join about 45 minutes late, so be ready to join in about `//joiningMinutes//`. ",
+      "notDecided": "There is an `//game//` event of `//name//` about to start in `//minutes//` minutes. You might be able to still join!"
+    },
+    "eventStopped": {
+      "notEnoughPlayers": "The `//game//` event of `//name//` has not enough players. This event is now stopped, look at general chat of //game// to see if the event is still happening."
+    }
+  },
+  "games": {}
+}

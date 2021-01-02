@@ -1,0 +1,18 @@
+{
+  "name": "cyl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-cyl": "cd PreStartup; node startCyl.js"
+  },
+  "author": "Joey Stil",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "custom-env": "^2.0.1",
+    "discord.js": "^12.5.1",
+    "esm": "^3.2.25",
+    "prompt": "^1.1.0"
+  }
+}

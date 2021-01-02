@@ -1,0 +1,9 @@
+.idea/*
+.env.production
+.env.staging
+.env.local
+
+Data/*
+
+!Data/Template
+!Data/mainServerInfo.json

@@ -1,0 +1,18 @@
+{
+  "message": "What do you want to do with event? \n\n -host",
+  "host": {
+    "message": "What game would you like to host an event for? \n\n",
+    "time": "What is the date this event will start? (YYYY-MM-DD hh:mm (example: 2020-10-20 20:00))",
+    "ip": "What is the ip where people can join you?",
+    "username": "What is your username where people can join you?",
+    "program": "From what program is that username? (Discord, Steam, etc)",
+    "late": "Can people say they are late? ('yes', 'no')",
+    "min": "How many people need to join before it can start? ('false' if there is no min)",
+    "max": "What is the maximum amount of people that can join? ('false' if there is no max)",
+    "notification": "Send an notification to everyone that wants to join, when the event start? ('yes', 'no')",
+    "earlyNotification": "Should there be another notification just before the event starts? ('yes', 'no')",
+    "earlyNotificationTime": "How many minutes should that notification be send before the event?",
+    "earlyNotificationEveryone": "Should this notification be send to people who haven't decided? ('yes', 'no')",
+    "finished": "You successfully created an event!"
+  }
+}
