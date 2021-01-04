@@ -18,11 +18,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 {
     private UserTokenService $userTokenService;
     private RequestDataService $requestDataService;
+    private UserProviderInterface $userProvider;
 
-    public function __construct(UserTokenService $userTokenService, RequestDataService $requestDataService)
+    public function __construct(UserTokenService $userTokenService, RequestDataService $requestDataService, UserProviderInterface $userProvider)
     {
         $this->userTokenService = $userTokenService;
         $this->requestDataService = $requestDataService;
+        $this->userProvider = $userProvider;
     }
 
     /**
@@ -128,8 +130,18 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request)
     {
-        // set to false to turn off the authenticator (the server data will also not exist)
-        // set to true to turn on the authenticator
+        $testingInBrowser = false;
+
+        if ($testingInBrowser) {
+            $username = 'test';
+            $serverIndexOfUser = 0;
+
+            $this->requestDataService->setData([
+                "server" => $this->userProvider->loadUserByUsername($username)->getServers()[$serverIndexOfUser],
+            ]);
+            return false;
+        }
+
         return true;
     }
 }

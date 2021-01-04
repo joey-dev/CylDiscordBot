@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Command;
 use App\Entity\Server;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -9,18 +10,41 @@ use Doctrine\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
-    public function load(ObjectManager $manager)
+    private Server $mainServer;
+
+    public function load(ObjectManager $manager): void
     {
         $this->loadUsers($manager);
+        $this->loadCommands($manager);
     }
 
-    public function loadUsers(ObjectManager $manager)
+    private function loadUsers(ObjectManager $manager): void
     {
         $mainServer = $this->createMainServer();
         $mainUser = $this->createMainUser($mainServer);
 
+        $this->mainServer = $mainServer;
+
         $manager->persist($mainServer);
         $manager->persist($mainUser);
+        $manager->flush();
+    }
+
+    private function loadCommands(ObjectManager $manager): void
+    {
+        $commandNames = [
+            "server",
+        ];
+        foreach ($commandNames as $commandName) {
+            $command = new Command();
+            $command->setName($commandName);
+
+            if ($commandName === "server") {
+                $command->addServer($this->mainServer);
+            }
+            $manager->persist($command);
+        }
+
         $manager->flush();
     }
 

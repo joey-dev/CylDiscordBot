@@ -35,10 +35,16 @@ class Server
      */
     private $User;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Command::class, inversedBy="servers")
+     */
+    private $Commands;
+
     public function __construct()
     {
         $this->serverUsers = new ArrayCollection();
         $this->User = new ArrayCollection();
+        $this->Commands = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,6 +96,30 @@ class Server
     public function removeUser(User $user): self
     {
         $this->User->removeElement($user);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Command[]
+     */
+    public function getCommands(): Collection
+    {
+        return $this->Commands;
+    }
+
+    public function addCommand(Command $command): self
+    {
+        if (!$this->Commands->contains($command)) {
+            $this->Commands[] = $command;
+        }
+
+        return $this;
+    }
+
+    public function removeCommand(Command $command): self
+    {
+        $this->Commands->removeElement($command);
 
         return $this;
     }
