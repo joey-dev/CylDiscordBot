@@ -7,6 +7,7 @@ use App\Service\RequestDataService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -44,6 +45,42 @@ class CommandController extends AbstractController
 
         return new JsonResponse([
             "enabled" => false
+        ]);
+    }
+
+    /**
+     * @Route("/permissions/{name}", name="permissions")
+     * @param Request $request
+     * @param string  $name
+     * @return Response
+     * @throws \JsonException
+     */
+    public function permissions(Request $request, string $name): Response
+    {
+        $requestData = $request->getContent();
+        $requestDataAsStdClass = json_decode($requestData);
+        $command = $this->em->getRepository(Command::class)->findOneBy(["name" => $name]);
+
+        $roleIds = $requestDataAsStdClass->roleIds;
+
+        $roleFound = false;
+
+        if ($command !== null) {
+            foreach ($command->getRoles() as $role) {
+                if (in_array($role->getRoleId(), $roleIds, true)) {
+                    $roleFound = true;
+                }
+            }
+        }
+
+        if ($roleFound) {
+            return new JsonResponse([
+                "gotPermissions" => true
+            ]);
+        }
+
+        return new JsonResponse([
+            "gotPermissions" => false
         ]);
     }
 }

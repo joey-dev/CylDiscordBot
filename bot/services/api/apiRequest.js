@@ -20,7 +20,20 @@ class ApiRequest {
     {
         fetch("http://localhost:8080/api/" + url, {
             method: "GET",
-            headers: this.getHeaderInfo(serverId)
+            headers: this.getHeaderInfo(serverId),
+        })
+            .then(response => response.json())
+            .then(responseInJson => {
+                callback(responseInJson);
+            });
+    }
+
+    static post(serverId, url, callback, body = [])
+    {
+        fetch("http://localhost:8080/api/" + url, {
+            method: "POST",
+            headers: this.getHeaderInfo(serverId),
+            body: JSON.stringify(body)
         })
             .then(response => response.json())
             .then(responseInJson => {

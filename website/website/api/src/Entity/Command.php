@@ -29,9 +29,15 @@ class Command
      */
     private $servers;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Roles::class, inversedBy="commands")
+     */
+    private $roles;
+
     public function __construct()
     {
         $this->servers = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,6 +80,30 @@ class Command
         if ($this->servers->removeElement($server)) {
             $server->removeCommand($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Roles[]
+     */
+    public function getRoles(): Collection
+    {
+        return $this->roles;
+    }
+
+    public function addRole(Roles $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Roles $role): self
+    {
+        $this->roles->removeElement($role);
 
         return $this;
     }

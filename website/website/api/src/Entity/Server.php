@@ -40,11 +40,17 @@ class Server
      */
     private $Commands;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Roles::class, mappedBy="server")
+     */
+    private $roles;
+
     public function __construct()
     {
         $this->serverUsers = new ArrayCollection();
         $this->User = new ArrayCollection();
         $this->Commands = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,6 +126,36 @@ class Server
     public function removeCommand(Command $command): self
     {
         $this->Commands->removeElement($command);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Roles[]
+     */
+    public function getRoles(): Collection
+    {
+        return $this->roles;
+    }
+
+    public function addRole(Roles $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->setServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Roles $role): self
+    {
+        if ($this->roles->removeElement($role)) {
+            // set the owning side to null (unless already changed)
+            if ($role->getServer() === $this) {
+                $role->setServer(null);
+            }
+        }
 
         return $this;
     }
