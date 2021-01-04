@@ -1,0 +1,13 @@
+FROM node:14.3.0
+
+ENV NPM_CONFIG_LOGLEVEL warn
+
+WORKDIR /app
+
+COPY ./website/spa/ ./
+
+RUN npm install -g serve
+
+CMD serve -s build
+
+EXPOSE 3000
