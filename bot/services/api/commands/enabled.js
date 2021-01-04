@@ -1,8 +1,8 @@
 import ApiRequest from '../apiRequest.js';
 
 class Enabled {
-    static command(name, serverId, callback) {
-        ApiRequest.get(serverId, "commands/enabled/" + name, (response) => {
+    static command(commandName, serverId, callback) {
+        ApiRequest.get(serverId, "commands/enabled/" + commandName, (response) => {
             callback(response.enabled);
         });
     }
