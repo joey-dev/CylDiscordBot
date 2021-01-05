@@ -2,10 +2,13 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Channel;
 use App\Entity\Command;
 use App\Entity\Roles;
 use App\Entity\Server;
 use App\Entity\User;
+use App\Entity\Welcome;
+use App\Entity\WelcomeMessages;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -19,6 +22,7 @@ class AppFixtures extends Fixture
         $this->loadUsers($manager);
         $this->loadCommands($manager);
         $this->loadRoles($manager);
+        $this->loadWelcome($manager);
     }
 
     private function loadUsers(ObjectManager $manager): void
@@ -62,6 +66,29 @@ class AppFixtures extends Fixture
 
         $manager->persist($role);
 
+        $manager->flush();
+    }
+
+    private function loadWelcome(ObjectManager $manager): void
+    {
+        $welcome = new Welcome();
+        $welcome->setEnabled(true);
+        $welcome->setDiscordServerId("796010336821051402");
+        $welcome->setServer($this->mainServer);
+
+        $role = new Roles();
+        $role->setServer($this->mainServer);
+        $role->setRoleId("796025329696899072");
+        $role->setName("welcome");
+        $role->addWelcome($welcome);
+
+        $welcomeMessage = new WelcomeMessages();
+        $welcomeMessage->setMessage("Welcome //name// to the server!");
+        $welcomeMessage->setWelcome($welcome);
+
+        $manager->persist($welcome);
+        $manager->persist($role);
+        $manager->persist($welcomeMessage);
         $manager->flush();
     }
 

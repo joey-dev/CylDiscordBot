@@ -45,12 +45,19 @@ class Server
      */
     private $Roles;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Welcome::class, mappedBy="Server", cascade={"persist", "remove"})
+     */
+    private $welcome;
+
     public function __construct()
     {
         $this->serverUsers = new ArrayCollection();
         $this->User = new ArrayCollection();
         $this->Commands = new ArrayCollection();
         $this->Roles = new ArrayCollection();
+        $this->channels = new ArrayCollection();
+        $this->welcomes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,6 +163,28 @@ class Server
                 $role->setServer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWelcome(): ?Welcome
+    {
+        return $this->welcome;
+    }
+
+    public function setWelcome(?Welcome $welcome): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($welcome === null && $this->welcome !== null) {
+            $this->welcome->setServer(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($welcome !== null && $welcome->getServer() !== $this) {
+            $welcome->setServer($this);
+        }
+
+        $this->welcome = $welcome;
 
         return $this;
     }

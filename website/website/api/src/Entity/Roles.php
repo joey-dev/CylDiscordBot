@@ -39,9 +39,15 @@ class Roles
      */
     private $Commands;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Welcome::class, mappedBy="Roles")
+     */
+    private $welcomes;
+
     public function __construct()
     {
         $this->Commands = new ArrayCollection();
+        $this->welcomes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -107,6 +113,33 @@ class Roles
     {
         if ($this->Commands->removeElement($command)) {
             $command->removeRole($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Welcome[]
+     */
+    public function getWelcomes(): Collection
+    {
+        return $this->welcomes;
+    }
+
+    public function addWelcome(Welcome $welcome): self
+    {
+        if (!$this->welcomes->contains($welcome)) {
+            $this->welcomes[] = $welcome;
+            $welcome->addRole($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWelcome(Welcome $welcome): self
+    {
+        if ($this->welcomes->removeElement($welcome)) {
+            $welcome->removeRole($this);
         }
 
         return $this;

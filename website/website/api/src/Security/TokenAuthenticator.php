@@ -130,7 +130,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request)
     {
-        $testingInBrowser = true;
+        $testingInBrowser = false;
 
         if ($testingInBrowser) {
             $username = 'test';
