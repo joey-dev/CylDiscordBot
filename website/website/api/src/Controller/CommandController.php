@@ -58,6 +58,62 @@ class CommandController extends AbstractController
     }
 
     /**
+     * @Route("/status/{name}/enabled", name="status_enabled", methods={"PATCH"})
+     * @param string $name
+     * @return Response
+     */
+    public function changeToEnabled(string $name): Response
+    {
+        $server = $this->requestDataService->getData()['server'];
+        $commands = $this->em->getRepository(Command::class)->findAll();
+        $changingCommand = null;
+
+        foreach ($commands as $command) {
+            if ($command->getName() === $name) {
+                $changingCommand = $command;
+            }
+        }
+
+        if ($changingCommand !== null) {
+            $server->addCommand($changingCommand);
+            $this->em->persist($server);
+            $this->em->flush();
+        }
+
+        return new JsonResponse([
+            "enabled" => true
+        ]);
+    }
+
+    /**
+     * @Route("/status/{name}/disabled", name="status_disabled", methods={"PATCH"})
+     * @param string $name
+     * @return Response
+     */
+    public function changeToDisabled(string $name): Response
+    {
+        $server = $this->requestDataService->getData()['server'];
+        $commands = $server->getCommands();
+        $changingCommand = null;
+
+        foreach ($commands as $command) {
+            if ($command->getName() === $name) {
+                $changingCommand = $command;
+            }
+        }
+
+        if ($changingCommand !== null) {
+            $server->removeCommand($changingCommand);
+            $this->em->persist($server);
+            $this->em->flush();
+        }
+
+        return new JsonResponse([
+            "disabled" => true
+        ]);
+    }
+
+    /**
      * @Route("/enabled/{name}", name="enabled")
      * @param string $name
      * @return Response

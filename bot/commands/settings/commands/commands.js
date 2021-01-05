@@ -1,7 +1,16 @@
 import StatusAll from '../../../services/api/commands/statusAll.js';
+import Edit from './edit/edit.js';
 
 export class Commands {
     static command(message, args, client) {
+        if (args[2]) {
+            Edit.command(message, args, client);
+        } else {
+            this.getCommandCommand(message, args, client)
+        }
+    }
+
+    static getCommandCommand(message, args, client) {
         StatusAll.command(message.guild.id, (statusAll) => {
             let rows = [];
             rows[0] = ['name', 'status', 'roles with permissions'];
