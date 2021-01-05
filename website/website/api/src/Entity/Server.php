@@ -31,17 +31,17 @@ class Server
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="servers")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="Servers")
      */
     private $User;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Command::class, inversedBy="servers")
+     * @ORM\ManyToMany(targetEntity=Command::class, inversedBy="Servers")
      */
     private $Commands;
 
     /**
-     * @ORM\OneToMany(targetEntity=Roles::class, mappedBy="server")
+     * @ORM\OneToMany(targetEntity=Roles::class, mappedBy="Server")
      */
     private $Roles;
 

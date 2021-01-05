@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Command;
+use App\Entity\Roles;
 use App\Service\RequestDataService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -81,7 +82,7 @@ class CommandController extends AbstractController
         }
 
         return new JsonResponse([
-            "enabled" => true
+            "enabled" => true,
         ]);
     }
 
@@ -109,7 +110,7 @@ class CommandController extends AbstractController
         }
 
         return new JsonResponse([
-            "disabled" => true
+            "disabled" => true,
         ]);
     }
 
@@ -125,12 +126,12 @@ class CommandController extends AbstractController
 
         if ($command !== null && $server->getCommands()->contains($command)) {
             return new JsonResponse([
-                "enabled" => true
+                "enabled" => true,
             ]);
         }
 
         return new JsonResponse([
-            "enabled" => false
+            "enabled" => false,
         ]);
     }
 
@@ -161,12 +162,87 @@ class CommandController extends AbstractController
 
         if ($roleFound) {
             return new JsonResponse([
-                "gotPermissions" => true
+                "gotPermissions" => true,
             ]);
         }
 
         return new JsonResponse([
-            "gotPermissions" => false
+            "gotPermissions" => false,
+        ]);
+    }
+
+    /**
+     * @Route("/role/add/{name}", name="role_add")
+     * @param Request $request
+     * @param string  $name
+     * @return Response
+     */
+    public function addRole(Request $request, string $name): Response
+    {
+        $server = $this->requestDataService->getData()['server'];
+
+        $requestData = $request->getContent();
+        $requestDataAsStdClass = json_decode($requestData);
+
+        $role = new Roles();
+        $role->setName($requestDataAsStdClass->roleName);
+        $role->setRoleId($requestDataAsStdClass->roleId);
+        $role->setServer($server);
+
+        $commands = $this->em->getRepository(Command::class)->findAll();
+        $changingCommand = null;
+
+        foreach ($commands as $command) {
+            if ($command->getName() === $name) {
+                $changingCommand = $command;
+            }
+        }
+
+        $changingCommand->addRole($role);
+
+        $this->em->persist($role);
+        $this->em->persist($changingCommand);
+
+        $this->em->flush();
+
+        return new JsonResponse([
+            "success" => true,
+        ]);
+    }
+
+    /**
+     * @Route("/role/remove/{name}", name="role_remove")
+     * @param Request $request
+     * @param string  $name
+     * @return Response
+     */
+    public function removeRole(Request $request, string $name): Response
+    {
+        $em = $this->em;
+        $server = $this->requestDataService->getData()['server'];
+
+        $requestData = $request->getContent();
+        $requestDataAsStdClass = json_decode($requestData);
+
+        $commands = $server->getCommands();
+        $changingCommand = null;
+        $changingRole = null;
+
+        foreach ($commands as $command) {
+            if ($command->getName() === $name) {
+                $changingCommand = $command;
+            }
+        }
+
+        foreach ($changingCommand->getRoles() as $role) {
+            if ($role->getRoleId() === $requestDataAsStdClass->roleId) {
+                $em->remove($role);
+            }
+        }
+        $em->flush();
+
+        return new JsonResponse([
+            "success" => true,
         ]);
     }
 }

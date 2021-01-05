@@ -30,7 +30,7 @@ class Command
     private $Servers;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Roles::class, inversedBy="commands")
+     * @ORM\ManyToMany(targetEntity=Roles::class, inversedBy="Commands")
      */
     private $Roles;
 

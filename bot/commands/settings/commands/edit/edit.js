@@ -1,3 +1,5 @@
+import AddRole from '../../../../services/api/commands/addRole.js';
+import RemoveRole from '../../../../services/api/commands/removeRole.js';
 import Disable from '../../../../services/api/commands/disable.js';
 import Enable from '../../../../services/api/commands/enable.js';
 import Questions from '../../../../services/questions/questions.js';
@@ -71,6 +73,10 @@ class Edit {
             switch (answers[0]) {
                 case 'status':
                     this.status(answers, commandName, message);
+                    break;
+                case 'roles':
+                    this.roles(answers, commandName, message);
+                    break;
             }
             console.log(answers);
         });
@@ -81,7 +87,7 @@ class Edit {
             return el != null;
         });
 
-        if (answers[1] === 'disabled') {
+        if (filteredAnswers[1] === 'disabled') {
             Disable.command(commandName, message.guild.id, () => {
             });
         } else if (answers[1] === 'enabled') {
@@ -89,6 +95,60 @@ class Edit {
             });
         }
     }
+
+    static roles(answers, commandName, message) {
+        let filteredAnswers = answers.filter(function (el) {
+            return el != null;
+        });
+
+        switch (filteredAnswers[1]) {
+            case 'add':
+                this.roleAdd(filteredAnswers, commandName, message);
+                break;
+            case 'remove':
+                this.roleRemove(filteredAnswers, commandName, message);
+                break;
+        }
+    }
+
+    static roleAdd(answers, commandName, message) {
+        const roleName = answers[2];
+        let roleId = 0;
+
+        message.guild.roles.cache.each(role => {
+            if (role.name === roleName) {
+                roleId = role.id;
+            }
+        });
+
+        AddRole.command(commandName, roleName, roleId, message.guild.id, (answer) => {
+            if (answer) {
+                message.reply("You successfully added a role");
+            } else {
+                message.reply("Something went wrong while adding a role... Please try again later. If this keeps happening, contact the server owner");
+            }
+        });
+    }
+
+    static roleRemove(answers, commandName, message) {
+        const roleName = answers[2];
+        let roleId = 0;
+
+        message.member.roles.cache.each(role => {
+            if (role.name === roleName) {
+                roleId = role.id;
+            }
+        });
+
+        RemoveRole.command(commandName, roleName, roleId, message.guild.id, (answer) => {
+            if (answer) {
+                message.reply("You successfully removed a role");
+            } else {
+                message.reply("Something went wrong while adding a role... Please try again later. If this keeps happening, contact the server owner");
+            }
+        });
+    }
+
 }
 
 export default Edit;

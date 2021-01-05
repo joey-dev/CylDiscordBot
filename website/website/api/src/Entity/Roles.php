@@ -30,12 +30,12 @@ class Roles
     private $roleId;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Server::class, inversedBy="roles")
+     * @ORM\ManyToOne(targetEntity=Server::class, inversedBy="Roles")
      */
     private $Server;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Command::class, mappedBy="roles")
+     * @ORM\ManyToMany(targetEntity=Command::class, mappedBy="Roles")
      */
     private $Commands;
 
