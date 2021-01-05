@@ -28,6 +28,36 @@ class CommandController extends AbstractController
     }
 
     /**
+     * @Route("/status", name="status")
+     * @return Response
+     */
+    public function statusAll(): Response
+    {
+        $server = $this->requestDataService->getData()['server'];
+        $commands = $this->em->getRepository(Command::class)->findAll();
+
+        $returnList = [];
+
+        foreach ($commands as $command) {
+            $status = $server->getCommands()->contains($command);
+            $roleNames = [];
+
+            foreach ($command->getRoles() as $role) {
+                $roleNames[] = $role->getName();
+            }
+
+            $row = [];
+            $row["commandName"] = $command->getName();
+            $row["status"] = $status ? "enabled" : "disabled";
+            $row["roles"] = $roleNames;
+
+            $returnList[] = $row;
+        }
+
+        return new JsonResponse($returnList);
+    }
+
+    /**
      * @Route("/enabled/{name}", name="enabled")
      * @param string $name
      * @return Response

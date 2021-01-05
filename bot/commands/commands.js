@@ -1,5 +1,6 @@
-import Settings from '../services/settings.js';
+import {Settings as SettingsService} from '../services/settings.js';
 import Server from './server/server.js';
+import Settings from './settings/settings.js';
 
 
 class Commands {
@@ -7,7 +8,7 @@ class Commands {
         client.on('message', message => {
             const serverId = message.guild.id;
 
-            const commandPrefix = Settings.getCommandPrefix(serverId);
+            const commandPrefix = SettingsService.getCommandPrefix(serverId);
 
             if (!message.content.startsWith(commandPrefix) || message.author.bot) return;
 
@@ -21,6 +22,9 @@ class Commands {
         switch (args[0]) {
             case 'server':
                 Server.command(message, args, client);
+                break;
+            case 'settings':
+                Settings.command(message, args, client);
                 break;
         }
     }

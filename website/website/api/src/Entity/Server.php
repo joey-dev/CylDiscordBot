@@ -43,14 +43,14 @@ class Server
     /**
      * @ORM\OneToMany(targetEntity=Roles::class, mappedBy="server")
      */
-    private $roles;
+    private $Roles;
 
     public function __construct()
     {
         $this->serverUsers = new ArrayCollection();
         $this->User = new ArrayCollection();
         $this->Commands = new ArrayCollection();
-        $this->roles = new ArrayCollection();
+        $this->Roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,18 +114,18 @@ class Server
         return $this->Commands;
     }
 
-    public function addCommand(Command $command): self
+    public function addCommand(Command $Command): self
     {
-        if (!$this->Commands->contains($command)) {
-            $this->Commands[] = $command;
+        if (!$this->Commands->contains($Command)) {
+            $this->Commands[] = $Command;
         }
 
         return $this;
     }
 
-    public function removeCommand(Command $command): self
+    public function removeCommand(Command $Command): self
     {
-        $this->Commands->removeElement($command);
+        $this->Commands->removeElement($Command);
 
         return $this;
     }
@@ -135,13 +135,13 @@ class Server
      */
     public function getRoles(): Collection
     {
-        return $this->roles;
+        return $this->Roles;
     }
 
     public function addRole(Roles $role): self
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
+        if (!$this->Roles->contains($role)) {
+            $this->Roles[] = $role;
             $role->setServer($this);
         }
 
@@ -150,7 +150,7 @@ class Server
 
     public function removeRole(Roles $role): self
     {
-        if ($this->roles->removeElement($role)) {
+        if ($this->Roles->removeElement($role)) {
             // set the owning side to null (unless already changed)
             if ($role->getServer() === $this) {
                 $role->setServer(null);

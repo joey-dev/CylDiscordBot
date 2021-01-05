@@ -32,16 +32,16 @@ class Roles
     /**
      * @ORM\ManyToOne(targetEntity=Server::class, inversedBy="roles")
      */
-    private $server;
+    private $Server;
 
     /**
      * @ORM\ManyToMany(targetEntity=Command::class, mappedBy="roles")
      */
-    private $commands;
+    private $Commands;
 
     public function __construct()
     {
-        $this->commands = new ArrayCollection();
+        $this->Commands = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,12 +75,12 @@ class Roles
 
     public function getServer(): ?Server
     {
-        return $this->server;
+        return $this->Server;
     }
 
-    public function setServer(?Server $server): self
+    public function setServer(?Server $Server): self
     {
-        $this->server = $server;
+        $this->Server = $Server;
 
         return $this;
     }
@@ -90,13 +90,13 @@ class Roles
      */
     public function getCommands(): Collection
     {
-        return $this->commands;
+        return $this->Commands;
     }
 
     public function addCommand(Command $command): self
     {
-        if (!$this->commands->contains($command)) {
-            $this->commands[] = $command;
+        if (!$this->Commands->contains($command)) {
+            $this->Commands[] = $command;
             $command->addRole($this);
         }
 
@@ -105,7 +105,7 @@ class Roles
 
     public function removeCommand(Command $command): self
     {
-        if ($this->commands->removeElement($command)) {
+        if ($this->Commands->removeElement($command)) {
             $command->removeRole($this);
         }
 

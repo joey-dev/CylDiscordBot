@@ -38,7 +38,7 @@ class User implements UserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Server::class, mappedBy="User")
      */
-    private $servers;
+    private $Servers;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -48,7 +48,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->serverUsers = new ArrayCollection();
-        $this->servers = new ArrayCollection();
+        $this->Servers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,13 +100,13 @@ class User implements UserInterface
      */
     public function getServers(): Collection
     {
-        return $this->servers;
+        return $this->Servers;
     }
 
     public function addServer(Server $server): self
     {
-        if (!$this->servers->contains($server)) {
-            $this->servers[] = $server;
+        if (!$this->Servers->contains($server)) {
+            $this->Servers[] = $server;
             $server->addUser($this);
         }
 
@@ -115,7 +115,7 @@ class User implements UserInterface
 
     public function removeServer(Server $server): self
     {
-        if ($this->servers->removeElement($server)) {
+        if ($this->Servers->removeElement($server)) {
             $server->removeUser($this);
         }
 

@@ -1,4 +1,4 @@
-class Settings {
+export class Settings {
     static getCommandPrefix(serverId)
     {
         return "!";

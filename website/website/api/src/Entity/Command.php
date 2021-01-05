@@ -27,17 +27,17 @@ class Command
     /**
      * @ORM\ManyToMany(targetEntity=Server::class, mappedBy="Command")
      */
-    private $servers;
+    private $Servers;
 
     /**
      * @ORM\ManyToMany(targetEntity=Roles::class, inversedBy="commands")
      */
-    private $roles;
+    private $Roles;
 
     public function __construct()
     {
-        $this->servers = new ArrayCollection();
-        $this->roles = new ArrayCollection();
+        $this->Servers = new ArrayCollection();
+        $this->Roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -62,23 +62,23 @@ class Command
      */
     public function getServers(): Collection
     {
-        return $this->servers;
+        return $this->Servers;
     }
 
-    public function addServer(Server $server): self
+    public function addServer(Server $Server): self
     {
-        if (!$this->servers->contains($server)) {
-            $this->servers[] = $server;
-            $server->addCommand($this);
+        if (!$this->Servers->contains($Server)) {
+            $this->Servers[] = $Server;
+            $Server->addCommand($this);
         }
 
         return $this;
     }
 
-    public function removeServer(Server $server): self
+    public function removeServer(Server $Server): self
     {
-        if ($this->servers->removeElement($server)) {
-            $server->removeCommand($this);
+        if ($this->Servers->removeElement($Server)) {
+            $Server->removeCommand($this);
         }
 
         return $this;
@@ -89,13 +89,13 @@ class Command
      */
     public function getRoles(): Collection
     {
-        return $this->roles;
+        return $this->Roles;
     }
 
     public function addRole(Roles $role): self
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
+        if (!$this->Roles->contains($role)) {
+            $this->Roles[] = $role;
         }
 
         return $this;
@@ -103,7 +103,7 @@ class Command
 
     public function removeRole(Roles $role): self
     {
-        $this->roles->removeElement($role);
+        $this->Roles->removeElement($role);
 
         return $this;
     }
