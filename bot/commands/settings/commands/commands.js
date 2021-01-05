@@ -2,11 +2,6 @@ import StatusAll from '../../../services/api/commands/statusAll.js';
 
 export class Commands {
     static command(message, args, client) {
-        // TODO: Get list of all the commands
-        // TODO: Add after every command if it's enabled
-        // TODO: Add after every enabled/disabled the role names with the permissions for it
-
-
         StatusAll.command(message.guild.id, (statusAll) => {
             let rows = [];
             rows[0] = ['name', 'status', 'roles with permissions'];
