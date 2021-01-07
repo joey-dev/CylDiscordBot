@@ -11,8 +11,8 @@ class Command {
         return Permissions.command(member, commandName, callback);
     }
 
-    static isEnabledAndMemberHasPermissions(commandName, message, callback) {
-        return CheckPermissionsAndEnabled.command(commandName, message, callback);
+    static isEnabledAndMemberHasPermissions(commandName, member, callback) {
+        return CheckPermissionsAndEnabled.command(commandName, member, callback);
     }
 }
 
