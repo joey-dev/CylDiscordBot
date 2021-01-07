@@ -41,10 +41,36 @@ class ApiRequest {
             });
     }
 
+    static put(serverId, url, callback, body = [])
+    {
+        fetch("http://localhost:8080/api/" + url, {
+            method: "PUT",
+            headers: this.getHeaderInfo(serverId),
+            body: JSON.stringify(body)
+        })
+            .then(response => response.json())
+            .then(responseInJson => {
+                callback(responseInJson);
+            });
+    }
+
     static patch(serverId, url, callback, body = [])
     {
         fetch("http://localhost:8080/api/" + url, {
             method: "PATCH",
+            headers: this.getHeaderInfo(serverId),
+            body: JSON.stringify(body)
+        })
+            .then(response => response.json())
+            .then(responseInJson => {
+                callback(responseInJson);
+            });
+    }
+
+    static delete(serverId, url, callback, body = [])
+    {
+        fetch("http://localhost:8080/api/" + url, {
+            method: "DELETE",
             headers: this.getHeaderInfo(serverId),
             body: JSON.stringify(body)
         })
