@@ -1,7 +1,7 @@
 import * as Discord from "discord.js";
 import pkg from 'custom-env';
 import Commands from './commands/commands.js';
-import Passive from './passive/passive.js';
+import Modules from './modules/modules.js';
 
 class Cyl {
     constructor() {
@@ -12,7 +12,7 @@ class Cyl {
 
         client.on('ready', () => {
             new Commands(client)
-            new Passive(client)
+            new Modules(client)
             console.log('bot is ready to be used ;)');
         })
 

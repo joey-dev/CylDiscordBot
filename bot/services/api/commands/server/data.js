@@ -1,4 +1,4 @@
-import ApiRequest from '../apiRequest.js';
+import ApiRequest from '../../apiRequest.js';
 
 export class Data {
     static get(serverId, callback) {

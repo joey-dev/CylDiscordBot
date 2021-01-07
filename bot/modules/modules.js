@@ -1,9 +1,9 @@
 import Welcome from './welcome/welcome.js';
 
-class Passive {
+class Modules {
     constructor(client) {
         new Welcome(client);
     }
 }
 
-export default Passive;
+export default Modules;

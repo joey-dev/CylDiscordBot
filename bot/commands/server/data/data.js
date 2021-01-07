@@ -1,4 +1,4 @@
-import {Data as DataApi} from "../../../services/api/server/data.js";
+import {Data as DataApi} from "../../../services/api/commands/server/data.js";
 
 class Data {
     static command(message, args, client) {

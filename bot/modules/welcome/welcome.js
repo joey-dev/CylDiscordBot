@@ -1,4 +1,4 @@
-import { Data as WelcomeChannel } from '../../services/api/welcome/data.js';
+import { Data as WelcomeChannel } from '../../services/api/modules/welcome/data.js';
 
 class Welcome {
     constructor(client) {
