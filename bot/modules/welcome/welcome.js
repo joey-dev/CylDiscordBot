@@ -1,12 +1,23 @@
-// import {createCanvas, loadImage} from 'canvas';
-import pkg from 'canvas';
-// import { createCanvas } from 'canvas';
 import Canvas from 'canvas';
 import * as Discord from 'discord.js';
-import { Data as WelcomeChannel } from '../../services/api/modules/welcome/data.js';
 
 class Welcome {
-    elements = [
+    static messageData = {
+        "color": "RANDOM",
+        "descriptions": [
+            "Welcome {yellUser} to {serverName}!",
+            "Hey {yellUser}, Welcome to {serverName}!",
+        ],
+        "footer": "Welcome",
+        "withCustomPicture": true,
+        "timestamp": true,
+        "enabled": true,
+        "roles": [
+            '796025329696899072',
+        ]
+    };
+
+    static elements = [
         {
             'type': 'text',
             'text': '{username}',
@@ -54,7 +65,7 @@ class Welcome {
         },
         {
             'type': 'text',
-            'text': 'Member: #{guildMemberCount}',
+            'text': 'Member: #{serverMemberCount}',
             'font': {
                 '>0': {
                     'bold': true,
@@ -71,7 +82,7 @@ class Welcome {
         },
         {
             'type': 'text',
-            'text': '{guildName}',
+            'text': '{serverName}',
             'font': {
                 '>0': {
                     'bold': true,
@@ -98,12 +109,12 @@ class Welcome {
 
     constructor(client) {
         client.on('guildMemberAdd', member => {
-            this.sendWelcomeMessage(member, client);
+            Welcome.sendWelcomeMessage(member, client);
         });
 
         client.on('message', async message => {
             if (message.content === '!sendWelcomeMessage')
-                this.sendWelcomeMessage(message.member);
+                Welcome.sendWelcomeMessage(message.member);
         });
     }
 
@@ -126,7 +137,7 @@ class Welcome {
     //     });
     // }
 
-    sendWelcomeMessage(member) {
+    static sendWelcomeMessage(member) {
         if (!member.guild) return;
 
         this.getValues((values) => {
@@ -134,26 +145,41 @@ class Welcome {
         }, member);
     }
 
-    getCanvasImage() {
+    static getCanvasImage() {
         const {loadImage} = Canvas;
         return loadImage(`./images/welcome/emptyWelcomeImage.png`);
     }
 
-    getUserAvatar(member) {
+    static getUserAvatar(member) {
         const {loadImage} = Canvas;
         return loadImage(member.user.displayAvatarURL({format: 'jpg'}));
     }
 
-    getValues(callback, member) {
+    static getValues(callback, member) {
         Promise.all([
             this.getCanvasImage(),
             this.getUserAvatar(member),
         ]).then(values => {
+            values[2] = Welcome.messageData;
+            values[3] = Welcome.elements;
             callback(values);
         });
     }
 
-    generateAndSendImageWithText(values, member) {
+    static generateAndSendImageWithText(values, member) {
+        const messageData = values[2];
+        const elements = values[3];
+
+        if (!messageData.withCustomPicture) {
+            const descriptionIndex = this.getRandomInt(messageData.descriptions);
+
+            const welcomeEmbed = this.createEmbedMessage(messageData.color, messageData.timestamp, messageData.footer, messageData.descriptions[descriptionIndex]);
+
+            const channel = member.guild.channels.cache.find(channel => channel.id === '796010336821051402');
+            channel.send(welcomeEmbed);
+
+            return;
+        }
         const {createCanvas} = Canvas;
 
         const canvas = createCanvas(1772, 633);
@@ -164,7 +190,7 @@ class Welcome {
         ctx.strokeStyle = '#f2f2f2';
         ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-        this.elements.forEach(element => {
+        elements.forEach(element => {
             if (element.type === 'text') {
                 ctx = this.addTextElement(ctx, member, element);
             } else if (element.type === 'avatar') {
@@ -174,21 +200,19 @@ class Welcome {
 
         const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
 
-        const welcomeEmbed = new Discord.MessageEmbed()
-            .setColor('RANDOM')
-            .setTimestamp()
-            .setFooter('Welcome', member.guild.iconURL({dynamic: true}))
-            .setDescription(`**Welcome to ${member.guild.name}!**
-        Hi <@${member.id}>!, read and accept the rules!`)
-            .setImage('attachment://welcome-image.png')
-            .attachFiles(attachment);
+        const descriptionIndex = this.getRandomInt(messageData.descriptions.length);
+        const description = this.getTextWithVariablesAdded(messageData.descriptions[descriptionIndex], member);
+
+        const welcomeEmbed = this.createEmbedMessage(messageData.color, messageData.timestamp, messageData.footer, description, attachment);
 
         const channel = member.guild.channels.cache.find(channel => channel.id === '796010336821051402');
         channel.send(welcomeEmbed);
+
+        this.giveRolesToUser(member, messageData.roles);
     }
 
-    addTextElement(ctx, member, elementValues) {
-        const text = this.getFormattedText(elementValues['text'], member);
+    static addTextElement(ctx, member, elementValues) {
+        const text = this.getTextWithVariablesAdded(elementValues['text'], member);
         let font = this.getFontData(elementValues['font'], text);
 
         if (Object.entries(font).length === 0) {
@@ -211,12 +235,13 @@ class Welcome {
         return ctx;
     }
 
-    getFormattedText(text, member) {
+    static getTextWithVariablesAdded(text, member) {
         const variables = {
             'username': member.user.username,
             'discriminatorNumber': member.user.discriminator,
-            'guildMemberCount': member.guild.memberCount,
-            'guildName': member.guild.name,
+            'serverMemberCount': member.guild.memberCount,
+            'serverName': member.guild.name,
+            'yellUser': member.user,
         };
 
         for (const variableName in variables) {
@@ -229,7 +254,7 @@ class Welcome {
         return text;
     }
 
-    getFontData(fonts, text) {
+    static getFontData(fonts, text) {
         const fontKeys = Object.keys(fonts);
         let font = {};
 
@@ -255,7 +280,7 @@ class Welcome {
         return font;
     }
 
-    addAvatarElement(ctx, element, avatar) {
+    static addAvatarElement(ctx, element, avatar) {
         let x = element.position.x;
         let y = element.position.y;
         let radius = element.radius;
@@ -270,8 +295,38 @@ class Welcome {
         return ctx;
     }
 
-    getRandomInt(max) {
+    static createEmbedMessage(color, timeStamp, footer, description, attachment = false) {
+        let embedMessage = new Discord.MessageEmbed()
+            .setColor(color)
+            .setDescription(description)
+            .setImage('attachment://welcome-image.png')
+
+        if (attachment) {
+            embedMessage.attachFiles(attachment);
+        }
+
+        if (timeStamp) {
+            embedMessage.setTimestamp();
+        }
+
+        if (footer) {
+            embedMessage.setFooter(footer);
+        }
+
+        return embedMessage;
+    }
+
+    static getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    static giveRolesToUser(member, roles) {
+        for (let roleIndex = 0; roleIndex < roles.length; roleIndex++) {
+            member.guild.roles.fetch(roles[roleIndex])
+                .then(role => {
+                    member.roles.add(role);
+                });
+        }
     }
 }
 
