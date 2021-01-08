@@ -118,25 +118,6 @@ class Welcome {
         });
     }
 
-    // sendWelcomeMessage(member, client) {
-    //     WelcomeChannel.getWelcomeData(member.guild.id, (response) => {
-    //         const welcomeChannel = client.channels.cache.get(response.channelId);
-    //         const totalWelcomeMessages = response.messages.length;
-    //         const welcomeMessageUsingIndex = this.getRandomInt(totalWelcomeMessages);
-    //
-    //         const welcomeMessage = response.messages[welcomeMessageUsingIndex].replace("//name//", member);
-    //
-    //         for (let roleIndex = 0; roleIndex < response.roles.length; roleIndex++) {
-    //             member.guild.roles.fetch(response.roles[roleIndex])
-    //                 .then(role => {
-    //                     member.roles.add(role);
-    //                 });
-    //         }
-    //
-    //         welcomeChannel.send(welcomeMessage);
-    //     });
-    // }
-
     static sendWelcomeMessage(member) {
         if (!member.guild) return;
 
