@@ -1,4 +1,4 @@
-import CheckPermissionsAndEnabled from '../../services/api/commands/checkPermissionsAndEnabled.js';
+import CheckPermissionsAndEnabled from '../../services/api/command/checkPermissionsAndEnabled.js';
 import Data from './data/data.js';
 import Help from './help/help.js';
 

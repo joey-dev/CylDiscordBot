@@ -1,4 +1,4 @@
-import Command from './command';
+import Command from './command.js';
 import Enabled from './enabled.js';
 import Permissions from './permissions.js';
 

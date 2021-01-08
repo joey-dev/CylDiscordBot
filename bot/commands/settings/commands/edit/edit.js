@@ -1,7 +1,7 @@
-import AddRole from '../../../../services/api/commands/addRole.js';
-import RemoveRole from '../../../../services/api/commands/removeRole.js';
-import Disable from '../../../../services/api/commands/disable.js';
-import Enable from '../../../../services/api/commands/enable.js';
+import AddRole from '../../../../services/api/command/addRole.js';
+import RemoveRole from '../../../../services/api/command/removeRole.js';
+import Disable from '../../../../services/api/command/disable.js';
+import Enable from '../../../../services/api/command/enable.js';
 import Questions from '../../../../services/questions/questions.js';
 
 class Edit {

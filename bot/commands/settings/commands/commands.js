@@ -1,4 +1,4 @@
-import StatusAll from '../../../services/api/commands/statusAll.js';
+import StatusAll from '../../../services/api/command/statusAll.js';
 import Edit from './edit/edit.js';
 
 export class Commands {
