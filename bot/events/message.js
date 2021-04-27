@@ -15,7 +15,7 @@ module.exports.run = async (client, message) => {
     let prefix = Settings.getCommandPrefix(message.guild.id);
 
     if (message.content.indexOf(prefix) !== 0) {
-        // normal message here
+
         return;
     }
     let splitCommandMessage = message.content.split(' ');

@@ -1,5 +1,5 @@
 module.exports.run = async (client, message, args, functions) => {
-    message.channel.send(functions.helpMenuBuilder(client, message, args[0])).catch(e => { });
+    message.channel.send(functions.helpMenuBuilder(client, message, args)).catch(e => { });
 }
 
 module.exports.help = {

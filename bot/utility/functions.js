@@ -10,10 +10,14 @@ const fs = require("fs");
  * @param command
  */
 module.exports.helpMenuBuilder = (client, message, command) => {
-    if (client.commands.has(command)) {
-        command = client.commands.get(command);
-    } else if (client.aliases.has(command)) {
-        command = client.commands.get(client.aliases.get(command))
+    if (client.commands.has(command[0])) {
+        command = client.commands.get(command[0]);
+    } else if (client.aliases.has(command[0])) {
+        command = client.commands.get(client.aliases.get(command[0]))
+    } else if (client.commands.has(command[0] + " " + command[1])) {
+        command = client.commands.get(command[0] + " " + command[1]);
+    } else if (client.aliases.has(command[0] + " " + command[1])) {
+        command = client.commands.get(client.aliases.get(command[0] + " " + command[1]))
     } else {
         return;
     }
