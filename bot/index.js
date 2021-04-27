@@ -25,7 +25,6 @@ for (let module of modules) {
     for (const file of commandFiles) {
         let index = commandFiles.indexOf(file);
         let props = require(`./modules/${module}/${file}`);
-        console.log(props);
         console.log(`- Loaded: ${file} (${index + 1})`);
 
         client.commands.set(props.help.name, props);
@@ -45,15 +44,9 @@ fs.readdir("./events/", (error, files) => {
 
         console.log(`Loading event: ${eventName}`);
 
-        console.log(eventFunction)
-
         client.on(eventName, (...args) => eventFunction.run(client, ...args));
-
-        console.log('test');
     });
 });
-
-
 
 process.on("uncaughtException", (error) => {
     console.error(error);

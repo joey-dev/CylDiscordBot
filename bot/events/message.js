@@ -29,6 +29,12 @@ module.exports.run = async (client, message) => {
         executeCommand = client.commands.get(commandFile);
     } else if (client.aliases.has(commandFile)) {
         executeCommand = client.commands.get(client.aliases.get(commandFile));
+    } else if (client.commands.has(commandFile + " " + splitCommandMessage[1])) {
+        args.shift();
+        executeCommand = client.commands.get(commandFile + " " + splitCommandMessage[1]);
+    } else if (client.aliases.has(commandFile + " " + splitCommandMessage[1])) {
+        args.shift();
+        executeCommand = client.commands.get(client.aliases.get(commandFile + " " + splitCommandMessage[1]));
     } else {
         return;
     }
