@@ -1,8 +1,3 @@
-export class Settings {
-    static getCommandPrefix(serverId)
-    {
-        return "!";
-    }
+module.exports.getCommandPrefix = (serverId) => {
+    return "!";
 }
-
-export default Settings

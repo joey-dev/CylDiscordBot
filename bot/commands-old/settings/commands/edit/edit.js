@@ -1,4 +1,4 @@
-import AddRole from '../../../../services/api/command/addRole.js';
+import { Index as ServiceApiCommandRole } from '../../../../services/api/command/role/index.js';
 import RemoveRole from '../../../../services/api/command/removeRole.js';
 import Disable from '../../../../services/api/command/disable.js';
 import Enable from '../../../../services/api/command/enable.js';
@@ -121,7 +121,7 @@ class Edit {
             }
         });
 
-        AddRole.command(commandName, roleName, roleId, message.guild.id, (answer) => {
+        ServiceApiCommandRole.add(commandName, roleName, roleId, message.guild.id, (answer) => {
             if (answer) {
                 message.reply("You successfully added a role");
             } else {

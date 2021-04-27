@@ -1,7 +1,7 @@
-import ApiRequest from '../apiRequest.js';
+import ApiRequest from '../../apiRequest.js';
 
-class AddRole {
-    static command(commandName, roleName, roleId, serverId, callback) {
+export class Add {
+    static run(commandName, roleName, roleId, serverId, callback) {
         ApiRequest.patch(serverId, "commands/role/add/" + commandName, (response) => {
             callback(response.success);
         }, {
@@ -10,5 +10,3 @@ class AddRole {
         });
     }
 }
-
-export default AddRole
