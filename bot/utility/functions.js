@@ -49,14 +49,14 @@ module.exports.helpMenuBuilder = (client, message, command) => {
  * @param title {String}
  * @param desc {String}
  */
-module.exports.msgAlert = (message, title, desc) => {
-    const embed = new Discord.RichEmbed()
-        .setAuthor(message.author.tag, message.author.avatarURL)
-        .setTitle(title)
-        .setTimestamp()
-        .setDescription(desc)
-        .setColor("RANDOM")
-    return message.channel.send(embed).then(msg => msg.delete(5000));
+module.exports.msgAlert = (message, title, description) => {
+    return message.reply({
+        embed: {
+            color: 0xe5cc0b,
+            title: title,
+            description: description
+        }
+    }).then(msg => msg.delete({ timeout: 5000 }));
 }
 
 /**
