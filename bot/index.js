@@ -15,8 +15,9 @@ env('local');
 client.login(process.env.DISCORD_TOKEN);
 
 const moduleTypes = [
+    "public",
     "private",
-    "public"
+    "privateAndPublic"
 ];
 
 moduleTypes.forEach(moduleType => {
@@ -35,11 +36,15 @@ moduleTypes.forEach(moduleType => {
             console.log(`- Loaded: ${file} (${index + 1})`);
 
             switch (moduleType) {
+                case 'public':
+                    client.publicCommands.set(props.help.name, props);
+                    break;
                 case 'private':
                     client.privateCommands.set(props.help.name, props);
                     break;
-                case 'public':
+                case 'privateAndPublic':
                     client.publicCommands.set(props.help.name, props);
+                    client.privateCommands.set(props.help.name, props);
                     break;
             }
 
