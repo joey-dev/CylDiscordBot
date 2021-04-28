@@ -47,7 +47,7 @@ module.exports.helpMenuBuilder = (client, message, command) => {
 /**
  * @param message {Message}
  * @param title {String}
- * @param desc {String}
+ * @param description {String}
  */
 module.exports.msgAlert = (message, title, description) => {
     return message.reply({
