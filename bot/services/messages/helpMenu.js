@@ -1,15 +1,12 @@
-// This is the universal functions file.
-// Use this to store functions you will be using across a bunch of commands.
-// Will be easier for you to manage.
 const Discord = require("discord.js");
-const fs = require("fs");
 
 /**
  * @param client
  * @param message {Message}
  * @param command
+ * @return MessageEmbed|null
  */
-module.exports.helpMenuBuilder = (client, message, command) => {
+module.exports.run = (client, message, command) => {
     if (client.publicCommands.has(command[0])) {
         command = client.publicCommands.get(command[0]);
     } else if (client.aliases.has(command[0])) {
@@ -19,7 +16,7 @@ module.exports.helpMenuBuilder = (client, message, command) => {
     } else if (client.aliases.has(command[0] + " " + command[1])) {
         command = client.publicCommands.get(client.aliases.get(command[0] + " " + command[1]))
     } else {
-        return;
+        return null;
     }
 
     const userPermissions = command.help.userPermissions.join(", ") || "-";
@@ -28,7 +25,7 @@ module.exports.helpMenuBuilder = (client, message, command) => {
     const commandUsage = command.help.usage.join("\n");
     const examples = command.help.example.join("\n") || "-";
 
-    const helpEmbed = new Discord.MessageEmbed()
+    return new Discord.MessageEmbed()
         .setAuthor(command.help.cmdName, client.user.avatarURL)
         .setColor("RANDOM")
         .setDescription(command.help.description)
@@ -40,43 +37,4 @@ module.exports.helpMenuBuilder = (client, message, command) => {
         .addField(`Command Usage`, "```css\n" + commandUsage + "```")
         .addField(`Examples`, "```css\n" + examples + "```")
         .setTimestamp()
-
-    return helpEmbed;
 }
-
-/**
- * @param message {Message}
- * @param title {String}
- * @param description {String}
- */
-module.exports.msgAlert = (message, title, description) => {
-    return message.reply({
-        embed: {
-            color: 0xe5cc0b,
-            title: title,
-            description: description
-        }
-    }).then(msg => msg.delete({ timeout: 5000 }));
-}
-
-/**
- *
- * @param arr
- * @returns {*}
- */
-module.exports.randArr = (arr) => {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
-
-/**
- *
- * @param min {number}
- * @param max {number}
- * @returns {number}
- */
-module.exports.randomInt = (min, max) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-

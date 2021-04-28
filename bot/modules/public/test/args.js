@@ -1,4 +1,4 @@
-module.exports.run = async (client, message, args, functions) => {
+module.exports.run = async (client, message, args) => {
     try {
         let fields = [];
         args.forEach((argument, key) => {

@@ -1,9 +1,6 @@
 const Settings = require('../services/settings.js');
 
-const {
-    msgAlert,
-    helpMenuBuilder
-} = require("../utility/functions.js");
+const serviceMessage = require('../services/messages/index');
 
 const questions = require('../services/questions/index');
 
@@ -64,14 +61,14 @@ module.exports.run = async (client, message) => {
 
     if (executeModuleCommand.help.ownerOnly && process.env.OWNER_ID !== message.author.id) {
         if (executeModuleCommand.help.returnMessageOnError) {
-            return msgAlert(message, 'Denied', 'You are not this bot\'s owner.');
+            return serviceMessage.alert(message, 'Denied', 'You are not this bot\'s owner.', true);
         }
         return;
     }
 
     if (executeModuleCommand.help.testersOnly && process.env.TESTER_IDS.split(',').indexOf(message.author.id) !== -1) {
         if (executeModuleCommand.help.returnMessageOnError) {
-            return msgAlert(message, 'Denied', 'You are not a tester of this bot\'s.');
+            return serviceMessage.alert(message, 'Denied', 'You are not a tester of this bot\'s.', true);
         }
         return;
     }
@@ -80,7 +77,7 @@ module.exports.run = async (client, message) => {
         if (executeModuleCommand.help.userPermissions) {
             if (!message.channel.permissionsFor(message.member) || !message.channel.permissionsFor(message.member).has(executeModuleCommand.help.userPermissions)) {
                 if (executeModuleCommand.help.returnMessageOnError) {
-                    return msgAlert(message, 'Denied', 'You do not have the permissions needed to run this command.');
+                    return serviceMessage.alert(message, 'Denied', 'You do not have the permissions needed to run this command.', true);
                 }
                 return;
             }
@@ -89,7 +86,7 @@ module.exports.run = async (client, message) => {
         if (executeModuleCommand.help.botPermissions) {
             if (!message.channel.permissionsFor(message.guild.me) || !message.channel.permissionsFor(message.guild.me).has(executeModuleCommand.help.botPermissions)) {
                 if (executeModuleCommand.help.returnMessageOnError) {
-                    return msgAlert(message, 'Denied', 'I cannot run the command due to limited permissions.');
+                    return serviceMessage.alert(message, 'Denied', 'I cannot run the command due to limited permissions.', true);
                 }
                 return;
             }
@@ -97,9 +94,8 @@ module.exports.run = async (client, message) => {
     }
 
     if (args.length < executeModuleCommand.help.minAmountOfArguments) {
-        return message.reply(helpMenuBuilder(client, message, commandFile));
+        return message.reply(serviceMessage.helpMenu(client, message, commandFile));
     }
 
-    const functions = require('../utility/functions');
-    return executeModuleCommand.run(client, message, args, functions);
+    return executeModuleCommand.run(client, message, args);
 };

@@ -1,5 +1,12 @@
-module.exports.run = async (client, message, args, functions) => {
-    message.channel.send(functions.helpMenuBuilder(client, message, args)).catch(e => { });
+const serviceMessage = require('../../../services/messages/index');
+
+
+module.exports.run = async (client, message, args) => {
+    const helpMenu = serviceMessage.helpMenu(client, message, args);
+
+    if (helpMenu) {
+        message.channel.send(helpMenu).catch(e => { });
+    }
 }
 
 module.exports.help = {
@@ -13,7 +20,7 @@ module.exports.help = {
     userPermissions: [],
     minAmountOfArguments: 0,
     usage: ["help <Command>"],
-    example: ["help 8ball"],
+    example: ["help ping"],
     deleteCommandMessage: false,
     returnMessageOnError: true,
 }
