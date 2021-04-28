@@ -3,7 +3,9 @@ const Settings = require('../services/settings.js');
 const {
     msgAlert,
     helpMenuBuilder
-} = require("../utility/functions.js")
+} = require("../utility/functions.js");
+
+const questions = require('../services/questions/index');
 
 module.exports.run = async (client, message) => {
     if (message.author.bot) return;
@@ -15,7 +17,7 @@ module.exports.run = async (client, message) => {
     let prefix = Settings.getCommandPrefix(message.guild.id);
 
     if (message.content.indexOf(prefix) !== 0) {
-
+        questions.askQuestions(message);
         return;
     }
     let splitCommandMessage = message.content.split(' ');

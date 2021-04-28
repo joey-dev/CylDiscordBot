@@ -28,11 +28,35 @@ module.exports.run = async (client, message, args, functions) => {
                 "finish": "Yes, Finished",
             },{
                 "finish": "No, Finished",
-            }
+            },
+            0
         ];
 
         questions.askFirstQuestion(message, questionsToAsk, (message, answers) => {
-            console.log(answers);
+            let fields = [];
+            answers.forEach((argument, key) => {
+                if (argument.answer !== undefined) {
+                    fields.push({
+                        name: argument.question,
+                        value: argument.answer,
+                        inline: true
+                    });
+                }
+            });
+
+            fields.push({
+                name: answers[answers[answers.length - 1]].finish,
+                value: answers.length - 1,
+                inline: true
+            });
+
+            message.reply({
+                embed: {
+                    color: 0xe5cc0b,
+                    title: `Here are the args: `,
+                    fields: fields
+                }
+            })
         });
     }
     catch (e) {

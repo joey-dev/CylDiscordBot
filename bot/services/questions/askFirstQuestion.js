@@ -1,12 +1,11 @@
 module.exports.finishPromises = {};
 
 module.exports.run = (authorMessage, questions, finished) => {
-    let questionIndex = 0;
     const serviceApiQuestions = require("../api/questions/index.js");
 
-    serviceApiQuestions.setQuestions(authorMessage, questions, questionIndex);
+    serviceApiQuestions.setQuestions(authorMessage, questions);
 
-    authorMessage.reply(questions[questionIndex].question);
+    authorMessage.reply(questions[questions[questions.length - 1]].question);
 
-    this.finishPromises[authorMessage.id] = finished;
+    this.finishPromises[authorMessage.author.id] = finished;
 }
