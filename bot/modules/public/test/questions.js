@@ -1,6 +1,6 @@
 module.exports.run = async (client, message, args, functions) => {
     try {
-        const questions = require("../../services/questions/index.js");
+        const questions = require("../../../services/questions");
 
         const questionsToAsk = [
             {

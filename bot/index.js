@@ -5,7 +5,8 @@ const path = require('path');
 
 const client = new Discord.Client();
 
-client.commands = new Discord.Collection();
+client.publicCommands = new Discord.Collection();
+client.privateCommands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 
 const { env } = pkg;
@@ -13,27 +14,41 @@ env('local');
 
 client.login(process.env.DISCORD_TOKEN);
 
-let modules = fs.readdirSync('./modules/').filter(file => fs.statSync(path.join('./modules/', file)).isDirectory());
+const moduleTypes = [
+    "private",
+    "public"
+];
 
-for (let module of modules) {
-    console.log(`Loading module: ${module}`);
+moduleTypes.forEach(moduleType => {
+    let modules = fs.readdirSync(`./modules/${moduleType}/`).filter(file => fs.statSync(path.join(`./modules/${moduleType}/`, file)).isDirectory());
 
-    let commandFiles = fs.readdirSync(path.resolve(`./modules/${module}`)).
-    filter(file => !fs.statSync(path.resolve('./modules/', module, file)).isDirectory()).
-    filter(file => file.endsWith('.js'));
+    for (let module of modules) {
+        console.log(`Loading module: ${module}`);
 
-    for (const file of commandFiles) {
-        let index = commandFiles.indexOf(file);
-        let props = require(`./modules/${module}/${file}`);
-        console.log(`- Loaded: ${file} (${index + 1})`);
+        let commandFiles = fs.readdirSync(path.resolve(`./modules/${moduleType}/${module}`)).
+        filter(file => !fs.statSync(path.resolve(`./modules/${moduleType}/`, module, file)).isDirectory()).
+        filter(file => file.endsWith('.js'));
 
-        client.commands.set(props.help.name, props);
+        for (const file of commandFiles) {
+            let index = commandFiles.indexOf(file);
+            let props = require(`./modules/${moduleType}/${module}/${file}`);
+            console.log(`- Loaded: ${file} (${index + 1})`);
 
-        props.help.alias.forEach(alias => {
-            client.aliases.set(alias, props.help.name);
-        });
+            switch (moduleType) {
+                case 'private':
+                    client.privateCommands.set(props.help.name, props);
+                    break;
+                case 'public':
+                    client.publicCommands.set(props.help.name, props);
+                    break;
+            }
+
+            props.help.alias.forEach(alias => {
+                client.aliases.set(alias, props.help.name);
+            });
+        }
     }
-}
+});
 
 fs.readdir("./events/", (error, files) => {
     if (error) console.log(error);

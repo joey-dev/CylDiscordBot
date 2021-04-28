@@ -26,8 +26,6 @@ module.exports.run = (message) => {
         let newQuestionKey = questions[questions.length - 1];
         let newQuestion = questions[newQuestionKey];
 
-        console.log(newQuestion);
-
         if (!('finish' in newQuestion)) {
             serviceApiQuestions.setQuestions(message, questions);
 

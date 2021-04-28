@@ -8,13 +8,16 @@ const {
 const questions = require('../services/questions/index');
 
 module.exports.run = async (client, message) => {
-    if (message.author.bot) return;
-    if (!message.guild) {
-        // private message here
-        return;
-    }
+    let isPublic = true;
 
-    let prefix = Settings.getCommandPrefix(message.guild.id);
+    if (message.author.bot) return;
+    let prefix = "!";
+
+    if (!message.guild) {
+        isPublic = false;
+    } else {
+        prefix = Settings.getCommandPrefix(message.guild.id);
+    }
 
     if (message.content.indexOf(prefix) !== 0) {
         questions.askQuestions(message);
@@ -26,67 +29,77 @@ module.exports.run = async (client, message) => {
     let commandFile = command.slice(prefix.length);
     let args = splitCommandMessage.slice(1);
 
-    let executeCommand;
-    if (client.commands.has(commandFile)) {
-        executeCommand = client.commands.get(commandFile);
+    let clientCommands;
+
+    if (isPublic) {
+        clientCommands = client.publicCommands;
+    } else {
+        clientCommands = client.privateCommands;
+    }
+
+    let executeModuleCommand;
+    if (clientCommands.has(commandFile)) {
+        executeModuleCommand = clientCommands.get(commandFile);
     } else if (client.aliases.has(commandFile)) {
-        executeCommand = client.commands.get(client.aliases.get(commandFile));
-    } else if (client.commands.has(commandFile + " " + splitCommandMessage[1])) {
+        executeModuleCommand = clientCommands.get(client.aliases.get(commandFile));
+    } else if (clientCommands.has(commandFile + " " + splitCommandMessage[1])) {
         args.shift();
-        executeCommand = client.commands.get(commandFile + " " + splitCommandMessage[1]);
+        executeModuleCommand = clientCommands.get(commandFile + " " + splitCommandMessage[1]);
     } else if (client.aliases.has(commandFile + " " + splitCommandMessage[1])) {
         args.shift();
-        executeCommand = client.commands.get(client.aliases.get(commandFile + " " + splitCommandMessage[1]));
+        executeModuleCommand = clientCommands.get(client.aliases.get(commandFile + " " + splitCommandMessage[1]));
     } else {
         return;
     }
 
-    if (!executeCommand) {
+    if (!executeModuleCommand) {
         return;
     }
 
 
-    if (executeCommand.help.deleteCommandMessage) {
+    if (executeModuleCommand.help.deleteCommandMessage) {
         message.delete().catch(error => {
         });
     }
 
-    if (executeCommand.help.ownerOnly && process.env.OWNER_ID !== message.author.id) {
-        if (executeCommand.help.returnMessageOnError) {
+    if (executeModuleCommand.help.ownerOnly && process.env.OWNER_ID !== message.author.id) {
+        if (executeModuleCommand.help.returnMessageOnError) {
             return msgAlert(message, 'Denied', 'You are not this bot\'s owner.');
         }
         return;
     }
 
-    if (executeCommand.help.testersOnly && process.env.TESTER_IDS.split(',').indexOf(message.author.id) !== -1) {
-        if (executeCommand.help.returnMessageOnError) {
+    if (executeModuleCommand.help.testersOnly && process.env.TESTER_IDS.split(',').indexOf(message.author.id) !== -1) {
+        if (executeModuleCommand.help.returnMessageOnError) {
             return msgAlert(message, 'Denied', 'You are not a tester of this bot\'s.');
         }
         return;
     }
 
-    if (executeCommand.help.userPermissions) {
-        if (!message.channel.permissionsFor(message.member) || !message.channel.permissionsFor(message.member).has(executeCommand.help.userPermissions)) {
-            if (executeCommand.help.returnMessageOnError) {
-                return msgAlert(message, 'Denied', 'You do not have the permissions needed to run this command.');
+    if (isPublic) {
+        if (executeModuleCommand.help.userPermissions) {
+            if (!message.channel.permissionsFor(message.member) || !message.channel.permissionsFor(message.member).has(executeModuleCommand.help.userPermissions)) {
+                if (executeModuleCommand.help.returnMessageOnError) {
+                    return msgAlert(message, 'Denied', 'You do not have the permissions needed to run this command.');
+                }
+                return;
             }
-            return;
+        }
+
+        if (executeModuleCommand.help.botPermissions) {
+            if (!message.channel.permissionsFor(message.guild.me) || !message.channel.permissionsFor(message.guild.me).has(executeModuleCommand.help.botPermissions)) {
+                if (executeModuleCommand.help.returnMessageOnError) {
+                    return msgAlert(message, 'Denied', 'I cannot run the command due to limited permissions.');
+                }
+                return;
+            }
         }
     }
 
-    if (executeCommand.help.botPermissions) {
-        if (!message.channel.permissionsFor(message.guild.me) || !message.channel.permissionsFor(message.guild.me).has(executeCommand.help.botPermissions)) {
-            if (executeCommand.help.returnMessageOnError) {
-                return msgAlert(message, 'Denied', 'I cannot run the command due to limited permissions.');
-            }
-            return;
-        }
-    }
-
-    if (args.length < executeCommand.help.minAmountOfArguments) {
-        return message.channel.send(helpMenuBuilder(client, message, commandFile));
+    if (args.length < executeModuleCommand.help.minAmountOfArguments) {
+        return message.reply(helpMenuBuilder(client, message, commandFile));
     }
 
     const functions = require('../utility/functions');
-    return executeCommand.run(client, message, args, functions);
+    return executeModuleCommand.run(client, message, args, functions);
 };
