@@ -1,5 +1,8 @@
+// location: ./events/
+
 module.exports.run = async (client, message, services) => {
     services = require('./../services/index');
+    console.log('works!!!!');
 
     let isPublic = true;
 

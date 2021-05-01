@@ -1,9 +1,9 @@
 module.exports.run = async (client, message, args, services) => {
     try {
         console.log('reloading modules');
-        client.serviceRequires.push(() => {
-            services = require('../../../services/index');
-        });
+        // client.serviceRequires.push(() => {
+        //     services = require('../../../services/index');
+        // });
 
         services.load.modules(client, services);
     }

@@ -10,9 +10,9 @@ client.privateCommands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.serviceRequires = [];
 
-client.serviceRequires.push(() => {
-    services = require('./services/index');
-});
+// client.serviceRequires.push(() => {
+//     services = require('./services/index');
+// });
 
 console.log(client.serviceRequires);
 
