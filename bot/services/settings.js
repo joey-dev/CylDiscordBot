@@ -1,3 +1,3 @@
-module.exports.getCommandPrefix = (serverId) => {
+module.exports.getCommandPrefix = (serverId, services) => {
     return "!";
 }

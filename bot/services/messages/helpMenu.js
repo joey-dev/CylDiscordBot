@@ -4,9 +4,10 @@ const Discord = require("discord.js");
  * @param client
  * @param message {Message}
  * @param command
+ * @param services
  * @return MessageEmbed|null
  */
-module.exports.run = (client, message, command) => {
+module.exports.run = (client, message, command, services) => {
     if (client.publicCommands.has(command[0])) {
         command = client.publicCommands.get(command[0]);
     } else if (client.aliases.has(command[0])) {

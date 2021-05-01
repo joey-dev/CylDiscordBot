@@ -1,4 +1,4 @@
-module.exports.run = async (client) => {
+module.exports.run = async (client, services) => {
     let date = new Date();
     console.log('\x1b[33m', `${client.user.tag} (${client.user.id}) has started on ${date}.`);
     await client.user.setActivity(

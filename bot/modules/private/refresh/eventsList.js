@@ -1,11 +1,11 @@
-const serviceLoad = require('../../../services/load/index');
-
-
-module.exports.run = async (client, message, args, functions) => {
+module.exports.run = async (client, message, args, services) => {
     try {
         console.log('reloading events');
+        client.serviceRequires.push(() => {
+            services = require('../../../services/index');
+        });
 
-        serviceLoad.events(client);
+        services.load.events(client, services);
     }
     catch (e) {
         console.log(e);

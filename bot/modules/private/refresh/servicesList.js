@@ -1,11 +1,10 @@
 module.exports.run = async (client, message, args, services) => {
     try {
-        console.log('reloading modules');
+        console.log('reloading services');
         client.serviceRequires.push(() => {
             services = require('../../../services/index');
         });
-
-        services.load.modules(client, services);
+        services.load.services(client, services);
     }
     catch (e) {
         console.log(e);
@@ -13,17 +12,17 @@ module.exports.run = async (client, message, args, services) => {
 }
 
 module.exports.help = {
-    name: "refresh moduleList",
-    cmdName: "refresh moduleList",
+    name: "refresh servicesList",
+    cmdName: "refresh servicesList",
     alias: [],
-    description: "Refreshes the module list, new modules will be added and old once will be removed",
+    description: "Refreshes the services list, new services will be added, old once will be removed, and all services will be updated",
     ownerOnly: true,
     testersOnly: false,
     botPermissions: [],
     userPermissions: [],
     minAmountOfArguments: 0,
-    usage: ["refresh moduleList"],
-    example: ["refresh moduleList"],
+    usage: ["refresh servicesList"],
+    example: ["refresh servicesList"],
     deleteCommandMessage: false,
     returnMessageOnError: true,
 }

@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 
-module.exports.run = (message, questions) => {
+module.exports.run = (message, questions, services) => {
     const questionsDatabaseJson = fs.readFileSync("tempDatabase/questions.json");
     const questionsDatabaseObject = JSON.parse(questionsDatabaseJson);
 

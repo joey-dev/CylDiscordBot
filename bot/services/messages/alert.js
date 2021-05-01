@@ -3,8 +3,9 @@
  * @param title {String}
  * @param description {String}
  * @param deleteAfter {Boolean}
+ * @param services
  */
-module.exports.run = (message, title, description, deleteAfter = true) => {
+module.exports.run = (message, title, description, deleteAfter = true, services) => {
     return message.reply({
         embed: {
             color: 0xe5cc0b,

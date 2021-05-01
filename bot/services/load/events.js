@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 
-module.exports.run = async (client) => {
+module.exports.run = async (client, services) => {
     try {
         fs.readdir(`./events/`, (error, files) => {
             if (error) console.log(error);
@@ -12,7 +12,7 @@ module.exports.run = async (client) => {
 
                 console.log(`Loading event: ${eventName}`);
 
-                client.on(eventName, (...args) => eventFunction.run(client, ...args));
+                client.on(eventName, (...args) => eventFunction.run(client, ...args, services));
             });
         });
     }

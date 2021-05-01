@@ -1,6 +1,6 @@
 module.exports.finishPromises = {};
 
-module.exports.run = (message) => {
+module.exports.run = (message, services) => {
     const serviceApiQuestions = require("../api/questions/index.js");
 
     const questions = serviceApiQuestions.getQuestions(message.author.id);

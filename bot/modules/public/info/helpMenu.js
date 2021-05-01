@@ -1,8 +1,5 @@
-const serviceMessage = require('../../../services/messages/index');
-
-
-module.exports.run = async (client, message, args) => {
-    const helpMenu = serviceMessage.helpMenu(client, message, args);
+module.exports.run = async (client, message, args, services) => {
+    const helpMenu = services.messages.helpMenu(client, message, args, services);
 
     if (helpMenu) {
         message.channel.send(helpMenu).catch(e => { });

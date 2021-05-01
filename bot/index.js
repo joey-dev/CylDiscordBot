@@ -1,22 +1,29 @@
 const Discord = require("discord.js");
 const pkg = require('custom-env');
-const fs = require('fs');
-const serviceLoad = require('./services/load/index');
-
 const client = new Discord.Client();
+
+let services = require('./services/index');
+
 
 client.publicCommands = new Discord.Collection();
 client.privateCommands = new Discord.Collection();
 client.aliases = new Discord.Collection();
+client.serviceRequires = [];
+
+client.serviceRequires.push(() => {
+    services = require('./services/index');
+});
+
+console.log(client.serviceRequires);
 
 const { env } = pkg;
 env('local');
 
 client.login(process.env.DISCORD_TOKEN);
 
-serviceLoad.modules(client);
+services.load.modules(client, services);
 
-serviceLoad.events(client);
+services.load.events(client, services);
 
 process.on("uncaughtException", (error) => {
     console.error(error);

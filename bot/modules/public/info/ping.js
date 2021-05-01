@@ -1,5 +1,6 @@
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args, services) => {
     try {
+        console.log('testt');
         let responseMessage = await message.reply({
             embed: {
                 color: 0xe5cc0b,

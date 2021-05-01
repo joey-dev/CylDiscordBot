@@ -1,4 +1,4 @@
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args, services) => {
     try {
         const questions = require("../../../services/questions");
 

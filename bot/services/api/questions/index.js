@@ -1,14 +1,14 @@
-module.exports.setQuestions = (message, questions) => {
+module.exports.setQuestions = (message, questions, services) => {
     const setQuestions = require("./setQuestions");
-    setQuestions.run(message, questions);
+    setQuestions.run(message, questions, services);
 }
 
-module.exports.getQuestions = (authorId) => {
+module.exports.getQuestions = (authorId, services) => {
     const getQuestions = require("./getQuestions");
-    return getQuestions.run(authorId);
+    return getQuestions.run(authorId, services);
 }
 
-module.exports.deleteQuestions = (authorId) => {
+module.exports.deleteQuestions = (authorId, services) => {
     const deleteQuestions = require("./deleteQuestions");
-    return deleteQuestions.run(authorId);
+    return deleteQuestions.run(authorId, services);
 }

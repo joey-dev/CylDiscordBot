@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 
-module.exports.run = async (client) => {
+module.exports.run = async (client, services) => {
     try {
         client.publicCommands = new Discord.Collection();
         client.privateCommands = new Discord.Collection();
