@@ -1,10 +1,8 @@
-module.exports.askFirstQuestion = (message, questions, finished, services) => {
-    const askFirstQuestion = require("./askFirstQuestion");
-    askFirstQuestion.run(message, questions, finished, services);
-}
+const fs = require('fs');
 
-module.exports.askQuestions = (message, questions, finished, services) => {
-    const askQuestions = require("./askQuestions");
-    askQuestions.run(message, questions, finished, services);
-}
 
+const modules = fs.readdirSync(__dirname).filter(fileName => fileName !== 'index.js').map(module => module.split('.js')[0]);
+
+modules.forEach(moduleName => {
+    module.exports[moduleName] = require('./' + moduleName).run;
+});

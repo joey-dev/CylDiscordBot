@@ -1,14 +1,8 @@
-module.exports.setQuestions = (message, questions, services) => {
-    const setQuestions = require("./setQuestions");
-    setQuestions.run(message, questions, services);
-}
+const fs = require('fs');
 
-module.exports.getQuestions = (authorId, services) => {
-    const getQuestions = require("./getQuestions");
-    return getQuestions.run(authorId, services);
-}
 
-module.exports.deleteQuestions = (authorId, services) => {
-    const deleteQuestions = require("./deleteQuestions");
-    return deleteQuestions.run(authorId, services);
-}
+const modules = fs.readdirSync(__dirname).filter(fileName => fileName !== 'index.js').map(module => module.split('.js')[0]);
+
+modules.forEach(moduleName => {
+    module.exports[moduleName] = require('./' + moduleName).run;
+});
