@@ -13,6 +13,7 @@
     "custom-env": "^2.0.1",
     "discord.js": "^12.5.1",
     "esm": "^3.2.25",
+    "mysql": "^2.18.1",
     "node-fetch": "^2.6.1",
     "prompt": "^1.1.0"
   }

@@ -6,10 +6,15 @@ module.exports.run = async (client, message, services) => {
 
     if (!message.guild) {
         isPublic = false;
-    } else {
-        prefix = services.settings.getCommandPrefix(message.guild.id);
+        return runCommand(client, message, services, isPublic, prefix);
     }
 
+    services.settings.getCommandPrefix(message.guild.id, services, (prefix => {
+        runCommand(client, message, services, isPublic, prefix);
+    }));
+};
+
+function runCommand(client, message, services, isPublic, prefix) {
     if (message.content.indexOf(prefix) !== 0) {
         services.questions.askQuestions(message);
         return;
@@ -92,4 +97,4 @@ module.exports.run = async (client, message, services) => {
     }
 
     return executeModuleCommand.run(client, message, args, services);
-};
+}

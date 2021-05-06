@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const pkg = require('custom-env');
 const client = new Discord.Client();
+const mysql = require('mysql');
+
 
 let services = require('./services/index');
 
@@ -18,6 +20,18 @@ services.load.modules(client, services);
 
 services.load.events(client, services);
 
+services.database.connection.pool = mysql.createPool({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "cyl",
+});
+
+services.database.connection.pool.getConnection(function(error, connection) {
+    if (error) throw error;
+    console.log("Connected!");
+    connection.release();
+});
 
 process.on("uncaughtException", (error) => {
     console.error(error);

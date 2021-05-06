@@ -16,7 +16,6 @@ module.exports.run = async (client, services) => {
         ];
 
         moduleTypes.forEach(moduleType => {
-            console.log('testing....');
             let modules = fs.readdirSync(`./modules/${moduleType}/`).filter(file => fs.statSync(path.join(`./modules/${moduleType}/`, file)).isDirectory());
 
             for (let module of modules) {
