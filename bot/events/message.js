@@ -1,4 +1,4 @@
-module.exports.run = async (client, message, services) => {
+module.exports.run = async (client, services, message) => {
     let isPublic = true;
 
     if (message.author.bot) return;
@@ -60,14 +60,14 @@ function runCommand(client, message, services, isPublic, prefix) {
 
     if (executeModuleCommand.help.ownerOnly && process.env.OWNER_ID !== message.author.id) {
         if (executeModuleCommand.help.returnMessageOnError) {
-            return services.message.alert(message, 'Denied', 'You are not this bot\'s owner.', true);
+            return services.messages.alert(message, 'Denied', 'You are not this bot\'s owner.', true);
         }
         return;
     }
 
-    if (executeModuleCommand.help.testersOnly && process.env.TESTER_IDS.split(',').indexOf(message.author.id) !== -1) {
+    if (executeModuleCommand.help.testersOnly && process.env.TESTER_IDS.split(',').indexOf(message.author.id) === -1) {
         if (executeModuleCommand.help.returnMessageOnError) {
-            return services.message.alert(message, 'Denied', 'You are not a tester of this bot\'s.', true);
+            return services.messages.alert(message, 'Denied', 'You are not a tester of this bot\'s.', true);
         }
         return;
     }
@@ -76,7 +76,7 @@ function runCommand(client, message, services, isPublic, prefix) {
         if (executeModuleCommand.help.userPermissions) {
             if (!message.channel.permissionsFor(message.member) || !message.channel.permissionsFor(message.member).has(executeModuleCommand.help.userPermissions)) {
                 if (executeModuleCommand.help.returnMessageOnError) {
-                    return services.message.alert(message, 'Denied', 'You do not have the permissions needed to run this command.', true);
+                    return services.messages.alert(message, 'Denied', 'You do not have the permissions needed to run this command.', true);
                 }
                 return;
             }
@@ -85,7 +85,7 @@ function runCommand(client, message, services, isPublic, prefix) {
         if (executeModuleCommand.help.botPermissions) {
             if (!message.channel.permissionsFor(message.guild.me) || !message.channel.permissionsFor(message.guild.me).has(executeModuleCommand.help.botPermissions)) {
                 if (executeModuleCommand.help.returnMessageOnError) {
-                    return services.message.alert(message, 'Denied', 'I cannot run the command due to limited permissions.', true);
+                    return services.messages.alert(message, 'Denied', 'I cannot run the command due to limited permissions.', true);
                 }
                 return;
             }
@@ -93,7 +93,7 @@ function runCommand(client, message, services, isPublic, prefix) {
     }
 
     if (args.length < executeModuleCommand.help.minAmountOfArguments) {
-        return message.reply(services.message.helpMenu(client, message, commandFile));
+        return message.reply(services.messages.helpMenu(client, message, commandFile));
     }
 
     return executeModuleCommand.run(client, message, args, services);

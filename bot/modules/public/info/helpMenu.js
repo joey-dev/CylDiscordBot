@@ -20,5 +20,6 @@ module.exports.help = {
     example: ["help ping"],
     deleteCommandMessage: false,
     returnMessageOnError: true,
+    event: "message",
 }
 

@@ -13,6 +13,8 @@ module.exports.run = (client, message, command, services) => {
         return null;
     }
 
+    if (command.help.event !== "message") return;
+
     const userPermissions = command.help.userPermissions.join(", ") || "-";
     const botPermissions = command.help.botPermissions.join(", ") || "-";
     const aliases = command.help.alias.join(", ") || "-";

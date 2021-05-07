@@ -12,7 +12,7 @@ module.exports.run = async (client, services) => {
 
                 console.log(`Loading event: ${eventName}`);
 
-                client.on(eventName, (...args) => eventFunction.run(client, ...args, services));
+                client.on(eventName, (...args) => eventFunction.run(client, services, ...args));
             });
         });
     }

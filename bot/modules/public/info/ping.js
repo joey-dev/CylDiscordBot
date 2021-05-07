@@ -38,4 +38,5 @@ module.exports.help = {
     example: [ "ping" ],
     deleteCommandMessage: true,
     returnMessageOnError: true,
+    event: "message",
 }

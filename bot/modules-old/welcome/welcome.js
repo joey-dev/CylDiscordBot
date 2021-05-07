@@ -2,110 +2,110 @@ import Canvas from 'canvas';
 import * as Discord from 'discord.js';
 
 class Welcome {
-    static messageData = {
-        "color": "RANDOM",
-        "descriptions": [
-            "Welcome {yellUser} to {serverName}!",
-            "Hey {yellUser}, Welcome to {serverName}!",
-        ],
-        "footer": "Welcome",
-        "withCustomPicture": true,
-        "timestamp": true,
-        "enabled": true,
-        "roles": [
-            '796025329696899072',
-        ]
-    };
-
-    static elements = [
-        {
-            'type': 'text',
-            'text': '{username}',
-            'font': {
-                '>13': {
-                    'bold': true,
-                    'italic': false,
-                    'size': '90px',
-                    'family': 'Genta',
-                    'style': '#f2f2f2',
-                    'position': {
-                        'x': '720',
-                        'y': '336',
-                    },
-                },
-                '<14': {
-                    'bold': true,
-                    'italic': false,
-                    'size': '150px',
-                    'family': 'Genta',
-                    'style': '#f2f2f2',
-                    'position': {
-                        'x': '720',
-                        'y': '336',
-                    },
-                },
-            },
-        },
-        {
-            'type': 'text',
-            'text': '#{discriminatorNumber}',
-            'font': {
-                '>0': {
-                    'bold': true,
-                    'italic': false,
-                    'size': '40px',
-                    'family': 'Genta',
-                    'style': '#f2f2f2',
-                    'position': {
-                        'x': '730',
-                        'y': '374',
-                    },
-                },
-            },
-        },
-        {
-            'type': 'text',
-            'text': 'Member: #{serverMemberCount}',
-            'font': {
-                '>0': {
-                    'bold': true,
-                    'italic': false,
-                    'size': '60px',
-                    'family': 'Genta',
-                    'style': '#f2f2f2',
-                    'position': {
-                        'x': '750',
-                        'y': '441',
-                    },
-                },
-            },
-        },
-        {
-            'type': 'text',
-            'text': '{serverName}',
-            'font': {
-                '>0': {
-                    'bold': true,
-                    'italic': false,
-                    'size': '60px',
-                    'family': 'Genta',
-                    'style': '#f2f2f2',
-                    'position': {
-                        'x': '700',
-                        'y': '166',
-                    },
-                },
-            },
-        },
-        {
-            'type': 'avatar',
-            'position': {
-                'x': 316,
-                'y': 316,
-            },
-            'radius': 250
-        },
-    ];
+    // static messageData = {
+    //     "color": "RANDOM",
+    //     "descriptions": [
+    //         "Welcome {yellUser} to {serverName}!",
+    //         "Hey {yellUser}, Welcome to {serverName}!",
+    //     ],
+    //     "footer": "Welcome",
+    //     "withCustomPicture": true,
+    //     "timestamp": true,
+    //     "enabled": true,
+    //     "roles": [
+    //         '796025329696899072',
+    //     ]
+    // };
+    //
+    // static elements = [
+    //     {
+    //         'type': 'text',
+    //         'text': '{username}',
+    //         'font': {
+    //             '>13': {
+    //                 'bold': true,
+    //                 'italic': false,
+    //                 'size': '90px',
+    //                 'family': 'Genta',
+    //                 'style': '#f2f2f2',
+    //                 'position': {
+    //                     'x': '720',
+    //                     'y': '336',
+    //                 },
+    //             },
+    //             '<14': {
+    //                 'bold': true,
+    //                 'italic': false,
+    //                 'size': '150px',
+    //                 'family': 'Genta',
+    //                 'style': '#f2f2f2',
+    //                 'position': {
+    //                     'x': '720',
+    //                     'y': '336',
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     {
+    //         'type': 'text',
+    //         'text': '#{discriminatorNumber}',
+    //         'font': {
+    //             '>0': {
+    //                 'bold': true,
+    //                 'italic': false,
+    //                 'size': '40px',
+    //                 'family': 'Genta',
+    //                 'style': '#f2f2f2',
+    //                 'position': {
+    //                     'x': '730',
+    //                     'y': '374',
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     {
+    //         'type': 'text',
+    //         'text': 'Member: #{serverMemberCount}',
+    //         'font': {
+    //             '>0': {
+    //                 'bold': true,
+    //                 'italic': false,
+    //                 'size': '60px',
+    //                 'family': 'Genta',
+    //                 'style': '#f2f2f2',
+    //                 'position': {
+    //                     'x': '750',
+    //                     'y': '441',
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     {
+    //         'type': 'text',
+    //         'text': '{serverName}',
+    //         'font': {
+    //             '>0': {
+    //                 'bold': true,
+    //                 'italic': false,
+    //                 'size': '60px',
+    //                 'family': 'Genta',
+    //                 'style': '#f2f2f2',
+    //                 'position': {
+    //                     'x': '700',
+    //                     'y': '166',
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     {
+    //         'type': 'avatar',
+    //         'position': {
+    //             'x': 316,
+    //             'y': 316,
+    //         },
+    //         'radius': 250
+    //     },
+    // ];
 
     constructor(client) {
         client.on('guildMemberAdd', member => {

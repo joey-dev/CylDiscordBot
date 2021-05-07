@@ -36,4 +36,5 @@ module.exports.help = {
     example: ["test args"],
     deleteCommandMessage: false,
     returnMessageOnError: true,
+    event: "message",
 }

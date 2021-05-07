@@ -5,6 +5,7 @@ const path = require('path');
 
 module.exports.run = async (client, services) => {
     try {
+        client.publicGuildMemberAdd = new Discord.Collection();
         client.publicCommands = new Discord.Collection();
         client.privateCommands = new Discord.Collection();
         client.aliases = new Discord.Collection();
@@ -32,20 +33,32 @@ module.exports.run = async (client, services) => {
 
                     switch (moduleType) {
                         case 'public':
-                            client.publicCommands.set(props.help.name, props);
+                            switch (props.help.event) {
+                                case 'message':
+                                    console.log("-- Public Message");
+                                    client.publicCommands.set(props.help.name, props);
+                                    break;
+                                case 'guildMemberAdd':
+                                    console.log("-- Public GuildMemberAdd");
+                                    client.publicGuildMemberAdd.set(props.help.name, props);
+                                    break;
+                            }
                             break;
                         case 'private':
+                            console.log("-- Private Message");
                             client.privateCommands.set(props.help.name, props);
                             break;
                         case 'privateAndPublic':
+                            console.log("-- Private And Public Message");
                             client.publicCommands.set(props.help.name, props);
                             client.privateCommands.set(props.help.name, props);
                             break;
                     }
-
-                    props.help.alias.forEach(alias => {
-                        client.aliases.set(alias, props.help.name);
-                    });
+                    if (props.help.alias) {
+                        props.help.alias.forEach(alias => {
+                            client.aliases.set(alias, props.help.name);
+                        });
+                    }
                 }
             }
         });

@@ -78,4 +78,5 @@ module.exports.help = {
     example: ["test questions"],
     deleteCommandMessage: false,
     returnMessageOnError: true,
+    event: "message",
 }
