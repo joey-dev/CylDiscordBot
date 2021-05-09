@@ -5,11 +5,21 @@ const addTextElement = require('./addTextElement');
 const addAvatarElement = require('./addAvatarElement');
 const getTextWithVariablesAdded = require('./getTextWithVariablesAdded');
 
-module.exports.run = (member, guild, values, services) => {
+module.exports.run = (member, guild, values, services, isPrivate) => {
     const background = values[0];
     const avatar = values[1];
-    const messageData = values[2];
-    const elements = values[3];
+    let messageData = values[2];
+    let elements = values[3];
+
+    if (isPrivate) {
+        if (!values[5]) {
+            return false;
+        }
+        messageData = values[5]
+        elements = values[6];
+    } else if (!messageData) {
+        return false;
+    }
 
     const descriptionIndex = services.random.intMax(messageData.descriptions.length);
 

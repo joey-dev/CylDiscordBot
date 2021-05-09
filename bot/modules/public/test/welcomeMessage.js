@@ -3,11 +3,11 @@ module.exports.run = async (client, message, args, services) => {
         const member = message.author;
         const guild = message.guild;
 
-        services.modules.public.welcome.createMessage(client, member, guild, services, ((welcomeMessage, data) => {
-            if (!welcomeMessage) return;
+        services.modules.public.welcome.createMessage(client, member, guild, services, ((publicWelcomeMessage, privateWelcomeMessage, data) => {
+            if (!publicWelcomeMessage) return;
 
             const channel = guild.channels.cache.find(channel => channel.id === data[4]);
-            channel.send(welcomeMessage);
+            channel.send(publicWelcomeMessage);
         }));
     } catch (e) {
         console.log(e);

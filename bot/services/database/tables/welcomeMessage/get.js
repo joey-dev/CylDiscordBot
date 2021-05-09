@@ -1,6 +1,6 @@
 module.exports.run = (server_id, services, callback) => {
     services.database.connection.command(services,
-        'SELECT `welcome_messages`.`channel_id`, `welcome_messages`.`messageData`, `welcome_messages`.`elements` ' +
+        'SELECT `welcome_messages`.`channel_id`, `welcome_messages`.`messageData`, `welcome_messages`.`elements`, `welcome_messages`.`privateMessageData`, `welcome_messages`.`privateElements` ' +
         'FROM `welcome_messages` ' +
         'INNER JOIN `welcome` ON `welcome`.`id` = `welcome_messages`.`id` ' +
         'INNER JOIN `server` ON `server`.`id` = `welcome`.`server_id` ' +

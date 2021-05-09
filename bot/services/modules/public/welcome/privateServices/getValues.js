@@ -14,6 +14,8 @@ module.exports.run = (client, member, guild, services, callback) => {
             values[2] = JSON.parse(welcomeMessageData.messageData);
             values[3] = JSON.parse(welcomeMessageData.elements);
             values[4] = welcomeMessageData.channel_id;
+            values[5] = JSON.parse(welcomeMessageData.privateMessageData);
+            values[6] = JSON.parse(welcomeMessageData.privateElements);
             callback(values);
         });
     }));
