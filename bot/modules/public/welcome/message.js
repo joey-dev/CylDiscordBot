@@ -1,6 +1,6 @@
-module.exports.run = async (client, member, services) => {
+module.exports.run = async (client, member, services, language) => {
     try {
-        services.modules.public.welcome.createMessage(client, member.user, member.guild, services, ((publicWelcomeMessage, privateWelcomeMessage, data) => {
+        services.modules.public.welcome.createMessage(client, member.user, member.guild, services, language, ((publicWelcomeMessage, privateWelcomeMessage, data) => {
             if (publicWelcomeMessage) {
                 services.modules.public.welcome.giveRolesToUser(member, data[2].roles);
 

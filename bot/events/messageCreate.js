@@ -57,6 +57,7 @@ function runCommand(client, message, services, language, isPublic, prefix) {
 
     if (executeModuleCommand.help.deleteCommandMessage) {
         message.delete().catch(error => {
+            console.error(error)
         });
     }
 

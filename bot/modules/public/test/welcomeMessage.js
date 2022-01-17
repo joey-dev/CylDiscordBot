@@ -1,9 +1,9 @@
-module.exports.run = async (client, message, args, services) => {
+module.exports.run = async (client, message, args, services, language) => {
     try {
         const member = message.author;
         const guild = message.guild;
 
-        services.modules.public.welcome.createMessage(client, member, guild, services, ((publicWelcomeMessage, privateWelcomeMessage, data) => {
+        services.modules.public.welcome.createMessage(client, member, guild, services, language, ((publicWelcomeMessage, privateWelcomeMessage, data) => {
             if (!publicWelcomeMessage) return;
 
             const channel = guild.channels.cache.find(channel => channel.id === data[4]);

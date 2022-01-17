@@ -2,7 +2,7 @@ module.exports.run = async (client, message, args, services, language) => {
     const helpMenu = services.messages.helpMenu(client, message, args, services, language);
 
     if (helpMenu) {
-        message.channel.send({embed: helpMenu}).catch(e => { console.error(e) });
+        message.channel.send({embeds: [helpMenu]}).catch(e => { console.error(e) });
     }
 }
 

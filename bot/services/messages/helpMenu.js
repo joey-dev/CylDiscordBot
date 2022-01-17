@@ -25,7 +25,7 @@ module.exports.run = (client, message, command, services, language) => {
     const examples = translatedTextCommand.help.example.join("\n") || "-";
 
     const date = new Date();
-    const day = date.getDay();
+    const day = date.getDate();
     const month = date.toLocaleString(language.short_name, { month: 'short' });
     const year = date.getFullYear();
     const hour = addZero(date.getHours());

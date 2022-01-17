@@ -9,12 +9,12 @@
   "author": "Joey Stil",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.6.1",
+    "canvas": "^2.8.0",
     "custom-env": "^2.0.1",
-    "discord.js": "^12.5.1",
+    "discord.js": "^13.6.0",
     "esm": "^3.2.25",
     "mysql": "^2.18.1",
-    "node-fetch": "^2.6.1",
-    "prompt": "^1.1.0"
+    "node-fetch": "^2.6.7",
+    "prompt": "^1.2.1"
   }
 }

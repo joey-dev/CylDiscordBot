@@ -5,7 +5,7 @@ const addTextElement = require('./addTextElement');
 const addAvatarElement = require('./addAvatarElement');
 const getTextWithVariablesAdded = require('./getTextWithVariablesAdded');
 
-module.exports.run = (member, guild, values, services, isPrivate) => {
+module.exports.run = (member, guild, values, services, language, isPrivate) => {
     const background = values[0];
     const avatar = values[1];
     let messageData = values[2];
@@ -24,7 +24,7 @@ module.exports.run = (member, guild, values, services, isPrivate) => {
     const descriptionIndex = services.random.intMax(messageData.descriptions.length);
 
     if (!messageData.withCustomPicture) {
-        return createEmbedMessage.run(messageData.color, messageData.timestamp, messageData.footer, messageData.descriptions[descriptionIndex]);
+        return createEmbedMessage.run(language, messageData.color, messageData.timestamp, messageData.footer, messageData.descriptions[descriptionIndex]);
     }
 
     const {createCanvas} = Canvas;
@@ -48,8 +48,12 @@ module.exports.run = (member, guild, values, services, isPrivate) => {
 
     const description = getTextWithVariablesAdded.run(messageData.descriptions[descriptionIndex], member, guild);
 
-    const welcomeEmbed = createEmbedMessage.run(messageData.color, messageData.timestamp, messageData.footer, description, attachment);
+    const welcomeEmbed = createEmbedMessage.run(language, messageData.color, messageData.timestamp, messageData.footer, description, attachment);
 
-    return welcomeEmbed;
+    if (attachment) {
+        return {embeds: [welcomeEmbed], files: [attachment]};
+    }
+
+    return {embeds: [welcomeEmbed]};
 };
 

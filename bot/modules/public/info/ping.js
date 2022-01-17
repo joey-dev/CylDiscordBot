@@ -2,14 +2,14 @@ module.exports.run = async (client, message, args, services, language) => {
     const translatedText = require("../../../data/languages/" + language.name + "/modules/public/info/ping.js");
 
     try {
-        let responseMessage = await message.reply({
-            embed: {
+        let responseMessage = await message.channel.send({
+            embeds: [{
                 color: 0xe5cc0b,
                 description: 'Pinging!'
-            }
+            }]
         });
         await responseMessage.edit({
-            embed: {
+            embeds: [{
                 color: 0xe5cc0b,
                 title: `${client.user.tag} ${translatedText.title}`,
                 fields: [
@@ -18,7 +18,7 @@ module.exports.run = async (client, message, args, services, language) => {
                     value: `${responseMessage.createdTimestamp - message.createdTimestamp}ms`,
                     inline: true
                 }
-            ]}
+            ]}]
         });
     }
     catch (e) {
