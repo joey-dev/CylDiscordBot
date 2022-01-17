@@ -1,42 +1,33 @@
 {
     "type": "project",
     "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
-        "php": "^7.2.5",
+        "php": ">=8.0.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "api-platform/api-pack": "^1.2",
-        "doctrine/doctrine-migrations-bundle": "^2.1",
-        "sensio/framework-extra-bundle": "^5.6",
-        "symfony/asset": "5.0.*",
-        "symfony/console": "5.0.*",
-        "symfony/dotenv": "5.0.*",
-        "symfony/expression-language": "5.0.*",
-        "symfony/flex": "^1.3.1",
-        "symfony/form": "5.0.*",
-        "symfony/framework-bundle": "5.0.*",
-        "symfony/http-client": "5.0.*",
-        "symfony/intl": "5.0.*",
-        "symfony/mailer": "5.0.*",
-        "symfony/monolog-bundle": "^3.1",
-        "symfony/notifier": "5.0.*",
-        "symfony/orm-pack": "*",
-        "symfony/process": "5.0.*",
-        "symfony/security-bundle": "5.0.*",
-        "symfony/serializer-pack": "*",
-        "symfony/string": "5.0.*",
-        "symfony/translation": "5.0.*",
-        "symfony/twig-pack": "*",
-        "symfony/validator": "5.0.*",
-        "symfony/web-link": "5.0.*",
-        "symfony/yaml": "5.0.*",
-        "vich/uploader-bundle": "^1.13"
-    },
-    "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^3.3",
-        "symfony/maker-bundle": "^1.18"
+        "doctrine/doctrine-bundle": "^2.5",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/orm": "^2.11",
+        "hautelook/alice-bundle": "^2.10",
+        "symfony/console": "6.0.*",
+        "symfony/dotenv": "6.0.*",
+        "symfony/flex": "^2",
+        "symfony/framework-bundle": "6.0.*",
+        "symfony/http-client": "6.0.*",
+        "symfony/proxy-manager-bridge": "6.0.*",
+        "symfony/runtime": "6.0.*",
+        "symfony/security-bundle": "6.0.*",
+        "symfony/yaml": "6.0.*"
     },
     "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "optimize-autoloader": true,
         "preferred-install": {
             "*": "dist"
         },
@@ -53,13 +44,12 @@
         }
     },
     "replace": {
-        "paragonie/random_compat": "2.*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
         "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php71": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-php56": "*"
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*"
     },
     "scripts": {
         "auto-scripts": {
@@ -79,7 +69,11 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "5.0.*"
+            "require": "6.0.*",
+            "docker": true
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.36"
     }
 }

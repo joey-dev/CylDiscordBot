@@ -1,8 +1,8 @@
-module.exports.run = async (client, message, args, services) => {
-    const helpMenu = services.messages.helpMenu(client, message, args, services);
+module.exports.run = async (client, message, args, services, language) => {
+    const helpMenu = services.messages.helpMenu(client, message, args, services, language);
 
     if (helpMenu) {
-        message.channel.send(helpMenu).catch(e => { });
+        message.channel.send({embed: helpMenu}).catch(e => { console.error(e) });
     }
 }
 

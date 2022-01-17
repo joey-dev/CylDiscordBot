@@ -2,53 +2,31 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields={"username"})
- * @UniqueEntity(fields={"email"})
- */
-class User implements UserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $username;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     */
-    private $password;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $token;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Server::class, mappedBy="User")
-     */
-    private $Servers;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $Token;
+    #[ORM\ManyToMany(targetEntity: Server::class, inversedBy: 'users')]
+    private $server;
 
     public function __construct()
     {
-        $this->serverUsers = new ArrayCollection();
-        $this->Servers = new ArrayCollection();
+        $this->server = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,46 +46,30 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getToken(): ?string
     {
-        return $this->password;
+        return $this->token;
     }
 
-    public function setPassword(string $password): self
+    public function setToken(?string $token): self
     {
-        $this->password = $password;
+        $this->token = $token;
 
         return $this;
-    }
-
-    public function getRoles()
-    {
-        return ['RULE_USER'];
-    }
-
-    public function getSalt()
-    {
-        return null;
-    }
-
-    public function eraseCredentials()
-    {
-        return false;
     }
 
     /**
      * @return Collection|Server[]
      */
-    public function getServers(): Collection
+    public function getServer(): Collection
     {
-        return $this->Servers;
+        return $this->server;
     }
 
     public function addServer(Server $server): self
     {
-        if (!$this->Servers->contains($server)) {
-            $this->Servers[] = $server;
-            $server->addUser($this);
+        if (!$this->server->contains($server)) {
+            $this->server[] = $server;
         }
 
         return $this;
@@ -115,21 +77,7 @@ class User implements UserInterface
 
     public function removeServer(Server $server): self
     {
-        if ($this->Servers->removeElement($server)) {
-            $server->removeUser($this);
-        }
-
-        return $this;
-    }
-
-    public function getToken(): ?string
-    {
-        return $this->Token;
-    }
-
-    public function setToken(?string $Token): self
-    {
-        $this->Token = $Token;
+        $this->server->removeElement($server);
 
         return $this;
     }

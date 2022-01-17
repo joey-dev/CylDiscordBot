@@ -4,17 +4,19 @@ module.exports.run = async (client, services, message) => {
     if (message.author.bot) return;
     let prefix = '!';
 
-    if (!message.guild) {
-        isPublic = false;
-        return runCommand(client, message, services, isPublic, prefix);
-    }
+    services.settings.getLanguage(message.guild.id, services, (language => {
+        if (!message.guild) {
+            isPublic = false;
+            return runCommand(client, message, services, language, isPublic, prefix);
+        }
 
-    services.settings.getCommandPrefix(message.guild.id, services, (prefix => {
-        runCommand(client, message, services, isPublic, prefix);
+        services.settings.getCommandPrefix(message.guild.id, services, (prefix => {
+            runCommand(client, message, services, language, isPublic, prefix);
+        }));
     }));
 };
 
-function runCommand(client, message, services, isPublic, prefix) {
+function runCommand(client, message, services, language, isPublic, prefix) {
     if (message.content.indexOf(prefix) !== 0) {
         services.questions.askQuestions(message);
         return;
@@ -93,8 +95,8 @@ function runCommand(client, message, services, isPublic, prefix) {
     }
 
     if (args.length < executeModuleCommand.help.minAmountOfArguments) {
-        return message.reply(services.messages.helpMenu(client, message, commandFile));
+        return message.reply(services.messages.helpMenu(client, message, commandFile, services, language));
     }
 
-    return executeModuleCommand.run(client, message, args, services);
+    return executeModuleCommand.run(client, message, args, services, language);
 }

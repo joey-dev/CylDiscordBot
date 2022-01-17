@@ -3,7 +3,7 @@ import fs from 'fs';
 
 class ApiRequest {
     static getHeaderInfo(serverId) {
-        const dataJson = fs.readFileSync('data/' + serverId + '.json');
+        const dataJson = fs.readFileSync('data/servers/' + serverId + '.json');
         const data = JSON.parse(dataJson);
 
         const token = data.token;

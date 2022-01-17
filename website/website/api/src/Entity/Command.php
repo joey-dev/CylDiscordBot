@@ -7,37 +7,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=CommandRepository::class)
- */
+#[ORM\Entity(repositoryClass: CommandRepository::class)]
 class Command
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Server::class, mappedBy="Command")
-     */
-    private $Servers;
+    #[ORM\ManyToMany(targetEntity: Server::class, inversedBy: 'commands')]
+    private $server;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Roles::class, inversedBy="Commands")
-     */
-    private $Roles;
+    #[ORM\ManyToMany(targetEntity: Role::class, mappedBy: 'command')]
+    private $roles;
 
     public function __construct()
     {
-        $this->Servers = new ArrayCollection();
-        $this->Roles = new ArrayCollection();
+        $this->server = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -60,50 +50,50 @@ class Command
     /**
      * @return Collection|Server[]
      */
-    public function getServers(): Collection
+    public function getServer(): Collection
     {
-        return $this->Servers;
+        return $this->server;
     }
 
-    public function addServer(Server $Server): self
+    public function addServer(Server $server): self
     {
-        if (!$this->Servers->contains($Server)) {
-            $this->Servers[] = $Server;
-            $Server->addCommand($this);
+        if (!$this->server->contains($server)) {
+            $this->server[] = $server;
         }
 
         return $this;
     }
 
-    public function removeServer(Server $Server): self
+    public function removeServer(Server $server): self
     {
-        if ($this->Servers->removeElement($Server)) {
-            $Server->removeCommand($this);
-        }
+        $this->server->removeElement($server);
 
         return $this;
     }
 
     /**
-     * @return Collection|Roles[]
+     * @return Collection|Role[]
      */
     public function getRoles(): Collection
     {
-        return $this->Roles;
+        return $this->roles;
     }
 
-    public function addRole(Roles $role): self
+    public function addRole(Role $role): self
     {
-        if (!$this->Roles->contains($role)) {
-            $this->Roles[] = $role;
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->addCommand($this);
         }
 
         return $this;
     }
 
-    public function removeRole(Roles $role): self
+    public function removeRole(Role $role): self
     {
-        $this->Roles->removeElement($role);
+        if ($this->roles->removeElement($role)) {
+            $role->removeCommand($this);
+        }
 
         return $this;
     }

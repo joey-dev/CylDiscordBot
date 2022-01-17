@@ -1,4 +1,6 @@
-module.exports.run = async (client, message, args, services) => {
+module.exports.run = async (client, message, args, services, language) => {
+    const translatedText = require("../../../data/languages/" + language.name + "/modules/public/info/ping.js");
+
     try {
         let responseMessage = await message.reply({
             embed: {
@@ -9,10 +11,10 @@ module.exports.run = async (client, message, args, services) => {
         await responseMessage.edit({
             embed: {
                 color: 0xe5cc0b,
-                title: `${client.user.tag} Ping Statistics`,
+                title: `${client.user.tag} ${translatedText.title}`,
                 fields: [
                 {
-                    name: 'Response Time',
+                    name: translatedText.fields_name,
                     value: `${responseMessage.createdTimestamp - message.createdTimestamp}ms`,
                     inline: true
                 }
@@ -26,7 +28,7 @@ module.exports.run = async (client, message, args, services) => {
 
 module.exports.help = {
     name: "ping",
-    cmdName: "Ping",
+    cmdName: "ping",
     alias: [],
     description: "Checks the ping of the bot.",
     ownerOnly: false,
@@ -39,4 +41,5 @@ module.exports.help = {
     deleteCommandMessage: true,
     returnMessageOnError: true,
     event: "message",
+    location: "/modules/public/info/ping.js"
 }

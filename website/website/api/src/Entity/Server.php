@@ -2,62 +2,49 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ServerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=ServerRepository::class)
- */
+#[ORM\Entity(repositoryClass: ServerRepository::class)]
 class Server
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $serverId;
+    #[ORM\Column(type: 'string', length: 255)]
+    private $server_id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="Servers")
-     */
-    private $User;
+    #[ORM\Column(type: 'string', length: 10)]
+    private $command_prefix;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Command::class, inversedBy="Servers")
-     */
-    private $Commands;
+    #[ORM\ManyToMany(targetEntity: Command::class, mappedBy: 'server')]
+    private $commands;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Roles::class, mappedBy="Server")
-     */
-    private $Roles;
+    #[ORM\OneToMany(mappedBy: 'server', targetEntity: Role::class, orphanRemoval: true)]
+    private $roles;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Welcome::class, mappedBy="Server", cascade={"persist", "remove"})
-     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'server')]
+    private $users;
+
+    #[ORM\OneToOne(mappedBy: 'server', targetEntity: Welcome::class, cascade: ['persist', 'remove'])]
     private $welcome;
+
+    #[ORM\ManyToOne(targetEntity: Language::class, inversedBy: 'servers')]
+    #[ORM\JoinColumn(nullable: true)]
+    private $language;
 
     public function __construct()
     {
-        $this->serverUsers = new ArrayCollection();
-        $this->User = new ArrayCollection();
-        $this->Commands = new ArrayCollection();
-        $this->Roles = new ArrayCollection();
-        $this->channels = new ArrayCollection();
-        $this->welcomes = new ArrayCollection();
+        $this->commands = new ArrayCollection();
+        $this->roles = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,12 +54,12 @@ class Server
 
     public function getServerId(): ?string
     {
-        return $this->serverId;
+        return $this->server_id;
     }
 
-    public function setServerId(string $serverId): self
+    public function setServerId(string $server_id): self
     {
-        $this->serverId = $serverId;
+        $this->server_id = $server_id;
 
         return $this;
     }
@@ -89,26 +76,14 @@ class Server
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUser(): Collection
+    public function getCommandPrefix(): ?string
     {
-        return $this->User;
+        return $this->command_prefix;
     }
 
-    public function addUser(User $user): self
+    public function setCommandPrefix(string $command_prefix): self
     {
-        if (!$this->User->contains($user)) {
-            $this->User[] = $user;
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        $this->User->removeElement($user);
+        $this->command_prefix = $command_prefix;
 
         return $this;
     }
@@ -118,50 +93,80 @@ class Server
      */
     public function getCommands(): Collection
     {
-        return $this->Commands;
+        return $this->commands;
     }
 
-    public function addCommand(Command $Command): self
+    public function addCommand(Command $command): self
     {
-        if (!$this->Commands->contains($Command)) {
-            $this->Commands[] = $Command;
+        if (!$this->commands->contains($command)) {
+            $this->commands[] = $command;
+            $command->addServer($this);
         }
 
         return $this;
     }
 
-    public function removeCommand(Command $Command): self
+    public function removeCommand(Command $command): self
     {
-        $this->Commands->removeElement($Command);
+        if ($this->commands->removeElement($command)) {
+            $command->removeServer($this);
+        }
 
         return $this;
     }
 
     /**
-     * @return Collection|Roles[]
+     * @return Collection|Role[]
      */
     public function getRoles(): Collection
     {
-        return $this->Roles;
+        return $this->roles;
     }
 
-    public function addRole(Roles $role): self
+    public function addRole(Role $role): self
     {
-        if (!$this->Roles->contains($role)) {
-            $this->Roles[] = $role;
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
             $role->setServer($this);
         }
 
         return $this;
     }
 
-    public function removeRole(Roles $role): self
+    public function removeRole(Role $role): self
     {
-        if ($this->Roles->removeElement($role)) {
+        if ($this->roles->removeElement($role)) {
             // set the owning side to null (unless already changed)
             if ($role->getServer() === $this) {
                 $role->setServer(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeServer($this);
         }
 
         return $this;
@@ -172,19 +177,26 @@ class Server
         return $this->welcome;
     }
 
-    public function setWelcome(?Welcome $welcome): self
+    public function setWelcome(Welcome $welcome): self
     {
-        // unset the owning side of the relation if necessary
-        if ($welcome === null && $this->welcome !== null) {
-            $this->welcome->setServer(null);
-        }
-
         // set the owning side of the relation if necessary
-        if ($welcome !== null && $welcome->getServer() !== $this) {
+        if ($welcome->getServer() !== $this) {
             $welcome->setServer($this);
         }
 
         $this->welcome = $welcome;
+
+        return $this;
+    }
+
+    public function getLanguage(): ?Language
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(?Language $language): self
+    {
+        $this->language = $language;
 
         return $this;
     }
