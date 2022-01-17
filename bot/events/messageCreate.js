@@ -18,7 +18,7 @@ module.exports.run = async (client, services, message) => {
 
 function runCommand(client, message, services, language, isPublic, prefix) {
     if (message.content.indexOf(prefix) !== 0) {
-        services.questions.askQuestions(message);
+        services.questions.askQuestions(message, services, language);
         return;
     }
     let splitCommandMessage = message.content.split(' ');

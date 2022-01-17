@@ -1,43 +1,82 @@
-module.exports.run = async (client, message, args, services) => {
+module.exports.run = async (client, message, args, services, language) => {
     try {
         const questions = require("../../../services/questions");
 
         const questionsToAsk = [
             {
-                "question": "Yes, or No?",
-                "nextQuestion": {
-                    "yes": 1,
-                    "no": 2,
-                    "_default": 2
-                }
+                "question": {
+                    "EnglishUs": "Yes, or No?",
+                    "Nederlands": "Ja, of Nee?"
+                },
+                "nextQuestion": [
+                    {
+                        "EnglishUs": "yes",
+                        "Nederlands": "ja",
+                        "goto": 1
+                    },
+                    {
+                        "EnglishUs": "no",
+                        "Nederlands": "nee",
+                        "goto": 2
+                    },
+                    2
+                ],
             },{
-                "question": "Yes?",
-                "nextQuestion": {
-                    "yes": 3,
-                    "no": 2,
-                    "_default": 0
-                }
+                "question": {
+                    "EnglishUs": "Yes?",
+                    "Nederlands": "Ja?"
+                },
+                "nextQuestion": [
+                    {
+                        "EnglishUs": "yes",
+                        "Nederlands": "ja",
+                        "goto": 3
+                    },
+                    {
+                        "EnglishUs": "no",
+                        "Nederlands": "nee",
+                        "goto": 2
+                    },
+                    0
+                ],
             },{
-                "question": "No?",
-                "nextQuestion": {
-                    "yes": 1,
-                    "no": 4,
-                    "_default": 1
-                }
+                "question": {
+                    "EnglishUs": "No?",
+                    "Nederlands": "Nee?"
+                },
+                "nextQuestion": [
+                    {
+                        "EnglishUs": "yes",
+                        "Nederlands": "ja",
+                        "goto": 1
+                    },
+                    {
+                        "EnglishUs": "no",
+                        "Nederlands": "nee",
+                        "goto": 4
+                    },
+                    1
+                ],
             },{
-                "finish": "Yes, Finished",
+                "finish": {
+                    "EnglishUs": "Yes, Finished",
+                    "Nederlands": "Ja, Klaar"
+                },
             },{
-                "finish": "No, Finished",
+                "finish": {
+                    "EnglishUs": "No, Finished",
+                    "Nederlands": "Nee, Klaar"
+                },
             },
             0
         ];
 
-        questions.askFirstQuestion(message, questionsToAsk, (message, answers) => {
+        questions.askFirstQuestion(message, questionsToAsk, language, (message, answers) => {
             let fields = [];
             answers.forEach((argument, key) => {
                 if (argument.answer !== undefined) {
                     fields.push({
-                        name: argument.question,
+                        name: argument.question[language.name],
                         value: argument.answer,
                         inline: true
                     });
@@ -45,17 +84,17 @@ module.exports.run = async (client, message, args, services) => {
             });
 
             fields.push({
-                name: answers[answers[answers.length - 1]].finish,
-                value: answers.length - 1,
+                name: answers[answers[answers.length - 1]].finish[language.name],
+                value: (answers.length - 1).toString(),
                 inline: true
             });
 
             message.reply({
-                embed: {
+                embeds: [{
                     color: 0xe5cc0b,
                     title: `Here are the args: `,
                     fields: fields
-                }
+                }]
             })
         });
     }
