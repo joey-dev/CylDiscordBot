@@ -1,6 +1,7 @@
+const {isObj} = require('custom-env/lib/funcs');
 module.exports.finishPromises = {};
 
-module.exports.run = (message, services) => {
+module.exports.run = (message, services, language) => {
     const serviceApiQuestions = require("../api/questions/index.js");
 
     const questions = serviceApiQuestions.getQuestions(message.author.id);
@@ -11,16 +12,22 @@ module.exports.run = (message, services) => {
         const question = questions[oldQuestionKey];
 
         let foundAnswer = false;
-
+        let defaultGoto = null;
         Object.keys(question.nextQuestion).forEach(index => {
-            if (index === question.answer) {
+            if (!isObj(question.nextQuestion[index])) {
+                defaultGoto = question.nextQuestion[index]
+            } else if (question.nextQuestion[index][language.name] === question.answer) {
                 foundAnswer = true;
-                questions[questions.length - 1] = question.nextQuestion[index];
+                questions[questions.length - 1] = question.nextQuestion[index].goto;
             }
         });
 
         if (!foundAnswer) {
-            questions[questions.length - 1] = question.nextQuestion['_default'];
+            if (defaultGoto === null) {
+                console.error("There was no default goto in this question: " + question);
+                defaultGoto = 0;
+            }
+            questions[questions.length - 1] = defaultGoto;
         }
 
         let newQuestionKey = questions[questions.length - 1];
@@ -28,11 +35,10 @@ module.exports.run = (message, services) => {
 
         if (!('finish' in newQuestion)) {
             serviceApiQuestions.setQuestions(message, questions);
-
-            message.reply(newQuestion.question);
+            message.reply(newQuestion.question[language.name]);
         } else {
             serviceApiQuestions.deleteQuestions(message, questions);
-            message.reply(newQuestion.finish);
+            message.reply(newQuestion.finish[language.name]);
 
             const askFirstQuestion = require("./askFirstQuestion");
             askFirstQuestion.finishPromises[message.author.id](message, questions);
