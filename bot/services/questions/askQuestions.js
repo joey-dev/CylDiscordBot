@@ -12,7 +12,7 @@ module.exports.run = (message, services, language) => {
         const question = questions[oldQuestionKey];
 
         let foundAnswer = false;
-        let defaultGoto = 0;
+        let defaultGoto = null;
         Object.keys(question.nextQuestion).forEach(index => {
             if (!isObj(question.nextQuestion[index])) {
                 defaultGoto = question.nextQuestion[index]
@@ -23,6 +23,10 @@ module.exports.run = (message, services, language) => {
         });
 
         if (!foundAnswer) {
+            if (defaultGoto === null) {
+                console.error("There was no default goto in this question: " + question);
+                defaultGoto = 0;
+            }
             questions[questions.length - 1] = defaultGoto;
         }
 
