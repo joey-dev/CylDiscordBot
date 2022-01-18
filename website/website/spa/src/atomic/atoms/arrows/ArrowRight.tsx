@@ -11,7 +11,7 @@ type StyledSpanProps = {
 };
 
 const StyledSpan = styled.span<StyledSpanProps>`
-    margin: ${props => (props.needSpacing ? '0 10px 0 10px' : '0')};
+    margin: ${(props: StyledSpanProps) => (props.needSpacing ? '0 10px 0 10px' : '0')};
 
     &:hover {
         cursor: pointer;

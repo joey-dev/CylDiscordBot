@@ -12,7 +12,7 @@ const StyledDiv = styled.div<StyledDivProps>`
     position: fixed;
     top: 0;
     left: 0;
-    display: ${props => (props.show ? 'block' : 'none')};
+    display: ${(props: StyledDivProps) => (props.show ? 'block' : 'none')};
     z-index: ${BACKDROP};
     background-color: #c4c4c4;
     opacity: 0.7;

@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-ignore
 import styled, { keyframes } from 'styled-components';
 
 const ldsDualRingKeyframe = keyframes`
@@ -15,7 +16,7 @@ type StyledDivProps = {
 };
 
 const StyledSpan = styled.span<StyledDivProps>`
-    position: ${props => (props.centered ? 'absolute' : 'unset')};
+    position: ${(props: StyledDivProps) => (props.centered ? 'absolute' : 'unset')};
     left: calc(50% - 32px);
     top: 30%;
 `;
@@ -41,10 +42,10 @@ const StyledLoader = styled.span<StyledLoaderProps>`
     &:after {
         content: ' ';
         display: block;
-        width: ${props => (props.small ? smallLoader.width : largeLoader.width)};
-        height: ${props => (props.small ? smallLoader.height : largeLoader.height)};
+        width: ${(props: StyledLoaderProps) => (props.small ? smallLoader.width : largeLoader.width)};
+        height: ${(props: StyledLoaderProps) => (props.small ? smallLoader.height : largeLoader.height)};
         border-radius: 50%;
-        border: ${props => (props.small ? smallLoader.borderThickness : largeLoader.borderThickness)} solid black;
+        border: ${(props: StyledLoaderProps) => (props.small ? smallLoader.borderThickness : largeLoader.borderThickness)} solid black;
         border-color: black transparent black transparent;
         animation: ${ldsDualRingKeyframe} 1.2s linear infinite;
     }

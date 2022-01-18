@@ -10,7 +10,7 @@ type StyledDivProps = {
 }
 
 const StyledDiv = styled.div<StyledDivProps>`
-    grid-area: ${props => props.grid}
+    grid-area: ${(props: StyledDivProps) => props.grid}
 `;
 
 type Props = {
