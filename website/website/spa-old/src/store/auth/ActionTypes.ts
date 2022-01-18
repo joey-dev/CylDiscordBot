@@ -1,0 +1,11 @@
+export const AUTH_CHECK_STATE: string = 'AUTH_CHECK_STATE';
+export const AUTH_CHECK_STATE_START: string = 'AUTH_CHECK_STATE_START';
+export const AUTH_CHECK_STATE_FINISH: string = 'AUTH_CHECK_STATE_FINISH';
+export const AUTH_USER: string = 'AUTH_USER';
+export const AUTH_START: string = 'AUTH_START';
+export const AUTH_SUCCESS: string = 'AUTH_SUCCESS';
+export const AUTH_FAIL: string = 'AUTH_FAIL';
+export const AUTH_CHECK_TIMEOUT: string = 'AUTH_CHECK_TIMEOUT';
+export const AUTH_INITIATE_LOGOUT: string = 'AUTH_INITIATE_LOGOUT';
+export const AUTH_LOGOUT: string = 'AUTH_LOGOUT';
+export const SET_AUTH_REDIRECT_PATH: string = 'SET_AUTH_REDIRECT_PATH';
