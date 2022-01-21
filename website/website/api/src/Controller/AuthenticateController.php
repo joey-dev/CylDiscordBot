@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,7 +26,7 @@ class AuthenticateController extends AbstractController
     #[Route('/authenticate/check', name: 'authenticate')]
     public function check(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
-        $data = $request->toArray();
+        $data = json_decode($request->getContent(), true);
 
         if (!array_key_exists("code", $data)) {
             return new JsonResponse([
@@ -89,20 +90,27 @@ class AuthenticateController extends AbstractController
 
         $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $resultUser['id']]);
 
+//        var_dump("date1");
+//        var_dump(strtotime("now"));
+//        var_dump("date2");
+//        var_dump($result['expires_in']);
+
         if ($user instanceof User) {
             $user->setToken($result["access_token"]);
             $user->setUsername($resultUser['username']);
+            $user->setRefreshToken($result['refresh_token']);
+            $user->setTokenExpiresIn(strtotime("now") + $result['expires_in']);
         } else {
             $user = new User();
             $user->setUserId($resultUser['id']);
             $user->setToken($result["access_token"]);
             $user->setUsername($resultUser['username']);
+            $user->setRefreshToken($result['refresh_token']);
+            $user->setTokenExpiresIn(strtotime("now") + $request['expires_in']);
         }
 
         $entityManager->persist($user);
         $entityManager->flush();
-
-        // set id in json response to id from database. user_id is the id from discord
 
         return new JsonResponse([
             "data" => [

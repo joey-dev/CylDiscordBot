@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home/Home';
 import Header from './atomic/templates/layout/Header';
@@ -10,6 +10,7 @@ import { authCheckState } from './store/auth/Action';
 import { MapStateToProps } from './store';
 import Layout from './components/layouts/Layout/Layout';
 import Loader from './atomic/atoms/Loader/Loader';
+import Button from './atomic/atoms/buttons/Button/Button';
 
 type Props = {
     onTryAutoSignUp: () => void;
@@ -19,6 +20,7 @@ type Props = {
 
 const App: React.FC<Props> = (props: Props) => {
     console.log('ttt');
+    const navigate = useNavigate();
 
     const { onTryAutoSignUp } = props;
 
@@ -46,12 +48,26 @@ const App: React.FC<Props> = (props: Props) => {
                         element={<Dashboard loading={false} />}
                     />
                 ): ''}
+
+                <Route
+                    path="*"
+                    element={
+                        <main style={{ padding: "1rem" }}>
+                            <p>404 page not found</p>
+                            <Button type="button"
+                                onClick={() => {
+                                    navigate('/');
+                                }}
+                            > Go Back Home
+                            </Button>
+                        </main>
+                    }
+                />
             </Routes>
         </React.Fragment>
     );
 
     return <Layout>{props.isAutoSigningUp ? <Loader centered={true} /> : routes}</Layout>;
-
 };
 
 const mapStateToProps = (state: MapStateToProps) => {

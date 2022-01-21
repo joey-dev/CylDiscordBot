@@ -27,6 +27,12 @@ class User
     #[ORM\Column(type: 'string', length: 25)]
     private $user_id;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $token_expires_in;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $refresh_token;
+
     public function __construct()
     {
         $this->server = new ArrayCollection();
@@ -93,6 +99,30 @@ class User
     public function setUserId(string $user_id): self
     {
         $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    public function getTokenExpiresIn(): ?string
+    {
+        return $this->token_expires_in;
+    }
+
+    public function setTokenExpiresIn(string $token_expires_in): self
+    {
+        $this->token_expires_in = $token_expires_in;
+
+        return $this;
+    }
+
+    public function getRefreshToken(): ?string
+    {
+        return $this->refresh_token;
+    }
+
+    public function setRefreshToken(string $refresh_token): self
+    {
+        $this->refresh_token = $refresh_token;
 
         return $this;
     }

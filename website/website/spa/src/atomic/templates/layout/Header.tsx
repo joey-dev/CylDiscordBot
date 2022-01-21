@@ -4,8 +4,7 @@ import Button from '../../atoms/buttons/Button/Button';
 import { MapStateToProps } from '../../../store';
 import { connect } from 'react-redux';
 import { AuthStoreState } from '../../../store/auth/Index';
-import { UserStoreState } from '../../../store/user/Index';
-import { useNavigate } from 'react-router-dom';
+import { logout } from '../../../store/auth/Action';
 
 const OuterDiv = styled.div`
     width: 100%;
@@ -16,8 +15,13 @@ const StyledH1 = styled.h1`
     display: inline-block;
 `;
 
+type DispatchProps = {
+    logout: () => void;
+};
 
-const Header: React.FC<AuthStoreState> = (props: AuthStoreState) => {
+type Props = DispatchProps & AuthStoreState;
+
+const Header: React.FC<Props> = (props: Props) => {
     const loginButton = (
         <Button type="button"
             onClick={() => {
@@ -29,7 +33,16 @@ const Header: React.FC<AuthStoreState> = (props: AuthStoreState) => {
     );
 
     const welcomeMessage = (
-        <StyledH1>Hello, {props.user?.username}</StyledH1>
+        <React.Fragment>
+            <StyledH1>Hello, {props.user?.username}</StyledH1>
+            <Button type="button"
+                onClick={() => {
+                    props.logout();
+                }}
+            >
+                Logout
+            </Button>
+        </React.Fragment>
     );
 
     return (
@@ -52,4 +65,14 @@ const mapStateToProps = (state: MapStateToProps) => {
     };
 };
 
-export default connect(mapStateToProps)(Header);
+type DispatchPropsArgs = {
+    type: string;
+};
+
+const mapDispatchToProps = (dispatch: (arg0: DispatchPropsArgs) => void) => {
+    return {
+        logout: () => dispatch(logout()),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
