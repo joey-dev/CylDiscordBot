@@ -24,6 +24,9 @@ class User
     #[ORM\ManyToMany(targetEntity: Server::class, inversedBy: 'users')]
     private $server;
 
+    #[ORM\Column(type: 'string', length: 25)]
+    private $user_id;
+
     public function __construct()
     {
         $this->server = new ArrayCollection();
@@ -78,6 +81,18 @@ class User
     public function removeServer(Server $server): self
     {
         $this->server->removeElement($server);
+
+        return $this;
+    }
+
+    public function getUserId(): ?string
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(string $user_id): self
+    {
+        $this->user_id = $user_id;
 
         return $this;
     }

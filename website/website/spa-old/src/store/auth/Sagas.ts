@@ -65,23 +65,23 @@ export function* authUserSaga(action: AuthUserSagaAction) {
 
         const user: User = response.data.user;
 
-        const expirationDate = yield new Date(new Date().getTime() + expiresIn * 1000);
+        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
         yield localStorage.setItem('token', response.data.token);
-        yield localStorage.setItem('expirationDate', expirationDate);
+        // yield localStorage.setItem('expirationDate', expirationDate);
         yield localStorage.setItem('userId', response.data.user.userId.toString());
 
         yield put(userActions.updateUserState(user));
         yield put(actions.authSuccess(user.userId.toString(), response.data.token));
         yield put(actions.checkAuthTimeout(expiresIn));
     } catch (error) {
-        yield put(actions.authFail(error.response.data.error));
+        // yield put(actions.authFail(error.response.data.error));
     }
 }
 
 export function* authCheckStateSaga(action: {}) {
     yield put(actions.authCheckStateStart());
 
-    const token = yield localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token || token === 'undefined') {
         yield put(actions.logout());
     } else {
@@ -90,14 +90,14 @@ export function* authCheckStateSaga(action: {}) {
             yield put(actions.authCheckStateFinish());
             return;
         }
-        const expirationDate = yield new Date(expirationDateStorage.toString());
+        const expirationDate = new Date(expirationDateStorage.toString());
         if (expirationDate <= new Date()) {
             yield put(actions.logout());
             yield put(actions.authCheckStateFinish());
             return;
         }
-        const userId = yield localStorage.getItem('userId');
-        yield authUserLoginWithId(userId);
+        const userId = localStorage.getItem('userId');
+        // yield authUserLoginWithId(userId);
     }
     yield put(actions.authCheckStateFinish());
 }
@@ -134,8 +134,8 @@ function* authUserLoginWithId(userId: string) {
             roles: response.data.roles,
         };
 
-        const expirationDate = yield new Date(new Date().getTime() + expiresIn * 1000);
-        yield localStorage.setItem('expirationDate', expirationDate);
+        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+        // yield localStorage.setItem('expirationDate', expirationDate);
 
         const token = localStorage.getItem('token') || undefined;
 
@@ -143,6 +143,6 @@ function* authUserLoginWithId(userId: string) {
         yield put(actions.authSuccess(user.userId.toString(), token));
         yield put(actions.checkAuthTimeout(expiresIn));
     } catch (error) {
-        yield put(actions.authFail(error.response.data.error));
+        // yield put(actions.authFail(error.response.data.error));
     }
 }
