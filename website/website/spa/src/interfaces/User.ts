@@ -11,3 +11,7 @@ export interface OptionalUser {
     token?: string;
     user_id?: string;
 }
+
+export interface UserLogin {
+    user_id: string;
+}

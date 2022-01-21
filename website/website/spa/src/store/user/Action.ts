@@ -1,44 +1,63 @@
 import * as actionTypes from './ActionTypes';
-import { OptionalUser, User } from '../../interfaces/User';
+import { User, UserLogin } from '../../interfaces/User';
 
-export const updateUserState = (user: User) => {
+export const getUserState = (user: User) => {
     return {
-        type: actionTypes.UPDATE_USER_STATE,
+        type: actionTypes.GET_USER_STATE,
         payload: {
             user,
         },
     };
 };
 
-export const updateUserStart = (user: OptionalUser) => {
+
+export const setUserStart = (user: User) => {
     return {
-        type: actionTypes.UPDATE_USER_START,
+        type: actionTypes.SET_USER_START,
         payload: {
             user,
         },
     };
 };
 
-export const updateUserFinish = (user: OptionalUser) => {
+export const setUserFinish = (user: User) => {
     return {
-        type: actionTypes.UPDATE_USER_FINISH,
+        type: actionTypes.SET_USER_FINISH,
         payload: {
             user,
         },
     };
 };
 
-export const updateUserError = (error: string) => {
+export const getUserStart = (user: UserLogin) => {
     return {
-        type: actionTypes.UPDATE_USER_ERROR,
+        type: actionTypes.GET_USER_START,
+        payload: {
+            user,
+        },
+    };
+};
+
+export const getUserFinish = (user: User) => {
+    return {
+        type: actionTypes.GET_USER_FINISH,
+        payload: {
+            user,
+        },
+    };
+};
+
+export const getUserError = (error: string) => {
+    return {
+        type: actionTypes.GET_USER_ERROR,
         payload: {
             error,
         },
     };
 };
 
-export const updateUserRemoveSuccess = () => {
+export const getUserRemoveSuccess = () => {
     return {
-        type: actionTypes.UPDATE_USER_REMOVE_SUCCESS,
+        type: actionTypes.GET_USER_REMOVE_SUCCESS,
     };
 };

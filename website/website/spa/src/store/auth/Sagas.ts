@@ -5,7 +5,6 @@ import * as actions from './Action';
 import * as userActions from './../user/Action';
 import { User } from '../../interfaces/User';
 import { ApiError } from '../../interfaces/api/Error';
-import { updateUserState } from './../user/Action';
 
 type LogoutSageAction = {
     logoutSucceed: () => void;
@@ -102,13 +101,15 @@ export function* authUserSaga(action: AuthUserSagaAction) {
     localStorage.setItem('expirationDate', expirationDate.toString());
     localStorage.setItem('userId', responseData.user.user_id.toString());
 
-    yield put(userActions.updateUserState(user));
+    yield put(userActions.setUserStart(user));
     yield put(actions.authSuccess(user.user_id.toString(), responseData.data.access_token));
     yield put(actions.checkAuthTimeout(expiresIn));
 }
 
 export function* authCheckStateSaga(action: {}) {
     yield put(actions.authCheckStateStart());
+
+    console.log('trying to sign up');
 
     const token = localStorage.getItem('token');
     if (!token || token === 'undefined') {
@@ -150,10 +151,12 @@ type UserResponseData = {
 };
 
 function* authUserLoginWithId(userId: string) {
+    console.log('finding user...');
     const response: UserResponse = yield Axios().get('/user/' + userId).catch((error: ApiError) => {
         put(actions.authFail(error.response.data.error));
     });
-    const expiresIn = 3600;
+
+    console.log(response);
 
     const user: User = {
         id: response.data.id,
@@ -162,12 +165,8 @@ function* authUserLoginWithId(userId: string) {
         token: response.data.token,
     };
 
-    // const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-    // localStorage.setItem('expirationDate', expirationDate);
+    console.log(user);
 
-    const token = localStorage.getItem('token') || undefined;
-
-    yield put(userActions.updateUserState(user));
-    yield put(actions.authSuccess(user.user_id.toString(), token));
-    yield put(actions.checkAuthTimeout(expiresIn));
+    yield put(userActions.setUserStart(user));
+    yield put(actions.authSuccess(user.user_id.toString(), user.token));
 }

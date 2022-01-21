@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home/Home';
 import Header from './atomic/templates/layout/Header';
 import AuthRedirect from './pages/Auth/Auth';
 import Dashboard from './pages/Dashboard/Dashboard';
+import { connect } from 'react-redux';
+import { authCheckState } from './store/auth/Action';
+import { MapStateToProps } from './store';
+import Layout from './components/layouts/Layout/Layout';
+import Loader from './atomic/atoms/Loader/Loader';
 
-const App: React.FC = () => {
+type Props = {
+    onTryAutoSignUp: () => void;
+    isAuthenticated: boolean;
+    isAutoSigningUp?: boolean;
+};
+
+const App: React.FC<Props> = (props: Props) => {
     console.log('ttt');
-    return (
+
+    const { onTryAutoSignUp } = props;
+
+    useEffect(() => {
+        console.log('[app] use effect run');
+        if (!props.isAuthenticated) {
+            console.log('auto sign up...');
+            onTryAutoSignUp();
+        }
+    }, [onTryAutoSignUp]);
+
+    const routes = (
         <React.Fragment>
             <Header token={null} />
 
@@ -19,13 +41,35 @@ const App: React.FC = () => {
                 <Route path="/auth/redirect"
                     element={<AuthRedirect token={null} />}
                 />
-                <Route path="/dashboard"
-                    element={<Dashboard loading={false} />}
-                />
+                {props.isAuthenticated ? (
+                    <Route path="/dashboard"
+                        element={<Dashboard loading={false} />}
+                    />
+                ): ''}
             </Routes>
         </React.Fragment>
     );
+
+    return <Layout>{props.isAutoSigningUp ? <Loader centered={true} /> : routes}</Layout>;
+
+};
+
+const mapStateToProps = (state: MapStateToProps) => {
+    return {
+        isAuthenticated: state.auth.userId !== null,
+        isAutoSigningUp: state.auth.isAutoSigningUp,
+    };
+};
+
+type DispatchPropsArgs = {
+    type: string;
+};
+
+const mapDispatchToProps = (dispatch: (arg0: DispatchPropsArgs) => void) => {
+    return {
+        onTryAutoSignUp: () => dispatch(authCheckState()),
+    };
 };
 
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -22,15 +22,19 @@ type Payload = {
 
 const userReducer = (state: UserStoreState = initialState, { type, payload }: Actions) => {
     switch (type) {
-        case ActionTypes.UPDATE_USER_STATE:
+        case ActionTypes.GET_USER_STATE:
             return UpdateObject(state, {user: payload.user});
-        case ActionTypes.UPDATE_USER_START:
+        case ActionTypes.GET_USER_START:
             return UpdateObject(state, {loading: true});
-        case ActionTypes.UPDATE_USER_FINISH:
+        case ActionTypes.SET_USER_START:
+            return UpdateObject(state, {loading: true});
+        case ActionTypes.GET_USER_FINISH:
             return UpdateObject(state, {loading: false, user: payload.user, success: true});
-        case ActionTypes.UPDATE_USER_ERROR:
+        case ActionTypes.SET_USER_FINISH:
+            return UpdateObject(state, {loading: false, user: payload.user, success: true});
+        case ActionTypes.GET_USER_ERROR:
             return UpdateObject(state, {loading: false, error: payload.error});
-        case ActionTypes.UPDATE_USER_REMOVE_SUCCESS:
+        case ActionTypes.GET_USER_REMOVE_SUCCESS:
             return UpdateObject(state, {success: false});
         default:
             return state;

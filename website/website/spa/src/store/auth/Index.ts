@@ -21,4 +21,5 @@ export type AuthStoreState = {
     isAuthenticated?: boolean;
     authRedirectPath: string;
     user?: User;
+    isAutoSigningUp?: boolean;
 };

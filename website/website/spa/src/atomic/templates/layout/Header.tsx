@@ -4,6 +4,8 @@ import Button from '../../atoms/buttons/Button/Button';
 import { MapStateToProps } from '../../../store';
 import { connect } from 'react-redux';
 import { AuthStoreState } from '../../../store/auth/Index';
+import { UserStoreState } from '../../../store/user/Index';
+import { useNavigate } from 'react-router-dom';
 
 const OuterDiv = styled.div`
     width: 100%;
@@ -42,6 +44,7 @@ const Header: React.FC<AuthStoreState> = (props: AuthStoreState) => {
 
 const mapStateToProps = (state: MapStateToProps) => {
     return {
+        user: state.user.user,
         loading: state.auth.loading,
         error: state.auth.error,
         isAuthenticated: state.auth.userId !== null,

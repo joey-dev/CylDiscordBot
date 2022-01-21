@@ -1,10 +1,7 @@
 import React from 'react';
 
-type Props = {
-    isAuthenticated: boolean;
-};
 
-const Layout: React.FC<Props> = props => {
+const Layout: React.FC = props => {
     return (
         <div>
             {props.children}
