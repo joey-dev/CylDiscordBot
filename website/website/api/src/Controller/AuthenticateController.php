@@ -90,10 +90,6 @@ class AuthenticateController extends AbstractController
 
         $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $resultUser['id']]);
 
-//        var_dump("date1");
-//        var_dump(strtotime("now"));
-//        var_dump("date2");
-//        var_dump($result['expires_in']);
 
         if ($user instanceof User) {
             $user->setToken($result["access_token"]);

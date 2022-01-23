@@ -11,43 +11,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
-    #[Route('/user/{id}', name: 'user', methods: ["GET"])]
-    public function user(Request $request, ManagerRegistry $doctrine, int $id): JsonResponse
+    #[Route('/user', name: 'user', methods: ["GET"])]
+    public function user(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
-        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $id]);
-
-        if (!($user instanceof User)) {
-            return new JsonResponse([
-                'error' => 400,
-                'error_message' => 'user not found',
-            ]);
-        }
-
-        // if token in header is the same as the user in the database
-        $fullAuthorizationToken = $request->headers->get("Authorization");
-
-        if (!$fullAuthorizationToken) {
-            return new JsonResponse([
-                'error' => 400,
-                'error_message' => 'token not found',
-            ]);
-        }
-
-        $authorizationToken = explode(" ", $fullAuthorizationToken)[1];
-
-        if ($authorizationToken != $user->getToken()) {
-            return new JsonResponse([
-                'error' => 400,
-                'error_message' => 'token incorrect',
-            ]);
-        }
-
+        $userRepository = $doctrine->getRepository(User::class);
+        $userId = $request->headers->get('user_id');
+        $user = $userRepository->findOneBy(['user_id' => $userId]);
 
         return new JsonResponse([
             "id" => $user->getId(),
             "username" => $user->getUsername(),
             "token" => $user->getToken(),
-            "user_id" => $user->getUserId()
+            "user_id" => $user->getUserId(),
         ]);
     }
 }
