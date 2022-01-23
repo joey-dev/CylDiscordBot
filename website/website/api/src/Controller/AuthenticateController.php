@@ -69,8 +69,8 @@ class AuthenticateController extends AbstractController
                 "Content-type" => " application/x-www-form-urlencoded",
             ],
             'body' => [
-                "client_id" => '794964425819160587',
-                "client_secret" => 'imXvPXhSOltnCD1J2ngOOfrMQUxJR5AX',
+                "client_id" => $_ENV["discord_client_id"],
+                "client_secret" => $_ENV["discord_client_secret"],
                 "grant_type" => 'authorization_code',
                 "redirect_uri" => 'http://localhost:3000/auth/redirect',
                 "code" => $code,
