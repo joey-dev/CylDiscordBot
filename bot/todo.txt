@@ -1,4 +1,0 @@
-- add languages (english/dutch)
-    - new table for languages in database & link with server (1 server can have 1 language)
-    - every command has own file for output in every language folder
-    - questions has multiple ask/answer fields for every language

@@ -1,11 +1,17 @@
 export interface User {
-    userId: number;
+    id: number;
     username: string;
     token: string;
+    user_id: string;
 }
 
 export interface OptionalUser {
-    userId?: number;
+    id?: number;
     username?: string;
     token?: string;
+    user_id?: string;
+}
+
+export interface UserLogin {
+    user_id: string;
 }
