@@ -15,16 +15,12 @@ type DispatchProps = {
 type Props = AuthStoreState & DispatchProps;
 
 const AuthRedirect: React.FC<Props> = (props: Props) => {
-    console.log('test');
     const useQuery = () => new URLSearchParams(useLocation().search);
 
     const query = useQuery();
 
     const code = query.get('code');
     const navigate = useNavigate();
-
-    console.log("isAuthenticated: " + props.isAuthenticated);
-    console.log("loading: " + props.loading);
 
     useEffect(() => {
         if (props.isAuthenticated) {
@@ -33,13 +29,12 @@ const AuthRedirect: React.FC<Props> = (props: Props) => {
     }, [props.isAuthenticated]);
 
     if (!props.isAuthenticated && !props.loading) {
-        if (typeof code === 'string') {
-            console.log(code);
-            props.onAuth(code);
-        } else {
+        if (typeof code !== 'string' || props.error) {
             return (
-                <p>error!</p>
+                <p>an error occurred while logging in. please try again</p>
             )
+        } else {
+            props.onAuth(code);
         }
     }
 

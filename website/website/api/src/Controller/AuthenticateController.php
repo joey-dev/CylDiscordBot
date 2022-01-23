@@ -20,7 +20,6 @@ class AuthenticateController extends AbstractController
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
-//        header("Access-Control-Allow-Origin: *");
     }
 
     #[Route('/authenticate/check', name: 'authenticate')]
@@ -35,8 +34,34 @@ class AuthenticateController extends AbstractController
             ]);
         }
 
-        $code = $data['code'];
+        $result = $this->getAccessToken($data['code']);
 
+        if ($result instanceof JsonResponse) {
+            return $result;
+        }
+
+        $resultUser = $this->getUserFromDiscordApi($result["access_token"]);
+
+        $user = $this->getAndSetUpdatedUser($doctrine, $resultUser, $result);
+
+        return new JsonResponse([
+            "data" => [
+                "access_token" => $user->getToken(),
+                "token_type" => $result["token_type"],
+                "expires_in" => $result["expires_in"],
+                "refresh_token" => $user->getRefreshToken(),
+                "scope" => $result["scope"],
+            ],
+            "user" => [
+                "id" => $user->getId(),
+                "username" => $user->getUsername(),
+                "token" => $user->getToken(),
+                "user_id" => $user->getUserId()
+            ]
+        ]);
+    }
+
+    private function getAccessToken(string $code): array|JsonResponse {
         $url = 'https://discord.com/api/v8/oauth2/token';
 
         $options = [
@@ -75,21 +100,26 @@ class AuthenticateController extends AbstractController
             ]);
         }
 
+        return $result;
+    }
+
+    private function getUserFromDiscordApi($access_token): array {
         $responseUser = $this->client->request(
             "GET",
             "https://discord.com/api/v8/users/@me",
             [
                 'headers' => [
-                    "Authorization" => "Bearer " . $result["access_token"]
+                    "Authorization" => "Bearer " . $access_token
                 ],
             ]
         );
 
-        $resultUser = json_decode($responseUser->getContent(), true);
+        return json_decode($responseUser->getContent(), true);
+    }
+
+    private function getAndSetUpdatedUser(ManagerRegistry $doctrine, $resultUser, $result): User {
         $entityManager = $doctrine->getManager();
-
         $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $resultUser['id']]);
-
 
         if ($user instanceof User) {
             $user->setToken($result["access_token"]);
@@ -102,27 +132,12 @@ class AuthenticateController extends AbstractController
             $user->setToken($result["access_token"]);
             $user->setUsername($resultUser['username']);
             $user->setRefreshToken($result['refresh_token']);
-            $user->setTokenExpiresIn(strtotime("now") + $request['expires_in']);
+            $user->setTokenExpiresIn(strtotime("now") + $result['expires_in']);
         }
 
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return new JsonResponse([
-            "data" => [
-                "access_token" => $result["access_token"],
-                "token_type" => $result["token_type"],
-                "expires_in" => $result["expires_in"],
-                "refresh_token" => $result["refresh_token"],
-                "scope" => $result["scope"],
-            ],
-            "user" => [
-                "id" => $user->getId(),
-                "username" => $resultUser['username'],
-                "token" => $result['access_token'],
-                "user_id" => $resultUser['id']
-            ]
-        ]);
-
+        return $user;
     }
 }

@@ -19,15 +19,12 @@ type Props = {
 };
 
 const App: React.FC<Props> = (props: Props) => {
-    console.log('ttt');
     const navigate = useNavigate();
 
     const { onTryAutoSignUp } = props;
 
     useEffect(() => {
-        console.log('[app] use effect run');
         if (!props.isAuthenticated) {
-            console.log('auto sign up...');
             onTryAutoSignUp();
         }
     }, [onTryAutoSignUp]);

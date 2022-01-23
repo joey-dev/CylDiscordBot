@@ -17,11 +17,8 @@ const Dashboard: React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         if (props.user === undefined) {
-            console.log('not signed in');
             navigate("/");
         }
-        console.log('signed in');
-        console.log(props.user);
     }, [props.user]);
 
     return (

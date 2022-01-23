@@ -40,16 +40,16 @@ type AuthUserSagaPayload = {
 };
 
 type LoginResponse = {
-    data?: DataResponse;
-
-    status_code?: number
-    error?: string,
-    error_description?: string,
+    data: DataResponse;
 };
 
 type DataResponse = {
     data: LoginResponseData;
     user: User;
+
+    status_code?: number
+    error?: string,
+    error_description?: string,
 }
 
 type LoginResponseData = {
@@ -67,49 +67,36 @@ export function* authUserSaga(action: AuthUserSagaAction) {
     };
     const url = '/authenticate/check';
 
-
-    console.log('requesting...');
-    console.log(action);
-    console.log(authData);
     const response: LoginResponse = yield Axios('application/x-www-form-urlencoded').post(url, authData).catch((error: ApiError) => {
-        // put(actions.authFail(error.response.data.error));
-        console.log('error');
+        put(actions.authFail(error.response.data.error));
     });
 
-    console.log(response);
+    if (response.data.hasOwnProperty("status_code") && response.data.status_code !== 200 && response.data.error && response.data.error_description) {
+        yield put(actions.authFail({
+            name: response.data.error,
+            message: response.data.error_description
+        }));
+    } else {
+        const responseData = response.data
 
-    if (response.hasOwnProperty("status_code") && response.status_code === 400) {
-        console.log('error2');
-        return;
+        const expiresIn = responseData.data.expires_in;
+
+        const user: User = responseData.user;
+
+        const expirationDate = new Date().getTime() + expiresIn * 1000;
+        localStorage.setItem('token', responseData.data.access_token);
+        localStorage.setItem('expirationDate', expirationDate.toString());
+        localStorage.setItem('userId', responseData.user.user_id.toString());
+
+        yield put(userActions.setUserStart(user));
+        yield put(actions.authSuccess(user.user_id.toString(), responseData.data.access_token));
+        yield put(actions.checkAuthTimeout(expiresIn));
     }
 
-    if (!response.data || !response.data.user) {
-        console.log('error3');
-        return;
-    }
-
-    console.log('no error');
-
-    const responseData = response.data
-
-    const expiresIn = responseData.data.expires_in;
-
-    const user: User = responseData.user;
-
-    const expirationDate = new Date().getTime() + expiresIn * 1000;
-    localStorage.setItem('token', responseData.data.access_token);
-    localStorage.setItem('expirationDate', expirationDate.toString());
-    localStorage.setItem('userId', responseData.user.user_id.toString());
-
-    yield put(userActions.setUserStart(user));
-    yield put(actions.authSuccess(user.user_id.toString(), responseData.data.access_token));
-    yield put(actions.checkAuthTimeout(expiresIn));
 }
 
 export function* authCheckStateSaga(action: {}) {
     yield put(actions.authCheckStateStart());
-
-    console.log('trying to sign up');
 
     const token = localStorage.getItem('token');
     if (!token || token === 'undefined') {
@@ -151,12 +138,9 @@ type UserResponseData = {
 };
 
 function* authUserLoginWithId(userId: string) {
-    console.log('finding user...');
-    const response: UserResponse = yield Axios().get('/user/' + userId).catch((error: ApiError) => {
+    const response: UserResponse = yield Axios().get('/user').catch((error: ApiError) => {
         put(actions.authFail(error.response.data.error));
     });
-
-    console.log(response);
 
     const user: User = {
         id: response.data.id,
@@ -164,8 +148,6 @@ function* authUserLoginWithId(userId: string) {
         user_id: response.data.user_id,
         token: response.data.token,
     };
-
-    console.log(user);
 
     yield put(userActions.setUserStart(user));
     yield put(actions.authSuccess(user.user_id.toString(), user.token));

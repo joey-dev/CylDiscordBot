@@ -27,9 +27,8 @@ export function* updateUserRemoveSuccessSaga() {
 }
 
 export function* getUserSaga(action: GetUserSagaAction) {
-    console.log('finding user...');
     const updatedUserData = {...action.payload.user};
-    const url = '/user/' + updatedUserData.user_id;
+    const url = '/user';
 
     const response: UserResponse = yield Axios().get(url).catch(error => {
         put(actions.getUserError(error.message));
