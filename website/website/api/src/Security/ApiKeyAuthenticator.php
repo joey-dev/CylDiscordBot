@@ -37,15 +37,11 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
     {
         $apiToken = $request->headers->get('Authorization');
         if (null === $apiToken) {
-            // The token header was empty, authentication fails with HTTP Status
-            // Code 401 "Unauthorized"
             throw new CustomUserMessageAuthenticationException('token not found');
         }
 
         $id = $request->headers->get('user_id');
         if (null === $id) {
-            // The token header was empty, authentication fails with HTTP Status
-            // Code 401 "Unauthorized"
             throw new CustomUserMessageAuthenticationException('user_id not found');
         }
 
@@ -74,18 +70,13 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        // on success, let the request continue
         return null;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $data = [
-            // you may want to customize or obfuscate the message first
             'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
-
-            // or to translate this message
-            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
