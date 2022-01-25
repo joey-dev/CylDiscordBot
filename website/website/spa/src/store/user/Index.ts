@@ -2,7 +2,7 @@ import { all, takeEvery } from 'redux-saga/effects';
 
 import * as actionTypes from './ActionTypes';
 import { getUserSaga, setUserSaga } from './Sagas';
-import { User } from '../../interfaces/User';
+import { User } from '../../interfaces/api/User';
 
 
 export function* watchUserSagas() {

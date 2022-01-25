@@ -6,6 +6,7 @@ type ButtonTypes = 'submit' | 'button';
 type Props = {
     type?: ButtonTypes;
     onClick?: () => void;
+    children: React.Component|string;
 };
 
 const StyledButton = styled.button`
@@ -20,7 +21,7 @@ const StyledButton = styled.button`
     }
 `;
 
-const Button: React.FC<Props> = props => {
+const Button: React.FC<Props> = (props: Props) => {
     return (
         <StyledButton type={props.type ? props.type : 'button'} onClick={props.onClick}>
             {props.children}

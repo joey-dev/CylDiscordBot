@@ -22,7 +22,7 @@ type Props = {
     placeholder?: string
 };
 
-const FullInput: React.FC<Props> = props => {
+const FullInput: React.FC<Props> = (props: Props) => {
     return (
         <StyledDiv grid={props.grid}>
             <Label for={props.name}>{props.name}</Label>

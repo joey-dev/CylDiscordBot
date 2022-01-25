@@ -1,5 +1,5 @@
 import * as actionTypes from './ActionTypes';
-import { User, UserLogin } from '../../interfaces/User';
+import { User, UserLogin } from '../../interfaces/api/User';
 
 export const getUserState = (user: User) => {
     return {

@@ -41,9 +41,14 @@ const App: React.FC<Props> = (props: Props) => {
                     element={<AuthRedirect token={null} />}
                 />
                 {props.isAuthenticated ? (
-                    <Route path="/dashboard"
-                        element={<Dashboard loading={false} />}
-                    />
+                    <React.Fragment>
+                        <Route path="/dashboard"
+                            element={<Dashboard loading={false} />}
+                        />
+                        <Route path="/dashboard/:serverId"
+                            element={<Dashboard loading={false} />}
+                        />
+                    </React.Fragment>
                 ): ''}
 
                 <Route

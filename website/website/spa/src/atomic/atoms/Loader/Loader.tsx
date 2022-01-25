@@ -56,7 +56,7 @@ type Props = {
     small?: boolean;
 };
 
-const Loader: React.FC<Props> = props => {
+const Loader: React.FC<Props> = (props: Props) => {
     return (
         <StyledSpan centered={props.centered}>
             <StyledLoader small={props.small} />

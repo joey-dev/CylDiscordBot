@@ -8,9 +8,10 @@ const StyledLabel = styled.label`
 
 type Props = {
     for: string;
+    children: string;
 };
 
-const Label: React.FC<Props> = props => {
+const Label: React.FC<Props> = (props: Props) => {
     return <StyledLabel htmlFor={props.for}>{props.children}</StyledLabel>;
 };
 
