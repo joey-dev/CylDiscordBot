@@ -1,4 +1,4 @@
-import { OptionalUser, User, UserLogin } from '../../interfaces/User';
+import { OptionalUser, User, UserLogin } from '../../interfaces/api/User';
 import { delay, put } from 'redux-saga/effects';
 import * as actions from './Action';
 import Axios from '../../services/Axios/AxiosConfig';

@@ -23,7 +23,7 @@ type Props = {
     onClose: () => void;
 };
 
-const Backdrop: React.FC<Props> = props => {
+const Backdrop: React.FC<Props> = (props: Props) => {
     return <StyledDiv show={props.show} onClick={props.onClose} />;
 };
 

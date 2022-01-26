@@ -15,7 +15,7 @@ type Props = {
     clicked: () => void;
 };
 
-const CloseButton: React.FC<Props> = props => {
+const CloseButton: React.FC<Props> = (props: Props) => {
     return <StyledDiv onClick={props.clicked}>&times;</StyledDiv>;
 };
 

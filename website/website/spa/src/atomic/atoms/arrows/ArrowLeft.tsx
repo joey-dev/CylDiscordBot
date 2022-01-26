@@ -18,7 +18,7 @@ const StyledSpan = styled.span<StyledSpanProps>`
     }
 `;
 
-const ArrowLeft: React.FC<Props> = props => {
+const ArrowLeft: React.FC<Props> = (props: Props) => {
     return (
         <StyledSpan needSpacing={props.spacing} onClick={props.onClick}>
             &#60;

@@ -39,7 +39,7 @@ type Props = {
     placeholder?: string;
 };
 
-const Input: React.FC<Props> = props => {
+const Input: React.FC<Props> = (props: Props) => {
     let inputType;
 
     switch (props.inputType) {

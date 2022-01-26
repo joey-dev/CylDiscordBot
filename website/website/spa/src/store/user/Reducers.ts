@@ -1,7 +1,7 @@
 import { UserStoreState } from '../user/Index';
 import * as ActionTypes from './ActionTypes';
 import UpdateObject from '../../services/reducer/UpdateObject/UpdateObject';
-import { User } from '../../interfaces/User';
+import { User } from '../../interfaces/api/User';
 
 const initialState: UserStoreState = {
     user: undefined,

@@ -1,0 +1,111 @@
+module:
+	plugin
+	    component
+	    component
+	plugin
+        component
+module:
+	plugin
+	    component
+	plugin
+	    component
+	    component
+	    component
+	plugin
+	    component
+
+
+
+Management:
+	Welcome
+		public message
+			message
+			image
+		private message
+			message
+		role
+			roles
+		leave
+			message
+	Reaction Roles
+		message/roles
+	Moderation
+		spam
+			ignored channels
+			ignored roles
+			mute/kick/ban after x messages in x seconds for x hours/days
+			mute/kick/ban after x times violations in x hours/days
+		caps
+			ignored channels
+			ignored roles
+			mute/kick/ban for x hours/days
+			mute/kick/ban after x times violations in x hours/days
+		bad words
+			ignored channels
+			ignored roles
+			wordlist
+			mute/kick/ban for x hours/days
+			mute/kick/ban after x times violations in x hours/days
+		invite
+			ignored channels
+			ignored roles
+			mute/kick/ban for x hours/days
+			mute/kick/ban after x times violations in x hours/days
+		link
+			ignored channels
+			ignored roles
+			mute/kick/ban for x hours/days
+			mute/kick/ban after x times violations in x hours/days
+		mass mention
+			ignored channels
+			ignored roles
+			mute/kick/ban for x hours/days
+			mute/kick/ban after x times violations in x hours/days
+		(every)
+			ignored channels
+			ignored roles
+    event
+        create
+            name
+            whitelist/blacklist
+                roles
+            time/date
+            repeat
+    security:
+        alt identify
+        anti-grief
+fun:
+	leveling
+		no xp roles
+		no xp channels
+		levelup message
+		levelup message channels
+		roles
+		#top
+		#rank
+	#roll [dice]
+		between 1-6 * dice
+	#ping
+	birthdays
+	    message
+	    time
+	    channel
+	    role
+	    year
+	        allow
+	        mandatory
+        #birthday
+            adds the birthday of the user
+        #birthday next
+            next 10 birthdays
+        #birthday forget
+    giveaway
+        message
+        amount of winners
+        whitelist/blacklist
+            roles
+        time/date
+Utility:
+	logs
+	easy timezones
+	custom command

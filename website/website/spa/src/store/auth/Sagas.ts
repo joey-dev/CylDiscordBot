@@ -3,7 +3,7 @@ import Axios from '../../services/Axios/AxiosConfig';
 import { call, delay, put } from 'redux-saga/effects';
 import * as actions from './Action';
 import * as userActions from './../user/Action';
-import { User } from '../../interfaces/User';
+import { User } from '../../interfaces/api/User';
 import { ApiError } from '../../interfaces/api/Error';
 
 type LogoutSageAction = {

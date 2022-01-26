@@ -9,10 +9,18 @@ import { logout } from '../../../store/auth/Action';
 const OuterDiv = styled.div`
     width: 100%;
     overflow: hidden;
+    background-color: #202225;
+    padding-top: 2.5vh;
+    padding-bottom: 2.5vh;
 `;
 
 const StyledH1 = styled.h1`
     display: inline-block;
+`;
+
+const ButtonDiv = styled.div`
+    float: right;
+    margin-right: 20px;
 `;
 
 type DispatchProps = {
@@ -34,14 +42,16 @@ const Header: React.FC<Props> = (props: Props) => {
 
     const welcomeMessage = (
         <React.Fragment>
-            <StyledH1>Hello, {props.user?.username}</StyledH1>
-            <Button type="button"
-                onClick={() => {
-                    props.logout();
-                }}
-            >
-                Logout
-            </Button>
+            {/*<StyledH1>Hello, {props.user?.username}</StyledH1>*/}
+            <ButtonDiv>
+                <Button type="button"
+                    onClick={() => {
+                        props.logout();
+                    }}
+                >
+                    Logout
+                </Button>
+            </ButtonDiv>
         </React.Fragment>
     );
 
