@@ -19,23 +19,31 @@ const ServerItems: React.FC<Props> = (props: Props) => {
     let currentServer;
     const navigate = useNavigate();
 
-    const [isListOpened, setListOpened] = useState(false);
+    const [isListOpened, setIsListOpened] = useState(false);
     const [currentServerId, setCurrentServerId] = useState(props.currentServerId);
 
     useEffect(() => {
-        navigate("/dashboard/" + currentServerId);
+        if (currentServerId === undefined) {
+            navigate('/dashboard');
+        } else {
+            navigate('/dashboard/' + currentServerId);
+        }
     }, [currentServerId, navigate]);
 
     for (let server of props.servers) {
-        serverList.push(<ServerItem key={server.id}
-            server={server}
-            isCurrentServer={false}
-            listOpen={isListOpened}
-            onArrowClick={() => setListOpened(!isListOpened)}
-            onServerClick={(serverId => setCurrentServerId(serverId))}
-        />);
         if (server.id === props.currentServerId) {
             currentServer = server;
+        } else {
+            serverList.push(<ServerItem key={server.id}
+                server={server}
+                isCurrentServer={false}
+                listOpen={isListOpened}
+                onArrowClick={() => setIsListOpened(!isListOpened)}
+                onServerClick={(serverId => {
+                    setCurrentServerId(serverId);
+                    setIsListOpened(false);
+                })}
+            />);
         }
     }
 
@@ -44,8 +52,9 @@ const ServerItems: React.FC<Props> = (props: Props) => {
             <ServerItem server={currentServer}
                 isCurrentServer={true}
                 listOpen={isListOpened}
-                onArrowClick={() => setListOpened(!isListOpened)}
-                onServerClick={() => {}}
+                onArrowClick={() => setIsListOpened(!isListOpened)}
+                onServerClick={() => {
+                }}
             />
             <StyledDiv>
                 {isListOpened && serverList}

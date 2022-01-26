@@ -10,11 +10,12 @@ type Props = {
 };
 
 const Dashboard: React.FC<Props> = (props: Props) => {
+    const currentServer = props.servers.find(server => server.id === props.currentServerId);
 
     return (
         <React.Fragment>
             <LeftMenu servers={props.servers} currentServerId={props.currentServerId} />
-            <ItemDisplay />
+            <ItemDisplay server={currentServer} currentServerId={props.currentServerId} />
         </React.Fragment>
     );
 };
