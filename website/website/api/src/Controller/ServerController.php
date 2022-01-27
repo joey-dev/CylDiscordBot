@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -47,6 +48,7 @@ class ServerController extends AbstractController
             'servers' => $availableServers,
         ]);
     }
+
     #[Route('/user/server/{id}', name: 'user_server', methods: ["GET"])]
     public function getServerWithId(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
@@ -77,7 +79,7 @@ class ServerController extends AbstractController
             return new JsonResponse([
                 "error" => "server not found",
                 "error_message" => "no server was found in the database for this user with that id"
-            ]);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ServerItem from '../../modecules/server/ServerItem';
-import { Server } from '../../../interfaces/api/Server';
+import { DetailedServer, Server } from '../../../interfaces/api/Server';
 import ServerItems from '../../modecules/server/ServerItems';
 
 
@@ -29,6 +28,7 @@ const StyledInnerBackground = styled.div`
 type Props = {
     servers: Server[];
     currentServerId?: string;
+    server?: DetailedServer;
 };
 
 const LeftMenu: React.FC<Props> = (props: Props) => {
@@ -36,7 +36,10 @@ const LeftMenu: React.FC<Props> = (props: Props) => {
     return (
         <StyledBackground>
             <StyledInnerBackground>
-                <ServerItems servers={props.servers} currentServerId={props.currentServerId} />
+                <ServerItems servers={props.servers}
+                    currentServerId={props.currentServerId}
+                    server={props.server}
+                />
             </StyledInnerBackground>
         </StyledBackground>
     );

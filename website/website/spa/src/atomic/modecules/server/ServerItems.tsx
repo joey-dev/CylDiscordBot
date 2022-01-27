@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Server } from '../../../interfaces/api/Server';
-import ServerItem from './ServerItem';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { DetailedServer, Server } from '../../../interfaces/api/Server';
+import ServerItem from './ServerItem';
 
 
 const StyledDiv = styled.div`
@@ -12,15 +12,16 @@ const StyledDiv = styled.div`
 type Props = {
     servers: Server[];
     currentServerId?: string;
+    server?: DetailedServer;
 };
 
 const ServerItems: React.FC<Props> = (props: Props) => {
-    let serverList: JSX.Element[] = [];
-    let currentServer;
     const navigate = useNavigate();
-
     const [isListOpened, setIsListOpened] = useState(false);
     const [currentServerId, setCurrentServerId] = useState(props.currentServerId);
+
+    let serverList: JSX.Element[] = [];
+    let currentServer: Server|undefined;
 
     useEffect(() => {
         if (currentServerId === undefined) {

@@ -1,11 +1,12 @@
 import React from 'react';
-import LeftMenu from '../../organisms/dashboard/LeftMenu';
+import { DetailedServer, Server } from '../../../interfaces/api/Server';
 import ItemDisplay from '../../organisms/dashboard/ItemDisplay';
-import { Server } from '../../../interfaces/api/Server';
+import LeftMenu from '../../organisms/dashboard/LeftMenu';
 
 
 type Props = {
     servers: Server[];
+    server?: DetailedServer;
     currentServerId?: string;
 };
 
@@ -14,8 +15,13 @@ const Dashboard: React.FC<Props> = (props: Props) => {
 
     return (
         <React.Fragment>
-            <LeftMenu servers={props.servers} currentServerId={props.currentServerId} />
-            <ItemDisplay server={currentServer} currentServerId={props.currentServerId} />
+            <LeftMenu servers={props.servers}
+                currentServerId={props.currentServerId}
+                server={props.server}
+            />
+            <ItemDisplay server={currentServer}
+                currentServerId={props.currentServerId}
+            />
         </React.Fragment>
     );
 };

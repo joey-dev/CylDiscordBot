@@ -1,4 +1,4 @@
-import { Server } from '../../interfaces/api/Server';
+import { DetailedServer, Server } from '../../interfaces/api/Server';
 import * as actionTypes from './ActionTypes';
 
 export const getServersState = (server: Server[]) => {
@@ -9,7 +9,6 @@ export const getServersState = (server: Server[]) => {
         },
     };
 };
-
 
 export const setServersStart = () => {
     return {
@@ -22,6 +21,24 @@ export const setServersFinish = (servers: Server[]) => {
         type: actionTypes.SET_SERVERS_FINISH,
         payload: {
             servers,
+        },
+    };
+};
+
+export const setServerStart = (server_id: string) => {
+    return {
+        type: actionTypes.SET_SERVER_START,
+        payload: {
+            server_id,
+        },
+    };
+};
+
+export const setServerFinish = (server: DetailedServer) => {
+    return {
+        type: actionTypes.SET_SERVER_FINISH,
+        payload: {
+            server,
         },
     };
 };
