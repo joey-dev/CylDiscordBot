@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Server;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,8 +20,8 @@ class ServerController extends AbstractController
         $this->client = $client;
     }
 
-    #[Route('/user/servers', name: 'server_user', methods: ["GET"])]
-    public function user(Request $request, ManagerRegistry $doctrine): JsonResponse
+    #[Route('/user/servers', name: 'user_servers', methods: ["GET"])]
+    public function getServers(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
         $userId = $request->headers->get('user_id');
 
@@ -45,6 +46,39 @@ class ServerController extends AbstractController
         return new JsonResponse([
             'servers' => $availableServers,
         ]);
+    }
+    #[Route('/user/server/{id}', name: 'user_server', methods: ["GET"])]
+    public function getServerWithId(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $userId = $request->headers->get('user_id');
+
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+
+        $requestedServer = null;
+
+        foreach ($user->getServer() as $server) {
+            if ($server->getServerId() == $request->get("id")) {
+                $requestedServer = $server;
+            }
+        }
+
+        if ($requestedServer instanceof Server) {
+            return new JsonResponse([
+                "server" => [
+                    "name" => $requestedServer->getName(),
+                    "command_prefix" => $requestedServer->getCommandPrefix(),
+                    "language" => [
+                        "name" => $requestedServer->getLanguage()->getName(),
+                        "small_name" => $requestedServer->getLanguage()->getSmallName()
+                    ]
+                ]
+            ]);
+        } else {
+            return new JsonResponse([
+                "error" => "server not found",
+                "error_message" => "no server was found in the database for this user with that id"
+            ]);
+        }
     }
 
     private function getServersFromDiscordApi(Request $request): array {
