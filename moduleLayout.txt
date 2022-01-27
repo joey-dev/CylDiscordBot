@@ -83,9 +83,19 @@ fun:
 		roles
 		#top
 		#rank
-	#roll [dice]
-		between 1-6 * dice
-	#ping
+    utility
+        #roll [dice]
+    		between 1-6 * dice
+    	#ping
+    	    enable/disable roles (boolean) (whitelist/blacklist)
+    	    enable/disable roles (roles) (whitelist/blacklist)
+
+    	    enable/disable servers (boolean) (whitelist/blacklist)
+            enable/disable servers (servers) (whitelist/blacklist)
+
+            auto delete command after bot reply
+            auto delete bot reply
+            send bot reply to the user only
 	birthdays
 	    message
 	    time
@@ -105,7 +115,7 @@ fun:
         whitelist/blacklist
             roles
         time/date
-Utility:
+// Utility:
 	logs
 	easy timezones
 	custom command
