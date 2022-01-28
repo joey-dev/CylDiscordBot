@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Command;
+use App\Entity\ComponentSettings;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Command|null find($id, $lockMode = null, $lockVersion = null)
- * @method Command|null findOneBy(array $criteria, array $orderBy = null)
- * @method Command[]    findAll()
- * @method Command[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ComponentSettings|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ComponentSettings|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ComponentSettings[]    findAll()
+ * @method ComponentSettings[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CommandRepository extends ServiceEntityRepository
+class ComponentSettingsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Command::class);
+        parent::__construct($registry, ComponentSettings::class);
     }
 
     // /**
-    //  * @return Command[] Returns an array of Command objects
+    //  * @return ComponentSettings[] Returns an array of ComponentSettings objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class CommandRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Command
+    public function findOneBySomeField($value): ?ComponentSettings
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')
