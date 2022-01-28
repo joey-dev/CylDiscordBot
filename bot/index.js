@@ -39,10 +39,10 @@ services.load.modules(client, services);
 services.load.events(client, services);
 
 services.database.connection.pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'cyl',
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
 });
 
 services.database.connection.pool.getConnection(function (error, connection) {
