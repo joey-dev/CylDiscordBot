@@ -26,16 +26,17 @@ class ServerController extends AbstractController
     {
         $userId = $request->headers->get('user_id');
 
-        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+        $servers = $this->getServersFromDiscordApi($request);
+
+        $user = $this->getAndSetNewJoinedServersOnUser($userId, $doctrine, $servers);
+
+        $availableServers = [];
 
         $alreadyJoinedServersIds = [];
 
         foreach ($user->getServer() as $server) {
             $alreadyJoinedServersIds[] = $server->getServerId();
         }
-
-        $servers = $this->getServersFromDiscordApi($request);
-        $availableServers = [];
 
         foreach ($servers as $server) {
             if ($server['owner'] || $server['permissions'] == "2199023255551") {
@@ -98,5 +99,34 @@ class ServerController extends AbstractController
         );
 
         return json_decode($responseUser->getContent(), true);
+    }
+
+    private function getAndSetNewJoinedServersOnUser(string $userId, ManagerRegistry $doctrine, array $servers): User {
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+        $databaseServers = $doctrine->getRepository(Server::class)->findAll();
+
+        if ($user instanceof User) {
+            foreach ($servers as $server) {
+                foreach ($databaseServers as $databaseServer) {
+                    if ($server['id'] === $databaseServer->getServerId()) {
+                        $serverFound = false;
+                        foreach ($user->getServer() as $userServer) {
+                            if ($userServer->getServerId() === $server['id']) {
+                                $serverFound = true;
+                            }
+                        }
+                        if (!$serverFound) {
+                            $user->addServer($databaseServer);
+                        }
+                    }
+                }
+            }
+            $entityManager = $doctrine->getManager();
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        return $user;
     }
 }

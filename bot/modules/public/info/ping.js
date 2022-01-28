@@ -1,5 +1,6 @@
 module.exports.run = async (client, message, args, services, language) => {
     const translatedText = require("../../../data/languages/" + language.name + "/modules/public/info/ping.js");
+    services.database.tables.server.post(message.guild.id, message.guild.name, services, () => {});
 
     try {
         let responseMessage = await message.channel.send({

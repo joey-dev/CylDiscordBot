@@ -7,5 +7,5 @@ module.exports.run = async (client, services, guild) => {
 };
 
 function addBotToDatabase(client, services, guild) {
-    //TODO: add bot to database
+    services.database.tables.server.post(guild.id, guild.name, services, () => {})
 }

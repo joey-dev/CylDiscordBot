@@ -1,4 +1,4 @@
-const tables = require('../../../../data/databaseTables/get');
+const tables = require('./../../structure/get');
 
 module.exports.run = (server_id, services, callback) => {
     services.database.connection.command(services,

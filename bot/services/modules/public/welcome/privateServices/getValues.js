@@ -1,5 +1,5 @@
 const Canvas = require('canvas');
-const welcome = require('../../../../../data/databaseTables/welcome');
+const welcome = require('../../../../database/structure/welcome');
 
 module.exports.run = (client, member, guild, services, callback) => {
     services.database.tables.welcomeMessage.get(guild.id, services, ((error, welcomeDatabaseRow) => {
