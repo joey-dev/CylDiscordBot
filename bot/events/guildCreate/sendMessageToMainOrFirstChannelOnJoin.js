@@ -1,13 +1,4 @@
-module.exports.run = async (client, services, guild) => {
-    addBotToDatabase(client, services, guild);
-    sendMessageToMainOrFirstChannelOnJoin(guild);
-};
-
-function addBotToDatabase(client, services, guild) {
-    services.database.tables.server.post(guild.id, guild.name, services, () => {})
-}
-
-function sendMessageToMainOrFirstChannelOnJoin(guild) {
+module.exports.run = (guild) => {
     const messageToSend = "Hello, thanks for inviting me! \nTo get the most out of this bot, configure it here: " + process.env.DASHBOARD_URL + guild.id;
 
     if (guild.systemChannelID) {
@@ -25,5 +16,6 @@ function sendMessageToMainOrFirstChannelOnJoin(guild) {
 
         let channel = guild.channels.cache.get(channelID);
         channel.send(messageToSend);
-    }
-}
+    }};
+
+
