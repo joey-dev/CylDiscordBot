@@ -7,12 +7,11 @@ module.exports.run = async (client, services) => {
             if (error) console.log(error);
 
             files.forEach(file => {
-                let eventFunction = require(`../../events/${file}`);
-                let eventName = file.split(".")[0];
+                let eventFunction = require(`../../events/${file}/index.js`);
 
-                console.log(`Loading event: ${eventName}`);
+                console.log(`Loading event: ${file}`);
 
-                client.on(eventName, (...args) => eventFunction.run(client, services, ...args));
+                client.on(file, (...args) => eventFunction.run(client, services, ...args));
             });
         });
     }
