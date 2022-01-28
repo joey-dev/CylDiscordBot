@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Server;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -19,21 +21,22 @@ class ServerController extends AbstractController
         $this->client = $client;
     }
 
-    #[Route('/user/servers', name: 'server_user', methods: ["GET"])]
-    public function user(Request $request, ManagerRegistry $doctrine): JsonResponse
+    #[Route('/user/servers', name: 'user_servers', methods: ["GET"])]
+    public function getServers(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
         $userId = $request->headers->get('user_id');
 
-        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+        $servers = $this->getServersFromDiscordApi($request);
+
+        $user = $this->getAndSetNewJoinedServersOnUser($userId, $doctrine, $servers);
+
+        $availableServers = [];
 
         $alreadyJoinedServersIds = [];
 
         foreach ($user->getServer() as $server) {
             $alreadyJoinedServersIds[] = $server->getServerId();
         }
-
-        $servers = $this->getServersFromDiscordApi($request);
-        $availableServers = [];
 
         foreach ($servers as $server) {
             if ($server['owner'] || $server['permissions'] == "2199023255551") {
@@ -45,6 +48,40 @@ class ServerController extends AbstractController
         return new JsonResponse([
             'servers' => $availableServers,
         ]);
+    }
+
+    #[Route('/user/server/{id}', name: 'user_server', methods: ["GET"])]
+    public function getServerWithId(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $userId = $request->headers->get('user_id');
+
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+
+        $requestedServer = null;
+
+        foreach ($user->getServer() as $server) {
+            if ($server->getServerId() == $request->get("id")) {
+                $requestedServer = $server;
+            }
+        }
+
+        if ($requestedServer instanceof Server) {
+            return new JsonResponse([
+                "server" => [
+                    "name" => $requestedServer->getName(),
+                    "command_prefix" => $requestedServer->getCommandPrefix(),
+                    "language" => [
+                        "name" => $requestedServer->getLanguage()->getName(),
+                        "small_name" => $requestedServer->getLanguage()->getSmallName()
+                    ]
+                ]
+            ]);
+        } else {
+            return new JsonResponse([
+                "error" => "server not found",
+                "error_message" => "no server was found in the database for this user with that id"
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     private function getServersFromDiscordApi(Request $request): array {
@@ -62,5 +99,34 @@ class ServerController extends AbstractController
         );
 
         return json_decode($responseUser->getContent(), true);
+    }
+
+    private function getAndSetNewJoinedServersOnUser(string $userId, ManagerRegistry $doctrine, array $servers): User {
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+        $databaseServers = $doctrine->getRepository(Server::class)->findAll();
+
+        if ($user instanceof User) {
+            foreach ($servers as $server) {
+                foreach ($databaseServers as $databaseServer) {
+                    if ($server['id'] === $databaseServer->getServerId()) {
+                        $serverFound = false;
+                        foreach ($user->getServer() as $userServer) {
+                            if ($userServer->getServerId() === $server['id']) {
+                                $serverFound = true;
+                            }
+                        }
+                        if (!$serverFound) {
+                            $user->addServer($databaseServer);
+                        }
+                    }
+                }
+            }
+            $entityManager = $doctrine->getManager();
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        return $user;
     }
 }

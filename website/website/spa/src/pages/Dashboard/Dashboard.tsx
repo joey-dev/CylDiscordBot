@@ -1,104 +1,59 @@
 import React, { useEffect } from 'react';
-import { MapStateToProps } from '../../store';
-import { UserStoreState } from '../../store/user/Index';
 import { connect } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUserStart } from '../../store/user/Action';
+import Loader from '../../atomic/atoms/Loader/Loader';
+import { default as DashboardTemplate } from '../../atomic/templates/Dashboard/Dashboard';
 import { UserLogin } from '../../interfaces/api/User';
-import {default as DashboardTemplate} from '../../atomic/templates/Dashboard/Dashboard';
+import { MapStateToProps } from '../../store';
+import { setServersStart, setServerStart } from '../../store/server/Action';
+import { ServerStoreState } from '../../store/server/Index';
+import { getUserStart } from '../../store/user/Action';
+import { UserStoreState } from '../../store/user/Index';
 
 type DispatchProps = {
     getUserStart: (user: UserLogin) => void;
+    getServersStart: () => void;
+    getServerStart: (server_id: string) => void;
 };
 
-type Props = UserStoreState & DispatchProps;
+type Props = UserStoreState & DispatchProps & ServerStoreState;
 
 const Dashboard: React.FC<Props> = (props: Props) => {
     const navigate = useNavigate();
     let params = useParams();
 
-    const testServers = [
-        {
-            "id": "483675088483385344",
-            "name": "Doki Doki ICT Club",
-            "icon": "d746f9e463a8e4bdf6b34922ea5a51d1",
-            "owner": false,
-            "permissions": "2199023255551",
-            "features": [],
-            "alreadyJoined": false
-        },
-        {
-            "id": "635122348596396043",
-            "name": "ForMyself",
-            "icon": null,
-            "owner": true,
-            "permissions": "2199023255551",
-            "features": [],
-            "alreadyJoined": false
-        },
-        {
-            "id": "738473524435353641",
-            "name": "The Game Corner",
-            "icon": "6db5fca41593bccacef83efffbcb83aa",
-            "owner": false,
-            "permissions": "2199023255551",
-            "features": [],
-            "alreadyJoined": false
-        },
-        {
-            "id": "738677843545948251",
-            "name": "The Game Corner test server",
-            "icon": null,
-            "owner": true,
-            "permissions": "2199023255551",
-            "features": [],
-            "alreadyJoined": false
-        },
-        {
-            "id": "750331817663529030",
-            "name": "The Game Corner Self Test",
-            "icon": null,
-            "owner": true,
-            "permissions": "2199023255551",
-            "features": [],
-            "alreadyJoined": false
-        },
-        {
-            "id": "794988966590808124",
-            "name": "Joey's bot test",
-            "icon": null,
-            "owner": true,
-            "permissions": "2199023255551",
-            "features": [],
-            "alreadyJoined": true
-        },
-        {
-            "id": "795036608335970306",
-            "name": "Joey's bot test 2",
-            "icon": null,
-            "owner": true,
-            "permissions": "2199023255551",
-            "features": [],
-            "alreadyJoined": false
-        }
-    ];
+    useEffect(() => {
+        props.getServersStart();
+    }, []);
 
-    const testCurrentServerId = params.serverId;
+    const currentServerId = params.serverId;
 
     useEffect(() => {
         if (props.user === undefined) {
-            navigate("/");
+            navigate('/');
         }
     }, [props.user, navigate]);
 
+    useEffect(() => {
+        if (currentServerId) {
+            props.getServerStart(currentServerId);
+        }
+    }, [currentServerId])
+
     return (
-        <DashboardTemplate servers={testServers} currentServerId={testCurrentServerId} />
+        props.loading || props.servers === undefined ? (<Loader centered={true} />) : (
+            <DashboardTemplate servers={props.servers}
+                currentServerId={currentServerId}
+                server={props.server}
+            />
+        )
     );
 };
 
 const mapStateToProps = (state: MapStateToProps) => {
     return {
         user: state.user.user,
+        servers: state.server.servers,
     };
 };
 
@@ -111,6 +66,8 @@ type DispatchPropsArgs = {
 const mapDispatchToProps = (dispatch: (arg0: DispatchPropsArgs) => void) => {
     return {
         getUserStart: (user: UserLogin) => dispatch(getUserStart(user)),
+        getServersStart: () => dispatch(setServersStart()),
+        getServerStart: (server_id: string) => dispatch(setServerStart(server_id)),
     };
 };
 

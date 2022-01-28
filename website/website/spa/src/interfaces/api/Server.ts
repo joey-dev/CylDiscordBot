@@ -1,3 +1,5 @@
+import { Language } from './Language';
+
 export interface Server {
     id: string,
     name: string,
@@ -6,4 +8,10 @@ export interface Server {
     permissions: string,
     features: string[],
     alreadyJoined: boolean
+}
+
+export interface DetailedServer {
+    name: string,
+    command_prefix: string,
+    language: Language
 }
