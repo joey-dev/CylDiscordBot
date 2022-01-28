@@ -18,5 +18,3 @@ module.exports.run = (table, data = {}, callback, services) => {
         callback(error, result);
     }))
 }
-
-// DELETE FROM `server` WHERE `server`.`id` = 7;
