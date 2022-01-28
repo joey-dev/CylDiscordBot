@@ -8,8 +8,7 @@ function addBotToDatabase(client, services, guild) {
 }
 
 function sendMessageToMainOrFirstChannelOnJoin(guild) {
-    const dashboardUrl = "http://localhost:3000/dashboard/";
-    const messageToSend = "Hello, thanks for inviting me! \nTo get the most out of this bot, configure it here: " + dashboardUrl + guild.id;
+    const messageToSend = "Hello, thanks for inviting me! \nTo get the most out of this bot, configure it here: " + process.env.DASHBOARD_URL + guild.id;
 
     if (guild.systemChannelID) {
         let channel = guild.channels.cache.get(guild.systemChannelID);

@@ -1,7 +1,6 @@
 module.exports.run = async (client, message, args, services, language) => {
     const translatedText = require("../../../data/languages/" + language.name + "/modules/public/info/ping.js");
 
-
     try {
         let responseMessage = await message.channel.send({
             embeds: [{
