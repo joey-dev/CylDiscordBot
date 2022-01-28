@@ -24,9 +24,6 @@ class Server
     #[ORM\Column(type: 'string', length: 10)]
     private $command_prefix;
 
-    #[ORM\ManyToMany(targetEntity: Command::class, mappedBy: 'server')]
-    private $commands;
-
     #[ORM\OneToMany(mappedBy: 'server', targetEntity: Role::class, orphanRemoval: true)]
     private $roles;
 
@@ -40,11 +37,18 @@ class Server
     #[ORM\JoinColumn(nullable: true)]
     private $language;
 
+    #[ORM\OneToMany(mappedBy: 'server', targetEntity: PluginSettings::class)]
+    private $pluginSettings;
+
+    #[ORM\OneToMany(mappedBy: 'server', targetEntity: ComponentSettings::class)]
+    private $componentSettings;
+
     public function __construct()
     {
-        $this->commands = new ArrayCollection();
         $this->roles = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->pluginSettings = new ArrayCollection();
+        $this->componentSettings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,33 +88,6 @@ class Server
     public function setCommandPrefix(string $command_prefix): self
     {
         $this->command_prefix = $command_prefix;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Command[]
-     */
-    public function getCommands(): Collection
-    {
-        return $this->commands;
-    }
-
-    public function addCommand(Command $command): self
-    {
-        if (!$this->commands->contains($command)) {
-            $this->commands[] = $command;
-            $command->addServer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommand(Command $command): self
-    {
-        if ($this->commands->removeElement($command)) {
-            $command->removeServer($this);
-        }
 
         return $this;
     }
@@ -197,6 +174,66 @@ class Server
     public function setLanguage(?Language $language): self
     {
         $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PluginSettings[]
+     */
+    public function getPluginSettings(): Collection
+    {
+        return $this->pluginSettings;
+    }
+
+    public function addPluginSetting(PluginSettings $pluginSetting): self
+    {
+        if (!$this->pluginSettings->contains($pluginSetting)) {
+            $this->pluginSettings[] = $pluginSetting;
+            $pluginSetting->setServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removePluginSetting(PluginSettings $pluginSetting): self
+    {
+        if ($this->pluginSettings->removeElement($pluginSetting)) {
+            // set the owning side to null (unless already changed)
+            if ($pluginSetting->getServer() === $this) {
+                $pluginSetting->setServer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ComponentSettings[]
+     */
+    public function getComponentSettings(): Collection
+    {
+        return $this->componentSettings;
+    }
+
+    public function addComponentSetting(ComponentSettings $componentSetting): self
+    {
+        if (!$this->componentSettings->contains($componentSetting)) {
+            $this->componentSettings[] = $componentSetting;
+            $componentSetting->setServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComponentSetting(ComponentSettings $componentSetting): self
+    {
+        if ($this->componentSettings->removeElement($componentSetting)) {
+            // set the owning side to null (unless already changed)
+            if ($componentSetting->getServer() === $this) {
+                $componentSetting->setServer(null);
+            }
+        }
 
         return $this;
     }

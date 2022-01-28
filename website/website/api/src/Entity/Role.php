@@ -25,16 +25,8 @@ class Role
     #[ORM\Column(type: 'string', length: 255)]
     private $role_id;
 
-    #[ORM\ManyToMany(targetEntity: Command::class, inversedBy: 'roles')]
-    private $command;
-
     #[ORM\ManyToOne(targetEntity: Welcome::class, inversedBy: 'role')]
     private $welcome;
-
-    public function __construct()
-    {
-        $this->command = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -73,30 +65,6 @@ class Role
     public function setRoleId(string $role_id): self
     {
         $this->role_id = $role_id;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Command[]
-     */
-    public function getCommand(): Collection
-    {
-        return $this->command;
-    }
-
-    public function addCommand(Command $command): self
-    {
-        if (!$this->command->contains($command)) {
-            $this->command[] = $command;
-        }
-
-        return $this;
-    }
-
-    public function removeCommand(Command $command): self
-    {
-        $this->command->removeElement($command);
 
         return $this;
     }
