@@ -2,7 +2,7 @@ import { all, takeEvery } from 'redux-saga/effects';
 
 import * as actionTypes from './ActionTypes';
 import { authCheckStateSaga, authUserSaga, checkAuthTimeoutSaga, logoutSaga } from './Sagas';
-import { User } from '../../interfaces/api/User';
+import { IUser } from '../../interfaces/api/User';
 
 export function* watchAuthSagas() {
     yield all([
@@ -20,6 +20,6 @@ export type AuthStoreState = {
     loading: boolean;
     isAuthenticated?: boolean;
     authRedirectPath: string;
-    user?: User;
+    user?: IUser;
     isAutoSigningUp?: boolean;
 };

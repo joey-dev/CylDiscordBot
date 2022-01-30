@@ -1,12 +1,12 @@
 import React from 'react';
-import { DetailedServer, Server } from '../../../interfaces/api/Server';
+import { IDetailedServer, IServer } from '../../../interfaces/api/Server';
 import ItemDisplay from '../../organisms/dashboard/ItemDisplay';
 import LeftMenu from '../../organisms/dashboard/LeftMenu';
 
 
 type Props = {
-    servers: Server[];
-    server?: DetailedServer;
+    servers: IServer[];
+    server?: IDetailedServer;
     currentServerId?: string;
 };
 

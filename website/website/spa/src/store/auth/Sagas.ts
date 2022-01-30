@@ -3,8 +3,8 @@ import Axios from '../../services/Axios/AxiosConfig';
 import { call, delay, put } from 'redux-saga/effects';
 import * as actions from './Action';
 import * as userActions from './../user/Action';
-import { User } from '../../interfaces/api/User';
-import { ApiError } from '../../interfaces/api/Error';
+import { IUser } from '../../interfaces/api/User';
+import { IApiError } from '../../interfaces/api/Error';
 
 type LogoutSageAction = {
     logoutSucceed: () => void;
@@ -45,7 +45,7 @@ type LoginResponse = {
 
 type DataResponse = {
     data: LoginResponseData;
-    user: User;
+    user: IUser;
 
     status_code?: number
     error?: string,
@@ -67,7 +67,7 @@ export function* authUserSaga(action: AuthUserSagaAction) {
     };
     const url = '/authenticate/check';
 
-    const response: LoginResponse = yield Axios('application/x-www-form-urlencoded').post(url, authData).catch((error: ApiError) => {
+    const response: LoginResponse = yield Axios('application/x-www-form-urlencoded').post(url, authData).catch((error: IApiError) => {
         put(actions.authFail(error.response.data.error));
     });
 
@@ -81,7 +81,7 @@ export function* authUserSaga(action: AuthUserSagaAction) {
 
         const expiresIn = responseData.data.expires_in;
 
-        const user: User = responseData.user;
+        const user: IUser = responseData.user;
 
         const expirationDate = new Date().getTime() + expiresIn * 1000;
         localStorage.setItem('token', responseData.data.access_token);
@@ -138,11 +138,11 @@ type UserResponseData = {
 };
 
 function* authUserLoginWithId(userId: string) {
-    const response: UserResponse = yield Axios().get('/user').catch((error: ApiError) => {
+    const response: UserResponse = yield Axios().get('/user').catch((error: IApiError) => {
         put(actions.authFail(error.response.data.error));
     });
 
-    const user: User = {
+    const user: IUser = {
         id: response.data.id,
         username: response.data.username,
         user_id: response.data.user_id,

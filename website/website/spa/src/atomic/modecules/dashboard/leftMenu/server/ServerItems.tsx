@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { DetailedServer, Server } from '../../../interfaces/api/Server';
+import { IDetailedServer, IServer } from '../../../../../interfaces/api/Server';
 import ServerItem from './ServerItem';
 
 
@@ -10,9 +10,9 @@ const StyledDiv = styled.div`
 `;
 
 type Props = {
-    servers: Server[];
+    servers: IServer[];
     currentServerId?: string;
-    server?: DetailedServer;
+    server?: IDetailedServer;
 };
 
 const ServerItems: React.FC<Props> = (props: Props) => {
@@ -21,7 +21,7 @@ const ServerItems: React.FC<Props> = (props: Props) => {
     const [currentServerId, setCurrentServerId] = useState(props.currentServerId);
 
     let serverList: JSX.Element[] = [];
-    let currentServer: Server|undefined;
+    let currentServer: IServer|undefined;
 
     useEffect(() => {
         if (currentServerId === undefined) {

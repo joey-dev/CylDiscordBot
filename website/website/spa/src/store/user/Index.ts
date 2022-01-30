@@ -2,7 +2,7 @@ import { all, takeEvery } from 'redux-saga/effects';
 
 import * as actionTypes from './ActionTypes';
 import { getUserSaga, setUserSaga } from './Sagas';
-import { User } from '../../interfaces/api/User';
+import { IUser } from '../../interfaces/api/User';
 
 
 export function* watchUserSagas() {
@@ -13,7 +13,7 @@ export function* watchUserSagas() {
 }
 
 export type UserStoreState = {
-    user?: User;
+    user?: IUser;
     loading: boolean
     success?: boolean
     error?: string

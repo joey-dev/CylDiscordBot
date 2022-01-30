@@ -1,11 +1,11 @@
-export interface ApiError {
-    response: ErrorResponse;
+export interface IApiError {
+    response: IErrorResponse;
 }
 
-export interface ErrorResponse {
-    data: ErrorData;
+export interface IErrorResponse {
+    data: IErrorData;
 }
 
-export interface ErrorData {
+export interface IErrorData {
     error: Error;
 }

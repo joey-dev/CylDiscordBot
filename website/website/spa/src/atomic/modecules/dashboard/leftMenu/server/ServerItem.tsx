@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import ServerLogo from '../../atoms/images/ServerLogo';
-import { Server } from '../../../interfaces/api/Server';
-import arrowDown from '../../../assets/images/arrowDown.svg';
-import check from '../../../assets/images/check.svg';
-import uncheck from '../../../assets/images/uncheck.svg';
+import ServerLogo from '../../../../atoms/images/ServerLogo';
+import { IServer } from '../../../../../interfaces/api/Server';
+import arrowDown from '../../../../../assets/icons/arrowDown.svg';
+import check from '../../../../../assets/icons/check.svg';
+import uncheck from '../../../../../assets/icons/uncheck.svg';
 
 
 type StyledMainDivProps = {
@@ -65,7 +65,7 @@ const StyledUnCheckImg = styled.img`
 `;
 
 type Props = {
-    server?: Server;
+    server?: IServer;
     isCurrentServer: boolean;
     listOpen: boolean;
     onArrowClick: () => void;

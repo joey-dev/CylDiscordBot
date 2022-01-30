@@ -1,4 +1,4 @@
-import { OptionalUser, User, UserLogin } from '../../interfaces/api/User';
+import { IOptionalUser, IUser, IUserLogin } from '../../interfaces/api/User';
 import { delay, put } from 'redux-saga/effects';
 import * as actions from './Action';
 import Axios from '../../services/Axios/AxiosConfig';
@@ -10,7 +10,7 @@ type GetUserSagaAction = {
 }
 
 type GetUserSagaActionPayload = {
-    user: UserLogin
+    user: IUserLogin
 }
 
 type SetUserSagaAction = {
@@ -18,7 +18,7 @@ type SetUserSagaAction = {
 }
 
 type SetUserSagaActionPayload = {
-    user: User
+    user: IUser
 }
 
 export function* updateUserRemoveSuccessSaga() {
@@ -34,7 +34,7 @@ export function* getUserSaga(action: GetUserSagaAction) {
         put(actions.getUserError(error.message));
     });
 
-    const user: User = {
+    const user: IUser = {
         id: response.data.id,
         username: response.data.username,
         user_id: response.data.user_id,
@@ -48,7 +48,7 @@ export function* getUserSaga(action: GetUserSagaAction) {
 export function* setUserSaga(action: SetUserSagaAction) {
     const userData = {...action.payload.user};
 
-    const user: User = {
+    const user: IUser = {
         id: userData.id,
         username: userData.username,
         user_id: userData.user_id,

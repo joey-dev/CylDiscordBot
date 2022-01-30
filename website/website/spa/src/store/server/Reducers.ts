@@ -1,4 +1,4 @@
-import { DetailedServer, Server } from '../../interfaces/api/Server';
+import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import UpdateObject from '../../services/reducer/UpdateObject/UpdateObject';
 import * as ActionTypes from './ActionTypes';
 import { ServerStoreState } from './Index';
@@ -17,8 +17,8 @@ export type Actions = {
 };
 
 type Payload = {
-    servers?: Server[];
-    server?: DetailedServer;
+    servers?: IServer[];
+    server?: IDetailedServer;
     error?: string
     server_id?: string;
 };

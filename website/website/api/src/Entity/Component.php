@@ -24,14 +24,15 @@ class Component
     #[ORM\Column(type: 'text')]
     private $data;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private $type;
-
     #[ORM\Column(type: 'integer')]
     private $order_id;
 
     #[ORM\OneToMany(mappedBy: 'component', targetEntity: ComponentSettings::class)]
     private $componentSettings;
+
+    #[ORM\ManyToOne(targetEntity: ComponentType::class, inversedBy: 'components')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $type;
 
     public function __construct()
     {
@@ -79,18 +80,6 @@ class Component
         return $this;
     }
 
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
     public function getOrderId(): ?int
     {
         return $this->order_id;
@@ -129,6 +118,18 @@ class Component
                 $componentSetting->setComponent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?ComponentType
+    {
+        return $this->type;
+    }
+
+    public function setType(?ComponentType $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

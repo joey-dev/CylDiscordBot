@@ -1,5 +1,5 @@
 import { all, takeEvery } from 'redux-saga/effects';
-import { DetailedServer, Server } from '../../interfaces/api/Server';
+import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import * as actionTypes from './ActionTypes';
 import { setServerSaga, setServersSaga } from './Sagas';
 
@@ -12,8 +12,8 @@ export function* watchServerSagas() {
 }
 
 export type ServerStoreState = {
-    servers?: Server[];
-    server?: DetailedServer;
+    servers?: IServer[];
+    server?: IDetailedServer;
     loading: boolean
     success?: boolean
     error?: string

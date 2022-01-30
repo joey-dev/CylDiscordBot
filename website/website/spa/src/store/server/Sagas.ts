@@ -1,5 +1,5 @@
 import { put } from 'redux-saga/effects';
-import { DetailedServer, Server } from '../../interfaces/api/Server';
+import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import Axios from '../../services/Axios/AxiosConfig';
 import * as actions from './Action';
 
@@ -8,7 +8,7 @@ type ServersResponse = {
 }
 
 type ServersResponseData = {
-    servers: Server[];
+    servers: IServer[];
 }
 
 export function* setServersSaga() {
@@ -38,7 +38,7 @@ type ServerResponse = {
 }
 
 type ServerResponseData = {
-    server: DetailedServer;
+    server: IDetailedServer;
 }
 
 export function* setServerSaga(action: SetServerSagaAction) {
