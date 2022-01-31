@@ -93,7 +93,7 @@ export function* editServerData(action: EditServerDataSagaAction) {
     } else {
         switch (action.payload.data.type) {
             case 'plugin':
-                editPluginServerData(action);
+                yield editPluginServerData(action);
                 break;
             case 'component':
                 break;
@@ -102,14 +102,12 @@ export function* editServerData(action: EditServerDataSagaAction) {
 }
 
 function* editPluginServerData(action: EditServerDataSagaAction) {
-    const url = '/module/plugin' + action.payload.server_id;
+    const url = '/module/plugin/' + action.payload.server_id;
     let currentError = "";
     const response: ModuleResponse = yield Axios().patch(url, {
-        body: {
-            plugin_id: action.payload.data.plugin_id,
-            checked: action.payload.data.checked,
-            return: true
-        }
+        plugin_id: action.payload.data.plugin_id,
+        checked: action.payload.data.checked ? 1 : 0,
+        return: true
     }).catch(error => {
         currentError = error.message;
     });

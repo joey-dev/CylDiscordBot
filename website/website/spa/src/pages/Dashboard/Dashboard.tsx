@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../../atomic/atoms/Loader/Loader';
 import { default as DashboardTemplate } from '../../atomic/templates/Dashboard/Dashboard';
 import { IUserLogin } from '../../interfaces/api/User';
 import { MapStateToProps } from '../../store';
-import { setServersStart, setServerStart } from '../../store/server/Action';
+import { editServerDataStart, setServersStart, setServerStart } from '../../store/server/Action';
 import { ServerStoreState } from '../../store/server/Index';
 import { IEditServerData } from '../../store/server/Sagas';
 import { getUserStart } from '../../store/user/Action';
@@ -15,6 +15,7 @@ type DispatchProps = {
     getUserStart: (user: IUserLogin) => void;
     getServersStart: () => void;
     getServerStart: (server_id: string) => void;
+    editServerDataStart: (server_id: string, data: IEditServerData) => void,
 };
 
 type Props = UserStoreState & DispatchProps & ServerStoreState;
@@ -42,8 +43,10 @@ const Dashboard: React.FC<Props> = (props: Props) => {
     }, [currentServerId]);
 
     const onPluginEnabledChange = (event: IEditServerData): void => {
-        console.log(event);
-    }
+        if (currentServerId) {
+            props.editServerDataStart(currentServerId, event);
+        }
+    };
 
     return (
         props.loading || props.servers === undefined ? (<Loader centered={true} />) : (
@@ -77,6 +80,7 @@ const mapDispatchToProps = (dispatch: (arg0: DispatchPropsArgs) => void) => {
         getUserStart: (user: IUserLogin) => dispatch(getUserStart(user)),
         getServersStart: () => dispatch(setServersStart()),
         getServerStart: (server_id: string) => dispatch(setServerStart(server_id)),
+        editServerDataStart: (server_id: string, data: IEditServerData) => dispatch(editServerDataStart(server_id, data)),
     };
 };
 

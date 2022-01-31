@@ -83,16 +83,6 @@ class ModuleController extends AbstractController
         return new JsonResponse([], Response::HTTP_OK);
     }
 
-//export type IEditServerData = {
-//    module_id?: number;
-//    plugin_id?: number;
-//    component_id?: number;
-//    checked?: boolean;
-//    server_data?: string;
-//    type: 'plugin' | 'component';
-//};
-
-
     private function getAllConfiguredModules(Request $request, ManagerRegistry $doctrine): array|JsonResponse
     {
         $modules = $this->getAllModules($doctrine);

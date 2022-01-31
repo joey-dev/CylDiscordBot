@@ -55,10 +55,11 @@ export const getServerError = (error: string) => {
     };
 };
 
-export const editServerDataStart = (data: IEditServerData) => {
+export const editServerDataStart = (server_id: string, data: IEditServerData) => {
     return {
         type: actionTypes.EDIT_SERVER_DATA_START,
         payload: {
+            server_id,
             data,
         },
     };
