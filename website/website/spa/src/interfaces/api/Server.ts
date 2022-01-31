@@ -1,4 +1,5 @@
 import { ILanguage } from './Language';
+import { IFullModuleWithData } from './Module';
 
 export interface IServer {
     id: string,
@@ -13,5 +14,6 @@ export interface IServer {
 export interface IDetailedServer {
     name: string,
     command_prefix: string,
-    language: ILanguage
+    language: ILanguage,
+    modules: IFullModuleWithData[]
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IFullModuleWithData } from '../../../../../interfaces/api/Module';
+import { IEditServerData } from '../../../../../store/server/Sagas';
 import Title from '../../../../atoms/text/Title';
-import { SwitchOnChange } from '../../../../organisms/dashboard/LeftMenu';
 import Plugin from './Plugin';
 
 
@@ -11,7 +11,7 @@ const StyledDiv = styled.div`
 
 type Props = {
     data: IFullModuleWithData;
-    onPluginEnabledChange: (event: SwitchOnChange) => void;
+    onPluginEnabledChange: (event: IEditServerData) => void;
 };
 
 const Module: React.FC<Props> = (props: Props) => {

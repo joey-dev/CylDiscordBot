@@ -2,49 +2,115 @@
 
 namespace App\Controller;
 
+use App\Entity\Component;
+use App\Entity\ComponentSettings;
 use App\Entity\Module;
+use App\Entity\Plugin;
+use App\Entity\PluginSettings;
+use App\Entity\Server;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/module', name: 'module_')]
 class ModuleController extends AbstractController
 {
-    #[Route('/all', name: 'all', methods: ["GET"])]
-    public function all(ManagerRegistry $doctrine): Response
+    #[Route('/all/{serverId}', name: 'all_get', methods: ["GET"])]
+    public function allGet(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
-        $modules = $this->getAllModules($doctrine);
+        $allConfiguredModules = $this->getAllConfiguredModules($request, $doctrine);
 
-        if (!$modules) {
+        if ($allConfiguredModules instanceof JsonResponse) {
+            return $allConfiguredModules;
+        }
+
+
+        return new JsonResponse($allConfiguredModules, Response::HTTP_OK);
+    }
+
+    #[Route('/plugin/{serverId}', name: 'plugin_patch', methods: ["PATCH"])]
+    public function pluginPatch(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $userId = $request->headers->get('user_id');
+        $entityManager = $doctrine->getManager();
+
+        if (!array_key_exists("plugin_id", $data) || !array_key_exists("checked", $data)) {
             return new JsonResponse([
-                "error" => "no modules",
-                "error_message" => "could not find any modules"
+                "error" => "invalid_request",
+                "error_description" => "incorrect data in request",
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $returnArray = [];
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+        $requestedServer = null;
 
-        foreach ($modules as $module) {
-            $returnArray[] = [
-                "id" => $module->getId(),
-                "name" => $module->getName(),
-            ];
+        foreach ($user->getServer() as $server) {
+            if ($server->getServerId() == $request->get("serverId")) {
+                $requestedServer = $server;
+            }
         }
 
-        return new JsonResponse($returnArray, Response::HTTP_OK);
+        $plugin = $doctrine->getRepository(Plugin::class)->find($data['plugin_id']);
+
+        if (!$plugin || !$requestedServer) {
+            return new JsonResponse([
+                "error" => "invalid_request",
+                "error_description" => "no plugin settings found with data",
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $pluginSettings = $doctrine->getRepository(PluginSettings::class)
+            ->findoneby(["plugin" => $plugin, "server" => $requestedServer]);
+
+        $pluginSettings->setTurnedOn($data['checked']);
+        $entityManager->flush();
+
+        if (isset($data['return'])) {
+            $allConfiguredModules = $this->getAllConfiguredModules($request, $doctrine);
+
+            if ($allConfiguredModules instanceof JsonResponse) {
+                return $allConfiguredModules;
+            }
+
+            return new JsonResponse($allConfiguredModules, Response::HTTP_OK);
+        }
+
+        return new JsonResponse([], Response::HTTP_OK);
     }
 
-    #[Route('/all/full', name: 'all_full')]
-    public function allFull(ManagerRegistry $doctrine): Response
+//export type IEditServerData = {
+//    module_id?: number;
+//    plugin_id?: number;
+//    component_id?: number;
+//    checked?: boolean;
+//    server_data?: string;
+//    type: 'plugin' | 'component';
+//};
+
+
+    private function getAllConfiguredModules(Request $request, ManagerRegistry $doctrine): array|JsonResponse
     {
         $modules = $this->getAllModules($doctrine);
+        $userId = $request->headers->get('user_id');
+
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+        $requestedServer = null;
+
+        foreach ($user->getServer() as $server) {
+            if ($server->getServerId() == $request->get("serverId")) {
+                $requestedServer = $server;
+            }
+        }
 
         if (!$modules) {
             return new JsonResponse([
                 "error" => "no modules",
-                "error_message" => "could not find any modules"
+                "error_message" => "could not find any modules",
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -55,29 +121,14 @@ class ModuleController extends AbstractController
             foreach ($module->getPlugins() as $plugin) {
                 $components = [];
                 foreach ($plugin->getComponents() as $component) {
-                    $components[] = [
-                        "id" => $component->getId(),
-                        "name" => $component->getName(),
-                        "order_id" => $component->getOrderId(),
-                        "data" => $component->getData(),
-                        "type" => $component->getType()->getName(),
-                    ];
+                    $components[] = $this->turnComponentDataToArray($component, $doctrine, $requestedServer);
                 }
-                $plugins[] = [
-                    "id" => $plugin->getId(),
-                    "name" => $plugin->getName(),
-                    "order_id" => $plugin->getOrderId(),
-                    "components" => $components,
-                ];
+                $plugins[] = $this->turnPluginDataToArray($plugin, $doctrine, $components, $requestedServer);
             }
-            $returnArray[] = [
-                "id" => $module->getId(),
-                "name" => $module->getName(),
-                "plugins" => $plugins,
-            ];
+            $returnArray[] = $this->turnModuleDataToArray($module, $plugins);
         }
 
-        return new JsonResponse($returnArray, Response::HTTP_OK);
+        return $returnArray;
     }
 
     /**
@@ -86,5 +137,62 @@ class ModuleController extends AbstractController
     private function getAllModules(ManagerRegistry $doctrine): array
     {
         return $doctrine->getRepository(Module::class)->findBy([], ['order_id' => 'ASC']);
+    }
+
+    private function turnComponentDataToArray(Component $component, ManagerRegistry $doctrine, Server $server = null): array
+    {
+        $returnData = [
+            "id" => $component->getId(),
+            "name" => $component->getName(),
+            "order_id" => $component->getOrderId(),
+            "data" => $component->getData(),
+            "type" => $component->getType()->getName(),
+        ];
+
+        if ($server) {
+            $componentSettings = $doctrine->getRepository(ComponentSettings::class)
+                ->findoneby(["component" => $component, "server" => $server]);
+
+            $returnData['turned_on'] = (bool)$componentSettings->getTurnedOn();
+            $returnData['server_data'] = $componentSettings->getData();
+        }
+
+        return $returnData;
+    }
+
+    private function turnPluginDataToArray(Plugin $plugin, ManagerRegistry $doctrine, array $components = null, Server $server = null): array
+    {
+        $returnData = [
+            "id" => $plugin->getId(),
+            "name" => $plugin->getName(),
+            "order_id" => $plugin->getOrderId(),
+        ];
+
+        if ($server) {
+            $pluginSettings = $doctrine->getRepository(PluginSettings::class)
+                ->findoneby(["plugin" => $plugin, "server" => $server]);
+
+            $returnData["turned_on"] = (bool)$pluginSettings->getTurnedOn();
+        }
+
+        if ($components) {
+            $returnData["components"] = $components;
+        }
+
+        return $returnData;
+    }
+
+    private function turnModuleDataToArray(Module $module, array $plugins = null): array
+    {
+        $returnData = [
+            "id" => $module->getId(),
+            "name" => $module->getName(),
+        ];
+
+        if ($plugins) {
+            $returnData["plugins"] = $plugins;
+        }
+
+        return $returnData;
     }
 }

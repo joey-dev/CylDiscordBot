@@ -1,3 +1,4 @@
+import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import UpdateObject from '../../services/reducer/UpdateObject/UpdateObject';
 import * as ActionTypes from './ActionTypes';
@@ -19,6 +20,7 @@ export type Actions = {
 type Payload = {
     servers?: IServer[];
     server?: IDetailedServer;
+    modules?: IFullPluginWithData[];
     error?: string
     server_id?: string;
 };
@@ -34,9 +36,11 @@ const userReducer = (state: ServerStoreState = initialState, {type, payload}: Ac
         case ActionTypes.SET_SERVER_START:
             return UpdateObject(state, {loading: true});
         case ActionTypes.SET_SERVER_FINISH:
-            return UpdateObject(state, {loading: false, server: payload.server, success: true});
+            return UpdateObject(state, {loading: false, server: payload.server, modules: payload.modules, success: true});
         case ActionTypes.GET_SERVER_ERROR:
             return UpdateObject(state, {loading: false, error: payload.error, server: undefined});
+        case ActionTypes.EDIT_SERVER_DATA_FINISH:
+            return UpdateObject(state, {loading: false, modules: payload.modules, success: true});
         default:
             return state;
     }

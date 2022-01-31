@@ -1,5 +1,7 @@
+import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import * as actionTypes from './ActionTypes';
+import { IEditServerData } from './Sagas';
 
 export const getServersState = (server: IServer[]) => {
     return {
@@ -34,11 +36,12 @@ export const setServerStart = (server_id: string) => {
     };
 };
 
-export const setServerFinish = (server: IDetailedServer) => {
+export const setServerFinish = (server: IDetailedServer, modules: IFullPluginWithData[]) => {
     return {
         type: actionTypes.SET_SERVER_FINISH,
         payload: {
             server,
+            modules,
         },
     };
 };
@@ -48,6 +51,24 @@ export const getServerError = (error: string) => {
         type: actionTypes.GET_SERVER_ERROR,
         payload: {
             error,
+        },
+    };
+};
+
+export const editServerDataStart = (data: IEditServerData) => {
+    return {
+        type: actionTypes.EDIT_SERVER_DATA_START,
+        payload: {
+            data,
+        },
+    };
+};
+
+export const editServerDataFinished = (modules: IFullPluginWithData[]) => {
+    return {
+        type: actionTypes.EDIT_SERVER_DATA_FINISH,
+        payload: {
+            modules,
         },
     };
 };

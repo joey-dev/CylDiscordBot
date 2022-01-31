@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../../atomic/atoms/Loader/Loader';
@@ -7,6 +7,7 @@ import { IUserLogin } from '../../interfaces/api/User';
 import { MapStateToProps } from '../../store';
 import { setServersStart, setServerStart } from '../../store/server/Action';
 import { ServerStoreState } from '../../store/server/Index';
+import { IEditServerData } from '../../store/server/Sagas';
 import { getUserStart } from '../../store/user/Action';
 import { UserStoreState } from '../../store/user/Index';
 
@@ -38,13 +39,19 @@ const Dashboard: React.FC<Props> = (props: Props) => {
         if (currentServerId) {
             props.getServerStart(currentServerId);
         }
-    }, [currentServerId])
+    }, [currentServerId]);
+
+    const onPluginEnabledChange = (event: IEditServerData): void => {
+        console.log(event);
+    }
 
     return (
         props.loading || props.servers === undefined ? (<Loader centered={true} />) : (
             <DashboardTemplate servers={props.servers}
                 currentServerId={currentServerId}
                 server={props.server}
+                modules={props.modules}
+                onPluginEnabledChange={onPluginEnabledChange}
             />
         )
     );
@@ -54,6 +61,8 @@ const mapStateToProps = (state: MapStateToProps) => {
     return {
         user: state.user.user,
         servers: state.server.servers,
+        server: state.server.server,
+        modules: state.server.modules,
     };
 };
 

@@ -2,9 +2,9 @@ import { Switch } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import { IFullPluginWithData } from '../../../../../interfaces/api/Plugin';
+import { IEditServerData } from '../../../../../store/server/Sagas';
 import Icon from '../../../../atoms/images/Icon';
 import Text from '../../../../atoms/text/Text';
-import { SwitchOnChange } from '../../../../organisms/dashboard/LeftMenu';
 
 
 const StyledDiv = styled.div`
@@ -19,7 +19,7 @@ const StyledSwitchDiv = styled.div`
 
 type Props = {
     data: IFullPluginWithData;
-    onPluginEnabledChange: (event: SwitchOnChange) => void;
+    onPluginEnabledChange: (event: IEditServerData) => void;
 };
 
 const Plugin: React.FC<Props> = (props: Props) => {

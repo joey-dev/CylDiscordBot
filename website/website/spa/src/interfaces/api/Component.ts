@@ -8,3 +8,8 @@ export interface IComponent {
 }
 
 export interface IFullComponent extends IComponent{ }
+
+export interface IFullComponentWithData extends IFullComponent{
+    turned_on: boolean;
+    server_data: string;
+}
