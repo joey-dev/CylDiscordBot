@@ -1,10 +1,12 @@
+export type IComponentTypes =
+    'command';
 
 export interface IComponent {
     id: number,
     name: string,
     order_id: number;
     data: string;
-    type: string;
+    type: IComponentTypes;
 }
 
 export interface IFullComponent extends IComponent{ }

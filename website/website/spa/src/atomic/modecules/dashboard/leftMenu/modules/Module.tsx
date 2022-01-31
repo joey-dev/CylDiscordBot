@@ -22,6 +22,7 @@ const Module: React.FC<Props> = (props: Props) => {
                 <Plugin key={plugin.id}
                     data={plugin}
                     onPluginEnabledChange={props.onPluginEnabledChange}
+                    moduleId={props.data.id}
                 />,
             )}
         </React.Fragment>

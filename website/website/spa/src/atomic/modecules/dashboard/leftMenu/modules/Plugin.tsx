@@ -1,5 +1,6 @@
 import { Switch } from '@material-ui/core';
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { IFullPluginWithData } from '../../../../../interfaces/api/Plugin';
 import { IEditServerData } from '../../../../../store/server/Sagas';
@@ -20,15 +21,24 @@ const StyledSwitchDiv = styled.div`
 type Props = {
     data: IFullPluginWithData;
     onPluginEnabledChange: (event: IEditServerData) => void;
+    moduleId: number;
 };
 
 const Plugin: React.FC<Props> = (props: Props) => {
+    const navigate = useNavigate();
+    let params = useParams();
+    const currentServerId = params.serverId;
+
+    console.log('/dashboard/' + currentServerId + '/' + props.moduleId + '/' + props.data.id);
+
+    const navigateToPlugin = () => navigate('/dashboard/' + currentServerId + '/' + props.moduleId + '/' + props.data.id);
+
     return (
         <StyledDiv>
             <Icon name="utility"
                 float={'left'}
             />
-            <Text margin={'20px 40px'}>
+            <Text margin={'20px 40px'} onClick={navigateToPlugin}>
                 {props.data.name}
             </Text>
             <StyledSwitchDiv>

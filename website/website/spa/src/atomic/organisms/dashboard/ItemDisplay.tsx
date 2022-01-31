@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { IServer } from '../../../interfaces/api/Server';
-import Button from '../../atoms/buttons/Button/Button';
+import { IFullModuleWithData } from '../../../interfaces/api/Module';
+import { IDetailedServer, IServer } from '../../../interfaces/api/Server';
 import NoFunctionalServer from '../../modecules/dashboard/itemDisplay/NoFunctionalServer';
+import PluginBody from '../../modecules/dashboard/itemDisplay/PluginBody';
 
 
 const StyledBackground = styled.div`
@@ -26,14 +28,15 @@ const StyledBackground = styled.div`
 
 type Props = {
     server?: IServer;
+    modules?: IFullModuleWithData[];
     currentServerId?: string;
 };
 
 const ItemDisplay: React.FC<Props> = (props: Props) => {
     return (
         <StyledBackground>
-            {props.server && props.server.alreadyJoined ? (
-                <p>works</p>
+            {props.server && props.server.alreadyJoined && props.modules ? (
+                <PluginBody modules={props.modules} />
             ) : (
                 <NoFunctionalServer server={props.server}
                     currentServerId={props.currentServerId}

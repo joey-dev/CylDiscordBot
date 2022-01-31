@@ -27,6 +27,7 @@ const Dashboard: React.FC<Props> = (props: Props) => {
             />
             <ItemDisplay server={currentServer}
                 currentServerId={props.currentServerId}
+                modules={props.modules}
             />
         </React.Fragment>
     );

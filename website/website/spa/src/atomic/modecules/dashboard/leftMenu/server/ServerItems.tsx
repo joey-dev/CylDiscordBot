@@ -29,7 +29,7 @@ const ServerItems: React.FC<Props> = (props: Props) => {
         } else {
             navigate('/dashboard/' + currentServerId);
         }
-    }, [currentServerId, navigate]);
+    }, [currentServerId]);
 
     for (let server of props.servers) {
         if (server.id === props.currentServerId) {
