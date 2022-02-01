@@ -2,30 +2,31 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { IFullModuleWithData } from '../../../../interfaces/api/Module';
-import { IDetailedServer, IServer } from '../../../../interfaces/api/Server';
+import { IDetailedServer } from '../../../../interfaces/api/Server';
 import Plugin from './Plugin';
 
 
 const StyledBackground = styled.div`
-    background-color: #1F2129;
-    width: calc(100% - 100px);
-    height: calc(100% - 100px);
-    margin: 50px;
-    overflow-y: auto;
-    border-radius: 5px;
-
-    ::-webkit-scrollbar {
-        width: 6px;
-        padding: 3px
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: #43464D;
-    }
+    //background-color: #1F2129;
+    //width: calc(100% - 100px);
+    //height: calc(100% - 100px);
+    //margin: 50px;
+    //overflow-y: auto;
+    //border-radius: 5px;
+    //
+    //::-webkit-scrollbar {
+    //    width: 6px;
+    //    padding: 3px
+    //}
+    //
+    //::-webkit-scrollbar-thumb {
+    //    background-color: #43464D;
+    //}
 `;
 
 type Props = {
     modules: IFullModuleWithData[];
+    detailedServer: IDetailedServer;
 };
 
 const PluginBody: React.FC<Props> = (props: Props) => {
@@ -34,7 +35,11 @@ const PluginBody: React.FC<Props> = (props: Props) => {
     return (
         <StyledBackground>
             {params.pluginId && params.moduleId && props.modules ? (
-                <Plugin moduleId={params.moduleId} pluginId={params.pluginId} modules={props.modules} />
+                <Plugin moduleId={params.moduleId}
+                    pluginId={params.pluginId}
+                    modules={props.modules}
+                    detailedServer={props.detailedServer}
+                />
             ) : (
                 <p>works</p>
             )}

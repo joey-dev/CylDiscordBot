@@ -3,16 +3,18 @@ import styled from 'styled-components';
 import { IFullModuleWithData } from '../../../../interfaces/api/Module';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
 import Component from './Component';
+import PluginHeader from './PluginHeader';
 
 
 const StyledBackground = styled.div`
-
+    margin-left: 50px;
 `;
 
 type Props = {
     pluginId: string;
     moduleId: string;
     modules: IFullModuleWithData[];
+    detailedServer: IDetailedServer;
 };
 
 const Plugin: React.FC<Props> = (props: Props) => {
@@ -27,8 +29,13 @@ const Plugin: React.FC<Props> = (props: Props) => {
         <React.Fragment>
             {plugin && (
                 <StyledBackground>
+                    <PluginHeader pluginName={plugin.name} />
                     {plugin.components.map(component =>
-                        <Component key={component.id} component={component} />
+                        <Component key={component.id}
+                            component={component}
+                            detailedServer={props.detailedServer}
+                            onComponentEnabledChange={(event => console.log(event))}
+                        />,
                     )}
                 </StyledBackground>
             )}

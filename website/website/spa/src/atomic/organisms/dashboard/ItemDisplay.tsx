@@ -30,13 +30,14 @@ type Props = {
     server?: IServer;
     modules?: IFullModuleWithData[];
     currentServerId?: string;
+    detailedServer?: IDetailedServer;
 };
 
 const ItemDisplay: React.FC<Props> = (props: Props) => {
     return (
         <StyledBackground>
-            {props.server && props.server.alreadyJoined && props.modules ? (
-                <PluginBody modules={props.modules} />
+            {props.server && props.server.alreadyJoined && props.modules && props.detailedServer ? (
+                <PluginBody modules={props.modules} detailedServer={props.detailedServer} />
             ) : (
                 <NoFunctionalServer server={props.server}
                     currentServerId={props.currentServerId}
