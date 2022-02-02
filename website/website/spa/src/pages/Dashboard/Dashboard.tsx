@@ -42,7 +42,7 @@ const Dashboard: React.FC<Props> = (props: Props) => {
         }
     }, [currentServerId]);
 
-    const onPluginEnabledChange = (event: IEditServerData): void => {
+    const onComponentOrPluginEnabledChange = (event: IEditServerData): void => {
         if (currentServerId) {
             props.editServerDataStart(currentServerId, event);
         }
@@ -54,7 +54,8 @@ const Dashboard: React.FC<Props> = (props: Props) => {
                 currentServerId={currentServerId}
                 server={props.server}
                 modules={props.modules}
-                onPluginEnabledChange={onPluginEnabledChange}
+                onPluginEnabledChange={onComponentOrPluginEnabledChange}
+                onComponentEnabledChange={onComponentOrPluginEnabledChange}
             />
         )
     );

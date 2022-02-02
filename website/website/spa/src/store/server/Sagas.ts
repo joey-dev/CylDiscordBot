@@ -88,16 +88,13 @@ type EditServerDataSagaPayload = {
 
 
 export function* editServerData(action: EditServerDataSagaAction) {
-    if (!action.payload.data.module_id) {
-        yield put(actions.getServerError("no module data"));
-    } else {
-        switch (action.payload.data.type) {
-            case 'plugin':
-                yield editPluginServerData(action);
-                break;
-            case 'component':
-                break;
-        }
+    switch (action.payload.data.type) {
+        case 'plugin':
+            yield editPluginServerData(action);
+            break;
+        case 'component':
+            yield editComponentServerData(action);
+            break;
     }
 }
 
@@ -107,6 +104,26 @@ function* editPluginServerData(action: EditServerDataSagaAction) {
     const response: ModuleResponse = yield Axios().patch(url, {
         plugin_id: action.payload.data.plugin_id,
         checked: action.payload.data.checked ? 1 : 0,
+        return: true
+    }).catch(error => {
+        currentError = error.message;
+    });
+
+    if (response !== undefined || !currentError) {
+        yield put(actions.editServerDataFinished(response.data));
+    } else {
+        yield put(actions.getServerError(currentError));
+    }
+}
+
+
+function* editComponentServerData(action: EditServerDataSagaAction) {
+    const url = '/module/component/' + action.payload.server_id;
+    let currentError = "";
+    const response: ModuleResponse = yield Axios().patch(url, {
+        component_id: action.payload.data.component_id,
+        checked: action.payload.data.checked ? 1 : 0,
+        data: action.payload.data.server_data || "{}",
         return: true
     }).catch(error => {
         currentError = error.message;

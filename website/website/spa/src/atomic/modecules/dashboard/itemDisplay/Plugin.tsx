@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IFullModuleWithData } from '../../../../interfaces/api/Module';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
+import { IEditServerData } from '../../../../store/server/Sagas';
 import Component from './Component';
 import PluginHeader from './PluginHeader';
 
@@ -15,6 +16,7 @@ type Props = {
     moduleId: string;
     modules: IFullModuleWithData[];
     detailedServer: IDetailedServer;
+    onComponentEnabledChange: (event: IEditServerData) => void;
 };
 
 const Plugin: React.FC<Props> = (props: Props) => {
@@ -34,7 +36,7 @@ const Plugin: React.FC<Props> = (props: Props) => {
                         <Component key={component.id}
                             component={component}
                             detailedServer={props.detailedServer}
-                            onComponentEnabledChange={(event => console.log(event))}
+                            onComponentEnabledChange={props.onComponentEnabledChange}
                         />,
                     )}
                 </StyledBackground>

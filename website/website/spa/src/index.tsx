@@ -11,14 +11,15 @@ import { Provider } from 'react-redux';
 
 const theme = createTheme({
     palette: {
+        mode: 'dark',
         primary: {
-            main: '#ffffff',
+            main: '#36393f',
         },
         secondary: {
-            main: '#e2409e'
+            main: '#ffffff'
         },
         info: {
-            main: '#76c880'
+            main: '#e2409e'
         },
     },
 });

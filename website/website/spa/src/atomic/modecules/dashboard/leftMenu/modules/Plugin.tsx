@@ -29,8 +29,6 @@ const Plugin: React.FC<Props> = (props: Props) => {
     let params = useParams();
     const currentServerId = params.serverId;
 
-    console.log('/dashboard/' + currentServerId + '/' + props.moduleId + '/' + props.data.id);
-
     const navigateToPlugin = () => navigate('/dashboard/' + currentServerId + '/' + props.moduleId + '/' + props.data.id);
 
     return (
@@ -51,7 +49,7 @@ const Plugin: React.FC<Props> = (props: Props) => {
                     })}
                     checked={props.data.turned_on}
                     edge="end"
-                    color="secondary"
+                    color="info"
                 />
             </StyledSwitchDiv>
         </StyledDiv>

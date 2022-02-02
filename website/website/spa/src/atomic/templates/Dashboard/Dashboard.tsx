@@ -12,6 +12,7 @@ type Props = {
     modules?: IFullModuleWithData[];
     currentServerId?: string;
     onPluginEnabledChange: (event: IEditServerData) => void;
+    onComponentEnabledChange: (event: IEditServerData) => void;
 };
 
 const Dashboard: React.FC<Props> = (props: Props) => {
@@ -29,6 +30,7 @@ const Dashboard: React.FC<Props> = (props: Props) => {
                 currentServerId={props.currentServerId}
                 modules={props.modules}
                 detailedServer={props.server}
+                onComponentEnabledChange={props.onComponentEnabledChange}
             />
         </React.Fragment>
     );

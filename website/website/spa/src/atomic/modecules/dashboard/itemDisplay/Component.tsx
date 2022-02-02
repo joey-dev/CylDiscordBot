@@ -1,10 +1,11 @@
 import { Button, Switch } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IFullComponent, IFullComponentWithData } from '../../../../interfaces/api/Component';
+import { IFullComponentWithData } from '../../../../interfaces/api/Component';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
 import { IEditServerData } from '../../../../store/server/Sagas';
 import Text from '../../../atoms/text/Text';
+import ComponentSettings from './ComponentSettings';
 
 
 const StyledBackground = styled.div`
@@ -35,6 +36,8 @@ type Props = {
 };
 
 const Component: React.FC<Props> = (props: Props) => {
+    const [componentSettingsOpen, setComponentSettingsOpen] = useState(false);
+
     let componentName = '';
     if (props.component.type === 'command') {
         componentName += props.detailedServer.command_prefix;
@@ -60,18 +63,25 @@ const Component: React.FC<Props> = (props: Props) => {
                 </Text>
             </StyledLeftDiv>
             <StyledRightDiv>
-                <Button variant="outlined" color="primary">
+                <Button variant="outlined"
+                    color="secondary"
+                    onClick={() => setComponentSettingsOpen(true)}
+                >
                     edit
                 </Button>
+                <ComponentSettings open={componentSettingsOpen}
+                    onClose={() => setComponentSettingsOpen(false)}
+                    component={props.component}
+                />
                 <Switch
                     name="enabled"
                     edge="end"
-                    color="secondary"
+                    color="info"
                     checked={props.component.turned_on}
                     onChange={event => props.onComponentEnabledChange({
                         checked: event.target.checked,
                         component_id: props.component.id,
-                        type: "component"
+                        type: 'component',
                     })}
                 />
             </StyledRightDiv>

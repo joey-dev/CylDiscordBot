@@ -83,6 +83,66 @@ class ModuleController extends AbstractController
         return new JsonResponse([], Response::HTTP_OK);
     }
 
+    #[Route('/component/{serverId}', name: 'component_patch', methods: ["PATCH"])]
+    public function componentPatch(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $userId = $request->headers->get('user_id');
+        $entityManager = $doctrine->getManager();
+
+        if (!array_key_exists("component_id", $data) || !array_key_exists("checked", $data) || !array_key_exists("data", $data)) {
+            return new JsonResponse([
+                "error" => "invalid_request",
+                "error_description" => "incorrect data in request",
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+        $requestedServer = null;
+
+        foreach ($user->getServer() as $server) {
+            if ($server->getServerId() == $request->get("serverId")) {
+                $requestedServer = $server;
+            }
+        }
+
+        $component = $doctrine->getRepository(Component::class)->find($data['component_id']);
+
+        if (!$component || !$requestedServer) {
+            return new JsonResponse([
+                "error" => "invalid_request",
+                "error_description" => "no module settings found with data",
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $componentSettings = $doctrine->getRepository(ComponentSettings::class)
+            ->findoneby(["component" => $component, "server" => $requestedServer]);
+
+        $componentSettings->setTurnedOn($data['checked']);
+
+        if ($data['data'] !== "{}") {
+            if ($data['data'] === "empty") {
+                $componentSettings->setData("{}");
+            } else {
+                $componentSettings->setData($data['data']);
+            }
+        }
+
+        $entityManager->flush();
+
+        if (isset($data['return'])) {
+            $allConfiguredModules = $this->getAllConfiguredModules($request, $doctrine);
+
+            if ($allConfiguredModules instanceof JsonResponse) {
+                return $allConfiguredModules;
+            }
+
+            return new JsonResponse($allConfiguredModules, Response::HTTP_OK);
+        }
+
+        return new JsonResponse([], Response::HTTP_OK);
+    }
+
     private function getAllConfiguredModules(Request $request, ManagerRegistry $doctrine): array|JsonResponse
     {
         $modules = $this->getAllModules($doctrine);

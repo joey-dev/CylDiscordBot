@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { IFullModuleWithData } from '../../../../interfaces/api/Module';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
+import { IEditServerData } from '../../../../store/server/Sagas';
 import Plugin from './Plugin';
 
 
@@ -27,6 +28,7 @@ const StyledBackground = styled.div`
 type Props = {
     modules: IFullModuleWithData[];
     detailedServer: IDetailedServer;
+    onComponentEnabledChange: (event: IEditServerData) => void;
 };
 
 const PluginBody: React.FC<Props> = (props: Props) => {
@@ -39,6 +41,7 @@ const PluginBody: React.FC<Props> = (props: Props) => {
                     pluginId={params.pluginId}
                     modules={props.modules}
                     detailedServer={props.detailedServer}
+                    onComponentEnabledChange={props.onComponentEnabledChange}
                 />
             ) : (
                 <p>works</p>
