@@ -31,6 +31,10 @@ class Plugin
     #[ORM\OneToMany(mappedBy: 'plugin', targetEntity: PluginSettings::class)]
     private $pluginSettings;
 
+    #[ORM\ManyToOne(targetEntity: PluginType::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private $type;
+
     public function __construct()
     {
         $this->components = new ArrayCollection();
@@ -134,6 +138,18 @@ class Plugin
                 $pluginSetting->setPlugin(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?PluginType
+    {
+        return $this->type;
+    }
+
+    public function setType(?PluginType $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
