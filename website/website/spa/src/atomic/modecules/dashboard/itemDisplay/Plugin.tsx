@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { IComponentServerSettings } from '../../../../interfaces/api/Component';
 import { IFullModuleWithData } from '../../../../interfaces/api/Module';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
 import { IEditServerData } from '../../../../store/server/Sagas';
@@ -17,14 +18,15 @@ type Props = {
     modules: IFullModuleWithData[];
     detailedServer: IDetailedServer;
     onComponentEnabledChange: (event: IEditServerData) => void;
+    onComponentSettingChange: (data: IEditServerData) => void;
 };
 
 const Plugin: React.FC<Props> = (props: Props) => {
-    let module = props.modules.find(module => module.id === parseInt(props.moduleId));
+    const module = props.modules.find(moduleItem => moduleItem.id === parseInt(props.moduleId));
     let plugin;
 
     if (module) {
-        plugin = module.plugins.find(plugin => plugin.id === parseInt(props.pluginId));
+        plugin = module.plugins.find(pluginItem => pluginItem.id === parseInt(props.pluginId));
     }
 
     return (
@@ -37,6 +39,7 @@ const Plugin: React.FC<Props> = (props: Props) => {
                             component={component}
                             detailedServer={props.detailedServer}
                             onComponentEnabledChange={props.onComponentEnabledChange}
+                            onComponentSettingChange={props.onComponentSettingChange}
                         />,
                     )}
                 </StyledBackground>

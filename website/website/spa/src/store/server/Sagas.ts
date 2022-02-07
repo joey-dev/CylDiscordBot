@@ -1,4 +1,5 @@
 import { put } from 'redux-saga/effects';
+import { IComponentServerSettingsData } from '../../interfaces/api/Component';
 import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import Axios from '../../services/Axios/AxiosConfig';
@@ -9,18 +10,18 @@ export type IEditServerData = {
     plugin_id?: number;
     component_id?: number;
     checked?: boolean;
-    server_data?: string;
+    server_data?: IComponentServerSettingsData;
     type: 'plugin' | 'component';
 };
 
 
 type ServersResponse = {
     data: ServersResponseData;
-}
+};
 
 type ServersResponseData = {
     servers: IServer[];
-}
+};
 
 export function* setServersSaga() {
     const url = '/user/servers';
@@ -46,26 +47,26 @@ type SetServerSagaPayload = {
 
 type ServerResponse = {
     data: ServerResponseData;
-}
+};
 
 type ServerResponseData = {
     server: IDetailedServer;
-}
+};
 
 type ModuleResponse = {
     data: IFullPluginWithData[];
-}
+};
 
 
 export function* setServerSaga(action: SetServerSagaAction) {
     const url = '/user/server/' + action.payload.server_id;
-    let currentError = "";
+    let currentError = '';
     const response: ServerResponse = yield Axios().get(url).catch(error => {
         currentError = error.message;
     });
 
     const moduleUrl = '/module/all/' + action.payload.server_id;
-    let currentModuleError = "";
+    let currentModuleError = '';
     const moduleResponse: ModuleResponse = yield Axios().get(moduleUrl).catch(error => {
         currentModuleError = error.message;
     });
@@ -100,11 +101,11 @@ export function* editServerData(action: EditServerDataSagaAction) {
 
 function* editPluginServerData(action: EditServerDataSagaAction) {
     const url = '/module/plugin/' + action.payload.server_id;
-    let currentError = "";
+    let currentError = '';
     const response: ModuleResponse = yield Axios().patch(url, {
         plugin_id: action.payload.data.plugin_id,
         checked: action.payload.data.checked ? 1 : 0,
-        return: true
+        return: true,
     }).catch(error => {
         currentError = error.message;
     });
@@ -119,12 +120,17 @@ function* editPluginServerData(action: EditServerDataSagaAction) {
 
 function* editComponentServerData(action: EditServerDataSagaAction) {
     const url = '/module/component/' + action.payload.server_id;
-    let currentError = "";
+    let currentError = '';
+    let data = '{}';
+    if (action.payload.data.server_data) {
+        data = JSON.stringify(action.payload.data.server_data);
+    }
+
     const response: ModuleResponse = yield Axios().patch(url, {
         component_id: action.payload.data.component_id,
         checked: action.payload.data.checked ? 1 : 0,
-        data: action.payload.data.server_data || "{}",
-        return: true
+        data: data,
+        return: true,
     }).catch(error => {
         currentError = error.message;
     });

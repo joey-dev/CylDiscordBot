@@ -1,7 +1,7 @@
 import { Button, Switch } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IFullComponentWithData } from '../../../../interfaces/api/Component';
+import { IComponentServerSettings, IFullComponentWithData } from '../../../../interfaces/api/Component';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
 import { IEditServerData } from '../../../../store/server/Sagas';
 import Text from '../../../atoms/text/Text';
@@ -33,6 +33,7 @@ type Props = {
     component: IFullComponentWithData;
     detailedServer: IDetailedServer;
     onComponentEnabledChange: (event: IEditServerData) => void;
+    onComponentSettingChange: (data: IEditServerData) => void;
 };
 
 const Component: React.FC<Props> = (props: Props) => {
@@ -72,6 +73,12 @@ const Component: React.FC<Props> = (props: Props) => {
                 <ComponentSettings open={componentSettingsOpen}
                     onClose={() => setComponentSettingsOpen(false)}
                     component={props.component}
+                    onComponentSettingChange={data => props.onComponentSettingChange({
+                        component_id: props.component.id,
+                        server_data: data,
+                        checked: props.component.turned_on,
+                        type: 'component',
+                    })}
                 />
                 <Switch
                     name="enabled"

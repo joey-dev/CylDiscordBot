@@ -1,9 +1,14 @@
 import { Modal } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
-import { IFullComponentWithData } from '../../../../interfaces/api/Component';
+import {
+    IComponentDataTypes,
+    IComponentServerSettings,
+    IComponentSettings,
+    IFullComponentWithData,
+} from '../../../../interfaces/api/Component';
 import Text from '../../../atoms/text/Text';
-import ComponentSetting, { IComponentSetting } from './settings/ComponentSetting';
+import ComponentSetting from './settings/ComponentSetting';
 
 
 const StyledModal = styled.div`
@@ -38,16 +43,12 @@ type Props = {
     open: boolean;
     onClose: () => void;
     component: IFullComponentWithData;
+    onComponentSettingChange: (data: IComponentServerSettings[]) => void;
 };
 
 const ComponentSettings: React.FC<Props> = (props: Props) => {
-
-    // let serverData = JSON.parse(props.component.server_data);
-    let serverData: IComponentSetting[] = [
-        {
-            name: 'role',
-        },
-    ];
+    const data = JSON.parse(props.component.data);
+    const serverData = JSON.parse(props.component.server_data);
 
     return (
         <Modal
@@ -65,17 +66,42 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
                     Edit {props.component.name} settings
                 </Text>
                 <StyledSettings>
-                    {serverData.map(data =>
-                        <ComponentSetting key={data.name} data={data} />,
+                    {data.map((item: IComponentSettings) =>
+                        <ComponentSetting key={item.name}
+                            data={item}
+                            serverData={currentServerData(serverData, item.name)}
+                            onComponentSettingChange={(newSettings) =>
+                                props.onComponentSettingChange(editServerData(data, newSettings, item.name))
+                            }
+                        />,
                     )}
                 </StyledSettings>
             </StyledModal>
         </Modal>
     );
 };
-//
-// margin: 35px;
-// border-bottom: 1px solid darkgray;
-// padding-bottom: 30px;
+
+
+const currentServerData = (serverData: IComponentServerSettings[], item: IComponentDataTypes): IComponentServerSettings => {
+    const returnValue = serverData.find(element => element.name === item);
+
+    if (returnValue) {
+        return returnValue;
+    }
+
+    throw 'serverData has not been set in the database, or is wrong on: ' + item;
+};
+
+const editServerData = (serverData: IComponentServerSettings[], newData: IComponentServerSettings, name: IComponentDataTypes): IComponentServerSettings[] => {
+    const returnValue = serverData;
+
+    for (const key in serverData) {
+        if (serverData[key].name === name) {
+            serverData[key] = newData;
+        }
+    }
+
+    return returnValue;
+};
 
 export default (ComponentSettings);

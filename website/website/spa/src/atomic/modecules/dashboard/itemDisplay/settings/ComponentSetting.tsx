@@ -1,17 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import { IComponentSettings, IComponentServerSettings } from '../../../../../interfaces/api/Component';
 import RoleSetting from './types/RoleSetting';
 
 
 const StyledSetting = styled.div`
 `;
 
-export interface IComponentSetting {
-    name: 'role';
-}
-
 type Props = {
-    data: IComponentSetting;
+    data: IComponentSettings;
+    serverData: IComponentServerSettings;
+    onComponentSettingChange: (data: IComponentServerSettings) => void;
 };
 
 const ComponentSettings: React.FC<Props> = (props: Props) => {
@@ -19,7 +18,7 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
 
     switch (props.data.name) {
         case 'role':
-            returnElement = <RoleSetting/>;
+            returnElement = <RoleSetting settings={props.serverData} onComponentSettingChange={props.onComponentSettingChange}/>;
             break;
         default:
             throw new Error('data name not found in ComponentSettings');

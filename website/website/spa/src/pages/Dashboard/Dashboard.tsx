@@ -5,11 +5,11 @@ import Loader from '../../atomic/atoms/Loader/Loader';
 import { default as DashboardTemplate } from '../../atomic/templates/Dashboard/Dashboard';
 import { IUserLogin } from '../../interfaces/api/User';
 import { MapStateToProps } from '../../store';
-import { editServerDataStart, setServersStart, setServerStart } from '../../store/server/Action';
 import { ServerStoreState } from '../../store/server';
+import { editServerDataStart, setServersStart, setServerStart } from '../../store/server/Action';
 import { IEditServerData } from '../../store/server/Sagas';
-import { getUserStart } from '../../store/user/Action';
 import { UserStoreState } from '../../store/user';
+import { getUserStart } from '../../store/user/Action';
 
 type DispatchProps = {
     getUserStart: (user: IUserLogin) => void;
@@ -42,7 +42,7 @@ const Dashboard: React.FC<Props> = (props: Props) => {
         }
     }, [currentServerId]);
 
-    const onComponentOrPluginEnabledChange = (event: IEditServerData): void => {
+    const onComponentOrPluginSettingsChange = (event: IEditServerData): void => {
         if (currentServerId) {
             props.editServerDataStart(currentServerId, event);
         }
@@ -56,8 +56,9 @@ const Dashboard: React.FC<Props> = (props: Props) => {
                 currentServerId={currentServerId}
                 server={props.server}
                 modules={props.modules}
-                onPluginEnabledChange={onComponentOrPluginEnabledChange}
-                onComponentEnabledChange={onComponentOrPluginEnabledChange}
+                onPluginEnabledChange={onComponentOrPluginSettingsChange}
+                onComponentEnabledChange={onComponentOrPluginSettingsChange}
+                onComponentSettingChange={onComponentOrPluginSettingsChange}
             />
         );
     }

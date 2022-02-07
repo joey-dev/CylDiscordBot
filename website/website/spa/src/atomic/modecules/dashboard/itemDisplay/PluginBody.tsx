@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { IComponentServerSettings } from '../../../../interfaces/api/Component';
 import { IFullModuleWithData } from '../../../../interfaces/api/Module';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
 import { IEditServerData } from '../../../../store/server/Sagas';
@@ -29,6 +30,7 @@ type Props = {
     modules: IFullModuleWithData[];
     detailedServer: IDetailedServer;
     onComponentEnabledChange: (event: IEditServerData) => void;
+    onComponentSettingChange: (data: IEditServerData) => void;
 };
 
 const PluginBody: React.FC<Props> = (props: Props) => {
@@ -42,6 +44,7 @@ const PluginBody: React.FC<Props> = (props: Props) => {
                     modules={props.modules}
                     detailedServer={props.detailedServer}
                     onComponentEnabledChange={props.onComponentEnabledChange}
+                    onComponentSettingChange={props.onComponentSettingChange}
                 />
             ) : (
                 <p>works</p>

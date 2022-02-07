@@ -1,4 +1,5 @@
 import React from 'react';
+import { IComponentServerSettings } from '../../../interfaces/api/Component';
 import { IFullModuleWithData } from '../../../interfaces/api/Module';
 import { IDetailedServer, IServer } from '../../../interfaces/api/Server';
 import { IEditServerData } from '../../../store/server/Sagas';
@@ -13,6 +14,7 @@ type Props = {
     currentServerId?: string;
     onPluginEnabledChange: (event: IEditServerData) => void;
     onComponentEnabledChange: (event: IEditServerData) => void;
+    onComponentSettingChange: (data: IEditServerData) => void;
 };
 
 const Dashboard: React.FC<Props> = (props: Props) => {
@@ -31,6 +33,7 @@ const Dashboard: React.FC<Props> = (props: Props) => {
                 modules={props.modules}
                 detailedServer={props.server}
                 onComponentEnabledChange={props.onComponentEnabledChange}
+                onComponentSettingChange={props.onComponentSettingChange}
             />
         </React.Fragment>
     );

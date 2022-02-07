@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { IComponentServerSettings } from '../../../interfaces/api/Component';
 import { IFullModuleWithData } from '../../../interfaces/api/Module';
 import { IDetailedServer, IServer } from '../../../interfaces/api/Server';
 import { IEditServerData } from '../../../store/server/Sagas';
@@ -32,6 +33,7 @@ type Props = {
     currentServerId?: string;
     detailedServer?: IDetailedServer;
     onComponentEnabledChange: (event: IEditServerData) => void;
+    onComponentSettingChange: (data: IEditServerData) => void;
 };
 
 const ItemDisplay: React.FC<Props> = (props: Props) => {
@@ -41,6 +43,7 @@ const ItemDisplay: React.FC<Props> = (props: Props) => {
                 <PluginBody modules={props.modules}
                     detailedServer={props.detailedServer}
                     onComponentEnabledChange={props.onComponentEnabledChange}
+                    onComponentSettingChange={props.onComponentSettingChange}
                 />
             ) : (
                 <NoFunctionalServer server={props.server}

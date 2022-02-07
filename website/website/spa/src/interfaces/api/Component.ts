@@ -1,3 +1,5 @@
+import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
+
 export type IComponentTypes =
     'command';
 
@@ -15,3 +17,17 @@ export interface IFullComponentWithData extends IFullComponent{
     turned_on: boolean;
     server_data: string;
 }
+
+export type IComponentDataTypes = 'role';
+
+export interface IComponentSettings {
+    name: IComponentDataTypes;
+}
+
+export interface IComponentServerSettings {
+    name: IComponentDataTypes;
+    turned_on: boolean;
+    data: IComponentServerSettingsData;
+}
+
+export type IComponentServerSettingsData = object|IRoleData;
