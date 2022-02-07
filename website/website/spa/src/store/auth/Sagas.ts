@@ -1,4 +1,3 @@
-// @ts-ignore
 import Axios from '../../services/Axios/AxiosConfig';
 import { call, delay, put } from 'redux-saga/effects';
 import * as actions from './Action';

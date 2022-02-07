@@ -2,10 +2,10 @@ import authReducer from './auth/Reducers';
 import thunk from 'redux-thunk';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { AuthStoreState, watchAuthSagas } from './auth/Index';
-import { UserStoreState, watchUserSagas } from './user/Index';
+import { AuthStoreState, watchAuthSagas } from './auth';
+import { UserStoreState, watchUserSagas } from './user';
 import userReducer from './user/Reducers';
-import { ServerStoreState, watchServerSagas } from './server/Index';
+import { ServerStoreState, watchServerSagas } from './server';
 import serverReducer from './server/Reducers';
 
 let composeEnhancers = compose;

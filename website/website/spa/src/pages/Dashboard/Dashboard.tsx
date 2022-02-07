@@ -6,10 +6,10 @@ import { default as DashboardTemplate } from '../../atomic/templates/Dashboard/D
 import { IUserLogin } from '../../interfaces/api/User';
 import { MapStateToProps } from '../../store';
 import { editServerDataStart, setServersStart, setServerStart } from '../../store/server/Action';
-import { ServerStoreState } from '../../store/server/Index';
+import { ServerStoreState } from '../../store/server';
 import { IEditServerData } from '../../store/server/Sagas';
 import { getUserStart } from '../../store/user/Action';
-import { UserStoreState } from '../../store/user/Index';
+import { UserStoreState } from '../../store/user';
 
 type DispatchProps = {
     getUserStart: (user: IUserLogin) => void;
@@ -22,7 +22,7 @@ type Props = UserStoreState & DispatchProps & ServerStoreState;
 
 const Dashboard: React.FC<Props> = (props: Props) => {
     const navigate = useNavigate();
-    let params = useParams();
+    const params = useParams();
 
     useEffect(() => {
         props.getServersStart();
@@ -48,8 +48,10 @@ const Dashboard: React.FC<Props> = (props: Props) => {
         }
     };
 
-    return (
-        props.loading || props.servers === undefined ? (<Loader centered={true} />) : (
+    let returnValue = (<Loader centered={true} />);
+
+    if (!props.loading && props.servers !== undefined) {
+        returnValue = (
             <DashboardTemplate servers={props.servers}
                 currentServerId={currentServerId}
                 server={props.server}
@@ -57,7 +59,11 @@ const Dashboard: React.FC<Props> = (props: Props) => {
                 onPluginEnabledChange={onComponentOrPluginEnabledChange}
                 onComponentEnabledChange={onComponentOrPluginEnabledChange}
             />
-        )
+        );
+    }
+
+    return (
+        returnValue
     );
 };
 

@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { AnyInputOnChange } from '../../interfaces/formTypes/FormEvents';
+import React, { useEffect } from 'react';
 import { auth, setAuthRedirectPath } from '../../store/auth/Action';
 import { connect } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MapStateToProps } from '../../store';
-import { AuthStoreState } from '../../store/auth/Index';
+import { AuthStoreState } from '../../store/auth';
 import Loader from '../../atomic/atoms/Loader/Loader';
 
 type DispatchProps = {

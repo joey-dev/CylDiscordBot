@@ -1,18 +1,26 @@
 module:
 	plugin
 	    component
+	        settings
 	    component
+	        settings
 	plugin
         component
+            settings
 module:
 	plugin
 	    component
+	        settings
 	plugin
 	    component
+	        settings
 	    component
+	        settings
 	    component
+	        settings
 	plugin
 	    component
+	        settings
 
 
 

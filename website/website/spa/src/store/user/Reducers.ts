@@ -1,4 +1,4 @@
-import { UserStoreState } from '../user/Index';
+import { UserStoreState } from '../user';
 import * as ActionTypes from './ActionTypes';
 import UpdateObject from '../../services/reducer/UpdateObject/UpdateObject';
 import { IUser } from '../../interfaces/api/User';

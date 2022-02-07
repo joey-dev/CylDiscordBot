@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Button from '../../atoms/buttons/Button/Button';
 import { MapStateToProps } from '../../../store';
 import { connect } from 'react-redux';
-import { AuthStoreState } from '../../../store/auth/Index';
+import { AuthStoreState } from '../../../store/auth';
 import { logout } from '../../../store/auth/Action';
 
 const OuterDiv = styled.div`

@@ -19,7 +19,10 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
 
     switch (props.data.name) {
         case 'role':
-            returnElement = <RoleSetting/>
+            returnElement = <RoleSetting/>;
+            break;
+        default:
+            throw new Error('data name not found in ComponentSettings');
     }
 
     return (

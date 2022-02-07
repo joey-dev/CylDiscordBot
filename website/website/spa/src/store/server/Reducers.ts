@@ -2,7 +2,7 @@ import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import UpdateObject from '../../services/reducer/UpdateObject/UpdateObject';
 import * as ActionTypes from './ActionTypes';
-import { ServerStoreState } from './Index';
+import { ServerStoreState } from './index';
 
 const initialState: ServerStoreState = {
     servers: undefined,

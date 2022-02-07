@@ -1,6 +1,6 @@
 import * as actionTypes from './ActionTypes';
 import UpdateObject from '../../services/reducer/UpdateObject/UpdateObject';
-import { AuthStoreState } from './Index';
+import { AuthStoreState } from './index';
 
 const initialState: AuthStoreState = {
     token: null,
