@@ -32,7 +32,7 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
         throw 'data for role settings is incorrect!';
     }
 
-    const [selectedRoles, setSelectedRoles] = useState(['']);
+    const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
 
     useEffect(() => {
         if ('roles' in props.settings.data) {
@@ -104,7 +104,7 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
                             props.onComponentSettingChange(
                                 {
                                     ...props.settings,
-                                    ...{data: editRoleData(props.settings.data, [''])},
+                                    ...{data: editRoleData(props.settings.data, [])},
                                 },
                             );
                         }
