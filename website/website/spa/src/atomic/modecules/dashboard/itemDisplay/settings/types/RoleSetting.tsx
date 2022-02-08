@@ -1,8 +1,14 @@
 import { QuestionMark } from '@mui/icons-material';
 import { Autocomplete, AutocompleteRenderInputParams, IconButton, Switch, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { IComponentServerSettings } from '../../../../../../interfaces/api/Component';
+import { MapStateToProps } from '../../../../../../store';
+import { ServerStoreState } from '../../../../../../store/server';
+import { getServerRolesStart } from '../../../../../../store/server/Action';
+import { IEditServerData } from '../../../../../../store/server/Sagas';
 import Text from '../../../../../atoms/text/Text';
 
 
@@ -21,15 +27,21 @@ export interface IRoleData {
     roles: IRolesData[];
 }
 
-interface IRolesData {
+export interface IRolesData {
     id: string;
     name: string;
 }
 
-type Props = {
+type RoleSettingsProps = {
     settings: IComponentServerSettings;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
 };
+
+type DispatchProps = {
+    getServerRolesStart: (serverId: string) => void,
+};
+
+type Props = RoleSettingsProps & DispatchProps & ServerStoreState;
 
 const RoleSetting: React.FC<Props> = (props: Props) => {
     if (!hasCorrectData(props.settings.data)) {
@@ -37,6 +49,9 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
     }
 
     const [selectedRoles, setSelectedRoles] = useState<IRolesData[]>([]);
+    const [serverId, setServerId] = useState<string>();
+    let params = useParams();
+
 
     useEffect(() => {
         if ('roles' in props.settings.data) {
@@ -44,36 +59,30 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
         }
     }, [props.settings.data]);
 
+    useEffect(() => {
+        setServerId(params.serverId);
+    }, [params]);
 
-    const roles = [
-        {
-            name: 'Cyl',
-            id: '795033292083822643',
-        },
-        {
-            name: 'adminRole',
-            id: '795749571967582218',
-        },
-        {
-            name: 'serverCommand',
-            id: '795969565167321118',
-        },
-        {
-            name: 'welcome',
-            id: '796025329696899072',
-        },
-    ];
+    const getRoles = (): void => {
+        if (serverId) {
+            props.getServerRolesStart(serverId);
+        }
+    };
 
-    const description = 'When enabled, any role that is not in the list will not be able to use the command. ' +
+    const rolesName = 'Roles';
+    const rolesSwitchDescription = 'Disable or enable some roles?';
+    const rolesSwitchDetailedDescription = 'When enabled, any role that is not in the list will not be able to use the command. ' +
         'When disabled any roles that are in the list will not be able to use that command.';
+    const enabledName = 'Enabled';
+    const disabledName = 'Disabled';
 
 
     return (
         <StyledSetting>
             <Text small={true}
                 float="left"
-            >Disable or enable some roles?</Text>
-            <Tooltip title={description}>
+            >{rolesSwitchDescription}</Text>
+            <Tooltip title={rolesSwitchDetailedDescription}>
                 <IconButton sx={{width: '20px', float: 'left'}}>
                     <QuestionMark sx={{width: '20px'}} />
                 </IconButton>
@@ -87,19 +96,20 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
                     color="info"
                 />
             </StyledSwitch>
-            <Text small={true}>{props.settings.turned_on ? 'enabled' : 'disabled'} roles:</Text>
+            <Text small={true}>{props.settings.turned_on ? enabledName : disabledName} {rolesName}:</Text>
             <StyledAutoComplete>
                 <Autocomplete
                     disablePortal
                     disableCloseOnSelect
-                    options={getValueForAutoCompleteFromRoles(roles)}
+                    options={getValueForAutoCompleteFromRoles(props.roles)}
                     id="combo-box-demo"
                     size="small"
                     multiple
                     sx={{width: '100%'}}
                     renderInput={(params: AutocompleteRenderInputParams) => <TextField color="info" {...params}
-                        label="Roles"
+                        label={rolesName}
                     />}
+                    onOpen={() => getRoles()}
                     onClose={() => {
                         props.onComponentSettingChange(
                             {
@@ -109,7 +119,7 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
                         );
                     }}
                     onChange={(event, value, reason) => {
-                        const fullRoles = getValueForRolesFromAutoComplete(value, roles);
+                        const fullRoles = getValueForRolesFromAutoComplete(value, props.roles);
                         setSelectedRoles(fullRoles);
                         if (reason === 'clear') {
                             props.onComponentSettingChange(
@@ -136,8 +146,8 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
 
 const hasCorrectData = (data: object): boolean => 'roles' in data;
 
-const getValueForAutoCompleteFromRoles = (roles: IRolesData[]): string[] => {
-    if (roles.length === 0) {
+const getValueForAutoCompleteFromRoles = (roles: IRolesData[]|undefined): string[] => {
+    if (!roles || roles.length === 0) {
         return [];
     }
 
@@ -153,8 +163,8 @@ const getValueForAutoCompleteFromRoles = (roles: IRolesData[]): string[] => {
     return returnValue;
 };
 
-const getValueForRolesFromAutoComplete = (roles: string[], allRoles: IRolesData[]): IRolesData[] => {
-    if (roles.length === 0) {
+const getValueForRolesFromAutoComplete = (roles: string[], allRoles: IRolesData[]|undefined): IRolesData[] => {
+    if (!allRoles || roles.length === 0) {
         return [];
     }
 
@@ -179,23 +189,22 @@ const editRoleData = (data: object, roles: IRolesData[]): object => {
     return data;
 };
 
-// const mapStateToProps = (state: MapStateToProps) => {
-//     return {
-//         roles: state.server.roles,
-//     };
-// };
-//
-// type DispatchPropsArgs = {
-//     type: string;
-//     isSignUp?: boolean;
-//     path?: string;
-// };
-//
-// const mapDispatchToProps = (dispatch: (arg0: DispatchPropsArgs) => void) => {
-//     return {
-//         getServerRolesStart: () => dispatch(setServerRolesStart()),
-//     };
-// };
-//
-// export default connect(mapStateToProps, mapDispatchToProps)(RoleSetting);
-export default RoleSetting;
+const mapStateToProps = (state: MapStateToProps) => {
+    return {
+        roles: state.server.roles,
+    };
+};
+
+type DispatchPropsArgs = {
+    type: string;
+    isSignUp?: boolean;
+    path?: string;
+};
+
+const mapDispatchToProps = (dispatch: (arg0: DispatchPropsArgs) => void) => {
+    return {
+        getServerRolesStart: (serverId: string) => dispatch(getServerRolesStart(serverId)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoleSetting);

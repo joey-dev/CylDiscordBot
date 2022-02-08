@@ -1,4 +1,5 @@
 import { put } from 'redux-saga/effects';
+import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
 import { IComponentServerSettingsData } from '../../interfaces/api/Component';
 import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
@@ -137,6 +138,34 @@ function* editComponentServerData(action: EditServerDataSagaAction) {
 
     if (response !== undefined || !currentError) {
         yield put(actions.editServerDataFinished(response.data));
+    } else {
+        yield put(actions.getServerError(currentError));
+    }
+}
+
+type GetRolesSagaAction = {
+    payload: GetRolesSagaPayload;
+};
+
+type GetRolesSagaPayload = {
+    server_id: string;
+};
+
+type GetRolesReturn = {
+    data: IRoleData;
+};
+
+
+export function* getRoles(action: GetRolesSagaAction) {
+    const url = `/user/server/${action.payload.server_id}/roles`;
+    let currentError = '';
+
+    const response: GetRolesReturn = yield Axios().get(url).catch(error => {
+        currentError = error.message;
+    });
+
+    if (response !== undefined || !currentError) {
+        yield put(actions.getServerRolesFinish(response.data));
     } else {
         yield put(actions.getServerError(currentError));
     }

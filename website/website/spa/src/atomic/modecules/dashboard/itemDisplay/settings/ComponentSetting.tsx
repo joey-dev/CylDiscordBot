@@ -18,7 +18,7 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
 
     switch (props.data.name) {
         case 'role':
-            returnElement = <RoleSetting settings={props.serverData} onComponentSettingChange={props.onComponentSettingChange}/>;
+            returnElement = <RoleSetting settings={props.serverData} onComponentSettingChange={props.onComponentSettingChange} loading={false}/>;
             break;
         default:
             throw new Error('data name not found in ComponentSettings');

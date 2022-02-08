@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
 use App\Entity\Server;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
@@ -82,6 +83,41 @@ class ServerController extends AbstractController
                 "error_message" => "no server was found in the database for this user with that id"
             ], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    #[Route('/user/server/{id}/roles', name: 'user_server_roles', methods: ["GET"])]
+    public function getServerRolesWithId(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $userId = $request->headers->get('user_id');
+
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+
+        $requestedServer = null;
+
+        foreach ($user->getServer() as $server) {
+            if ($server->getServerId() == $request->get("id")) {
+                $requestedServer = $server;
+            }
+        }
+
+        if ($requestedServer instanceof Server) {
+            $roles = [];
+
+            foreach ($requestedServer->getRoles() as $role) {
+                $roles[] = [
+                    'id' => $role->getRoleId(),
+                    'name' => $role->getName(),
+                ];
+            }
+
+            return new JsonResponse([
+                "roles" => $roles,
+            ]);
+        }
+        return new JsonResponse([
+            "error" => "server not found",
+            "error_message" => "no server was found in the database for this user with that id"
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     private function getServersFromDiscordApi(Request $request): array {

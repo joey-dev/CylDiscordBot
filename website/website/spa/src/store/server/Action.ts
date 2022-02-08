@@ -1,3 +1,4 @@
+import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
 import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import * as actionTypes from './ActionTypes';
@@ -70,6 +71,26 @@ export const editServerDataFinished = (modules: IFullPluginWithData[]) => {
         type: actionTypes.EDIT_SERVER_DATA_FINISH,
         payload: {
             modules,
+        },
+    };
+};
+
+
+export const getServerRolesStart = (server_id: string) => {
+    return {
+        type: actionTypes.GET_SERVER_ROLES_START,
+        payload: {
+            server_id,
+        },
+    };
+};
+
+
+export const getServerRolesFinish = (roles: IRoleData) => {
+    return {
+        type: actionTypes.GET_SERVER_ROLES_FINISH,
+        payload: {
+            roles,
         },
     };
 };

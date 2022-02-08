@@ -1,3 +1,4 @@
+import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
 import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
 import UpdateObject from '../../services/reducer/UpdateObject/UpdateObject';
@@ -7,6 +8,8 @@ import { ServerStoreState } from './index';
 const initialState: ServerStoreState = {
     servers: undefined,
     server: undefined,
+    modules: undefined,
+    roles: undefined,
     loading: false,
     success: false,
     error: undefined,
@@ -21,6 +24,7 @@ type Payload = {
     servers?: IServer[];
     server?: IDetailedServer;
     modules?: IFullPluginWithData[];
+    roles?: IRoleData;
     error?: string
     server_id?: string;
 };
@@ -41,6 +45,8 @@ const userReducer = (state: ServerStoreState = initialState, {type, payload}: Ac
             return UpdateObject(state, {loading: false, error: payload.error, server: undefined});
         case ActionTypes.EDIT_SERVER_DATA_FINISH:
             return UpdateObject(state, {loading: false, modules: payload.modules, success: true});
+        case ActionTypes.GET_SERVER_ROLES_FINISH:
+            return UpdateObject(state, {loading: false, roles: payload.roles?.roles, success: true});
         default:
             return state;
     }
