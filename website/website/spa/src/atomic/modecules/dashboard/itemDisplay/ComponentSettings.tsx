@@ -71,7 +71,7 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
                             data={item}
                             serverData={currentServerData(serverData, item.name)}
                             onComponentSettingChange={newSettings =>
-                                props.onComponentSettingChange(editServerData(data, newSettings, item.name))
+                                props.onComponentSettingChange(editServerData(serverData, newSettings, item.name))
                             }
                             isModalOpen={props.open}
                         />,

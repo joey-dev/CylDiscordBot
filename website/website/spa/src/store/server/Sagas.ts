@@ -1,4 +1,5 @@
 import { put } from 'redux-saga/effects';
+import { IChannelData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/ChannelSetting';
 import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
 import { IComponentServerSettingsData } from '../../interfaces/api/Component';
 import { IFullPluginWithData } from '../../interfaces/api/Plugin';
@@ -166,6 +167,35 @@ export function* getRoles(action: GetRolesSagaAction) {
 
     if (response !== undefined || !currentError) {
         yield put(actions.getServerRolesFinish(response.data));
+    } else {
+        yield put(actions.getServerError(currentError));
+    }
+}
+
+
+type GetChannelsSagaAction = {
+    payload: GetChannelsSagaPayload;
+};
+
+type GetChannelsSagaPayload = {
+    server_id: string;
+};
+
+type GetChannelsReturn = {
+    data: IChannelData;
+};
+
+
+export function* getChannels(action: GetChannelsSagaAction) {
+    const url = `/user/server/${action.payload.server_id}/channels`;
+    let currentError = '';
+
+    const response: GetChannelsReturn = yield Axios().get(url).catch(error => {
+        currentError = error.message;
+    });
+
+    if (response !== undefined || !currentError) {
+        yield put(actions.getServerChannelsFinish(response.data));
     } else {
         yield put(actions.getServerError(currentError));
     }

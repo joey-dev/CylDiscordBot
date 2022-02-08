@@ -1,3 +1,4 @@
+import { IChannelData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/ChannelSetting';
 import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
 
 export type IComponentTypes =
@@ -18,7 +19,7 @@ export interface IFullComponentWithData extends IFullComponent{
     server_data: string;
 }
 
-export type IComponentDataTypes = 'role';
+export type IComponentDataTypes = 'role'|'channel';
 
 export interface IComponentSettings {
     name: IComponentDataTypes;
@@ -30,4 +31,4 @@ export interface IComponentServerSettings {
     data: IComponentServerSettingsData;
 }
 
-export type IComponentServerSettingsData = object|IRoleData;
+export type IComponentServerSettingsData = object|IRoleData|IChannelData;

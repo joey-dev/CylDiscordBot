@@ -1,3 +1,4 @@
+import { IChannelData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/ChannelSetting';
 import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
 import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
@@ -25,6 +26,7 @@ type Payload = {
     server?: IDetailedServer;
     modules?: IFullPluginWithData[];
     roles?: IRoleData;
+    channels?: IChannelData;
     error?: string
     server_id?: string;
 };
@@ -47,6 +49,8 @@ const userReducer = (state: ServerStoreState = initialState, {type, payload}: Ac
             return UpdateObject(state, {loading: false, modules: payload.modules, success: true});
         case ActionTypes.GET_SERVER_ROLES_FINISH:
             return UpdateObject(state, {loading: false, roles: payload.roles?.roles, success: true});
+        case ActionTypes.GET_SERVER_CHANNELS_FINISH:
+            return UpdateObject(state, {loading: false, channels: payload.channels?.channels, success: true});
         default:
             return state;
     }

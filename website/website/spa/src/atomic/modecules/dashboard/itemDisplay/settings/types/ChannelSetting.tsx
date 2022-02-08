@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { IComponentServerSettings } from '../../../../../../interfaces/api/Component';
 import { MapStateToProps } from '../../../../../../store';
 import { ServerStoreState } from '../../../../../../store/server';
-import { getServerRolesStart } from '../../../../../../store/server/Action';
+import { getServerChannelsStart } from '../../../../../../store/server/Action';
 import Text from '../../../../../atoms/text/Text';
 
 
@@ -22,57 +22,57 @@ const StyledSwitch = styled.div`
     padding: 7px 0;
 `;
 
-export interface IRoleData {
-    roles: IRolesData[];
+export interface IChannelData {
+    channels: IChannelsData[];
 }
 
-export interface IRolesData {
+export interface IChannelsData {
     id: string;
     name: string;
 }
 
-type RoleSettingsProps = {
+type ChannelSettingsProps = {
     settings: IComponentServerSettings;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
     isModalOpen: boolean;
 };
 
 type DispatchProps = {
-    getServerRolesStart: (serverId: string) => void,
+    getServerChannelsStart: (serverId: string) => void,
 };
 
-type Props = RoleSettingsProps & DispatchProps & ServerStoreState;
+type Props = ChannelSettingsProps & DispatchProps & ServerStoreState;
 
-const RoleSetting: React.FC<Props> = (props: Props) => {
+const ChannelSetting: React.FC<Props> = (props: Props) => {
     if (!hasCorrectData(props.settings.data)) {
-        throw new Error('data for role settings is incorrect!');
+        throw new Error('data for channel settings is incorrect!');
     }
 
-    const [selectedRoles, setSelectedRoles] = useState<IRolesData[]>([]);
+    const [selectedChannels, setSelectedChannels] = useState<IChannelsData[]>([]);
     const params = useParams();
 
     useEffect(() => {
         if (props.isModalOpen) {
-            getRoles();
+            getChannels();
         }
     }, [props.isModalOpen]);
 
     useEffect(() => {
-        if ('roles' in props.settings.data) {
-            setSelectedRoles(props.settings.data.roles);
+        if ('channels' in props.settings.data) {
+            setSelectedChannels(props.settings.data.channels);
         }
     }, [props.settings.data]);
 
-    const getRoles = (): void => {
+    const getChannels = (): void => {
         if (params.serverId) {
-            props.getServerRolesStart(params.serverId);
+            props.getServerChannelsStart(params.serverId);
         }
     };
 
-    const rolesName = 'Roles';
-    const rolesSwitchDescription = 'Disable or enable some roles?';
-    const rolesSwitchDetailedDescription = 'When enabled, if a user has at least one of these roles, they will be able to use the command. ' +
-        'When disabled if a user has at least one of these roles, they will not be able to use this command.';
+    const channelsName = 'Channels';
+    const channelsSwitchDescription = 'Disable or enable some channels?';
+    const channelsSwitchDetailedDescription = 'When enabled, if a user sends this command to listed channel, they will be able to use the command. ' +
+        'When disabled if a user sends this command to a listed channel, the command wouldn\'t work.';
     const enabledName = 'Enabled';
     const disabledName = 'Disabled';
 
@@ -81,8 +81,8 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
         <StyledSetting>
             <Text small={true}
                 float="left"
-            >{rolesSwitchDescription}</Text>
-            <Tooltip title={rolesSwitchDetailedDescription}>
+            >{channelsSwitchDescription}</Text>
+            <Tooltip title={channelsSwitchDetailedDescription}>
                 <IconButton sx={{width: '20px', float: 'left'}}>
                     <QuestionMark sx={{width: '20px'}} />
                 </IconButton>
@@ -100,65 +100,65 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
                     color="info"
                 />
             </StyledSwitch>
-            <Text small={true}>{props.settings.turned_on ? enabledName : disabledName} {rolesName}:</Text>
+            <Text small={true}>{props.settings.turned_on ? enabledName : disabledName} {channelsName}:</Text>
             <StyledAutoComplete>
                 <Autocomplete
                     disablePortal
                     disableCloseOnSelect
-                    options={getValueForAutoCompleteFromRoles(props.roles)}
+                    options={getValueForAutoCompleteFromChannels(props.channels)}
                     id="combo-box-demo"
                     size="small"
                     multiple
                     sx={{width: '100%'}}
                     renderInput={(renderInputParams: AutocompleteRenderInputParams) =>
                         <TextField color="info" {...renderInputParams}
-                            label={rolesName}
+                            label={channelsName}
                         />}
-                    onOpen={() => getRoles()}
+                    onOpen={() => getChannels()}
                     onClose={() => {
                         props.onComponentSettingChange(
                             {
                                 ...props.settings,
-                                ...{data: editRoleData(props.settings.data, selectedRoles)},
+                                ...{data: editChannelData(props.settings.data, selectedChannels)},
                             },
                         );
                     }}
                     onChange={(event, value, reason) => {
-                        const fullRoles = getValueForRolesFromAutoComplete(value, props.roles);
-                        setSelectedRoles(fullRoles);
+                        const fullChannels = getValueForChannelsFromAutoComplete(value, props.channels);
+                        setSelectedChannels(fullChannels);
                         if (reason === 'clear') {
                             props.onComponentSettingChange(
                                 {
                                     ...props.settings,
-                                    ...{data: editRoleData(props.settings.data, [])},
+                                    ...{data: editChannelData(props.settings.data, [])},
                                 },
                             );
                         } else if (reason === 'removeOption') {
                             props.onComponentSettingChange(
                                 {
                                     ...props.settings,
-                                    ...{data: editRoleData(props.settings.data, fullRoles)},
+                                    ...{data: editChannelData(props.settings.data, fullChannels)},
                                 },
                             );
                         }
                     }}
-                    value={getValueForAutoCompleteFromRoles(selectedRoles)}
+                    value={getValueForAutoCompleteFromChannels(selectedChannels)}
                 />
             </StyledAutoComplete>
         </StyledSetting>
     );
 };
 
-const hasCorrectData = (data: object): boolean => 'roles' in data;
+const hasCorrectData = (data: object): boolean => 'channels' in data;
 
-const getValueForAutoCompleteFromRoles = (roles: IRolesData[] | undefined): string[] => {
-    if (!roles || roles.length === 0) {
+const getValueForAutoCompleteFromChannels = (channels: IChannelsData[] | undefined): string[] => {
+    if (!channels || channels.length === 0) {
         return [];
     }
 
     const returnValue: string[] = [];
-    roles.forEach(role => {
-        returnValue.push(role.name);
+    channels.forEach(channel => {
+        returnValue.push(channel.name);
     });
 
     if (returnValue.length === 0) {
@@ -168,27 +168,27 @@ const getValueForAutoCompleteFromRoles = (roles: IRolesData[] | undefined): stri
     return returnValue;
 };
 
-const getValueForRolesFromAutoComplete = (roles: string[], allRoles: IRolesData[] | undefined): IRolesData[] => {
-    if (!allRoles || roles.length === 0) {
+const getValueForChannelsFromAutoComplete = (channels: string[], allChannels: IChannelsData[] | undefined): IChannelsData[] => {
+    if (!allChannels || channels.length === 0) {
         return [];
     }
 
-    const returnValue: IRolesData[] = [];
+    const returnValue: IChannelsData[] = [];
 
-    roles.forEach(role => {
-        const foundRole = allRoles.find(allRole => allRole.name === role);
-        if (foundRole) {
-            returnValue.push(foundRole);
+    channels.forEach(channel => {
+        const foundChannel = allChannels.find(allChannel => allChannel.name === channel);
+        if (foundChannel) {
+            returnValue.push(foundChannel);
         }
     });
 
     return returnValue;
 };
 
-const editRoleData = (data: object, roles: IRolesData[]): object => {
+const editChannelData = (data: object, channels: IChannelsData[]): object => {
     data = {
         ...data,
-        roles: roles,
+        channels: channels,
     };
 
     return data;
@@ -196,7 +196,7 @@ const editRoleData = (data: object, roles: IRolesData[]): object => {
 
 const mapStateToProps = (state: MapStateToProps) => {
     return {
-        roles: state.server.roles,
+        channels: state.server.channels,
     };
 };
 
@@ -208,8 +208,8 @@ type DispatchPropsArgs = {
 
 const mapDispatchToProps = (dispatch: (arg0: DispatchPropsArgs) => void) => {
     return {
-        getServerRolesStart: (serverId: string) => dispatch(getServerRolesStart(serverId)),
+        getServerChannelsStart: (serverId: string) => dispatch(getServerChannelsStart(serverId)),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RoleSetting);
+export default connect(mapStateToProps, mapDispatchToProps)(ChannelSetting);

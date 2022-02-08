@@ -120,6 +120,41 @@ class ServerController extends AbstractController
         ], Response::HTTP_BAD_REQUEST);
     }
 
+    #[Route('/user/server/{id}/channels', name: 'user_server_channels', methods: ["GET"])]
+    public function getServerChannelsWithId(Request $request, ManagerRegistry $doctrine): JsonResponse
+    {
+        $userId = $request->headers->get('user_id');
+
+        $user = $doctrine->getRepository(User::class)->findOneBy(['user_id' => $userId]);
+
+        $requestedServer = null;
+
+        foreach ($user->getServer() as $server) {
+            if ($server->getServerId() == $request->get("id")) {
+                $requestedServer = $server;
+            }
+        }
+
+        if ($requestedServer instanceof Server) {
+            $channels = [];
+
+            foreach ($requestedServer->getChannels() as $channel) {
+                $channels[] = [
+                    'id' => $channel->getChannelId(),
+                    'name' => $channel->getName(),
+                ];
+            }
+
+            return new JsonResponse([
+                "channels" => $channels,
+            ]);
+        }
+        return new JsonResponse([
+            "error" => "server not found",
+            "error_message" => "no server was found in the database for this user with that id"
+        ], Response::HTTP_BAD_REQUEST);
+    }
+
     private function getServersFromDiscordApi(Request $request): array {
         $apiToken = $request->headers->get('Authorization');
         $authorizationToken = explode(" ", $apiToken)[1];

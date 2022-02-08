@@ -1,5 +1,6 @@
 import React from 'react';
 import { IComponentServerSettings, IComponentSettings } from '../../../../../interfaces/api/Component';
+import ChannelSetting from './types/ChannelSetting';
 import RoleSetting from './types/RoleSetting';
 
 
@@ -16,6 +17,13 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
     switch (props.data.name) {
         case 'role':
             returnElement = <RoleSetting settings={props.serverData}
+                onComponentSettingChange={props.onComponentSettingChange}
+                loading={false}
+                isModalOpen={props.isModalOpen}
+            />;
+            break;
+        case 'channel':
+            returnElement = <ChannelSetting settings={props.serverData}
                 onComponentSettingChange={props.onComponentSettingChange}
                 loading={false}
                 isModalOpen={props.isModalOpen}

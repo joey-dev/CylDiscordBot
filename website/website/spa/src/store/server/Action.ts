@@ -1,3 +1,4 @@
+import { IChannelData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/ChannelSetting';
 import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
 import { IFullPluginWithData } from '../../interfaces/api/Plugin';
 import { IDetailedServer, IServer } from '../../interfaces/api/Server';
@@ -75,7 +76,6 @@ export const editServerDataFinished = (modules: IFullPluginWithData[]) => {
     };
 };
 
-
 export const getServerRolesStart = (server_id: string) => {
     return {
         type: actionTypes.GET_SERVER_ROLES_START,
@@ -85,12 +85,30 @@ export const getServerRolesStart = (server_id: string) => {
     };
 };
 
-
 export const getServerRolesFinish = (roles: IRoleData) => {
     return {
         type: actionTypes.GET_SERVER_ROLES_FINISH,
         payload: {
             roles,
+        },
+    };
+};
+
+export const getServerChannelsStart = (server_id: string) => {
+    return {
+        type: actionTypes.GET_SERVER_CHANNELS_START,
+        payload: {
+            server_id,
+        },
+    };
+};
+
+
+export const getServerChannelsFinish = (channels: IChannelData) => {
+    return {
+        type: actionTypes.GET_SERVER_CHANNELS_FINISH,
+        payload: {
+            channels,
         },
     };
 };
