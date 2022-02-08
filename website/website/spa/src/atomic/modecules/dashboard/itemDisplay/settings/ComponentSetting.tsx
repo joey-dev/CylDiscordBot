@@ -1,16 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
-import { IComponentSettings, IComponentServerSettings } from '../../../../../interfaces/api/Component';
+import { IComponentServerSettings, IComponentSettings } from '../../../../../interfaces/api/Component';
 import RoleSetting from './types/RoleSetting';
 
-
-const StyledSetting = styled.div`
-`;
 
 type Props = {
     data: IComponentSettings;
     serverData: IComponentServerSettings;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
+    isModalOpen: boolean;
 };
 
 const ComponentSettings: React.FC<Props> = (props: Props) => {
@@ -18,7 +15,11 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
 
     switch (props.data.name) {
         case 'role':
-            returnElement = <RoleSetting settings={props.serverData} onComponentSettingChange={props.onComponentSettingChange} loading={false}/>;
+            returnElement = <RoleSetting settings={props.serverData}
+                onComponentSettingChange={props.onComponentSettingChange}
+                loading={false}
+                isModalOpen={props.isModalOpen}
+            />;
             break;
         default:
             throw new Error('data name not found in ComponentSettings');

@@ -70,9 +70,10 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
                         <ComponentSetting key={item.name}
                             data={item}
                             serverData={currentServerData(serverData, item.name)}
-                            onComponentSettingChange={(newSettings) =>
+                            onComponentSettingChange={newSettings =>
                                 props.onComponentSettingChange(editServerData(data, newSettings, item.name))
                             }
+                            isModalOpen={props.open}
                         />,
                     )}
                 </StyledSettings>
@@ -89,17 +90,17 @@ const currentServerData = (serverData: IComponentServerSettings[], item: ICompon
         return returnValue;
     }
 
-    throw 'serverData has not been set in the database, or is wrong on: ' + item;
+    throw new Error('serverData has not been set in the database, or is wrong on: ' + item);
 };
 
 const editServerData = (serverData: IComponentServerSettings[], newData: IComponentServerSettings, name: IComponentDataTypes): IComponentServerSettings[] => {
     const returnValue = serverData;
 
-    for (const key in serverData) {
-        if (serverData[key].name === name) {
-            serverData[key] = newData;
+    serverData.forEach((data, index) => {
+        if (serverData[index].name === name) {
+            serverData[index] = newData;
         }
-    }
+    });
 
     return returnValue;
 };

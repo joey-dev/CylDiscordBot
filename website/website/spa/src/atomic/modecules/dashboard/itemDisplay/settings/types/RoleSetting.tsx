@@ -8,7 +8,6 @@ import { IComponentServerSettings } from '../../../../../../interfaces/api/Compo
 import { MapStateToProps } from '../../../../../../store';
 import { ServerStoreState } from '../../../../../../store/server';
 import { getServerRolesStart } from '../../../../../../store/server/Action';
-import { IEditServerData } from '../../../../../../store/server/Sagas';
 import Text from '../../../../../atoms/text/Text';
 
 
@@ -35,6 +34,7 @@ export interface IRolesData {
 type RoleSettingsProps = {
     settings: IComponentServerSettings;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
+    isModalOpen: boolean;
 };
 
 type DispatchProps = {
@@ -45,13 +45,17 @@ type Props = RoleSettingsProps & DispatchProps & ServerStoreState;
 
 const RoleSetting: React.FC<Props> = (props: Props) => {
     if (!hasCorrectData(props.settings.data)) {
-        throw 'data for role settings is incorrect!';
+        throw new Error('data for role settings is incorrect!');
     }
 
     const [selectedRoles, setSelectedRoles] = useState<IRolesData[]>([]);
-    const [serverId, setServerId] = useState<string>();
-    let params = useParams();
+    const params = useParams();
 
+    useEffect(() => {
+        if (props.isModalOpen) {
+            getRoles();
+        }
+    }, [props.isModalOpen]);
 
     useEffect(() => {
         if ('roles' in props.settings.data) {
@@ -59,20 +63,16 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
         }
     }, [props.settings.data]);
 
-    useEffect(() => {
-        setServerId(params.serverId);
-    }, [params]);
-
     const getRoles = (): void => {
-        if (serverId) {
-            props.getServerRolesStart(serverId);
+        if (params.serverId) {
+            props.getServerRolesStart(params.serverId);
         }
     };
 
     const rolesName = 'Roles';
     const rolesSwitchDescription = 'Disable or enable some roles?';
-    const rolesSwitchDetailedDescription = 'When enabled, any role that is not in the list will not be able to use the command. ' +
-        'When disabled any roles that are in the list will not be able to use that command.';
+    const rolesSwitchDetailedDescription = 'When enabled, if a user has at least one of these roles, they will be able to use the command. ' +
+        'When disabled if a user has at least one of these roles, they will not be able to use this command.';
     const enabledName = 'Enabled';
     const disabledName = 'Disabled';
 
@@ -106,9 +106,10 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
                     size="small"
                     multiple
                     sx={{width: '100%'}}
-                    renderInput={(params: AutocompleteRenderInputParams) => <TextField color="info" {...params}
-                        label={rolesName}
-                    />}
+                    renderInput={(renderInputParams: AutocompleteRenderInputParams) =>
+                        <TextField color="info" {...renderInputParams}
+                            label={rolesName}
+                        />}
                     onOpen={() => getRoles()}
                     onClose={() => {
                         props.onComponentSettingChange(
@@ -146,7 +147,7 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
 
 const hasCorrectData = (data: object): boolean => 'roles' in data;
 
-const getValueForAutoCompleteFromRoles = (roles: IRolesData[]|undefined): string[] => {
+const getValueForAutoCompleteFromRoles = (roles: IRolesData[] | undefined): string[] => {
     if (!roles || roles.length === 0) {
         return [];
     }
@@ -163,7 +164,7 @@ const getValueForAutoCompleteFromRoles = (roles: IRolesData[]|undefined): string
     return returnValue;
 };
 
-const getValueForRolesFromAutoComplete = (roles: string[], allRoles: IRolesData[]|undefined): IRolesData[] => {
+const getValueForRolesFromAutoComplete = (roles: string[], allRoles: IRolesData[] | undefined): IRolesData[] => {
     if (!allRoles || roles.length === 0) {
         return [];
     }
