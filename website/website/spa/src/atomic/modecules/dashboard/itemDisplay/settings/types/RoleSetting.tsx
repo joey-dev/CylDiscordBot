@@ -18,8 +18,12 @@ const StyledSwitch = styled.div`
 `;
 
 export interface IRoleData {
-    roles: string[];
-    roles1: string[];
+    roles: IRolesData[];
+}
+
+interface IRolesData {
+    id: string;
+    name: string;
 }
 
 type Props = {
@@ -32,7 +36,7 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
         throw 'data for role settings is incorrect!';
     }
 
-    const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+    const [selectedRoles, setSelectedRoles] = useState<IRolesData[]>([]);
 
     useEffect(() => {
         if ('roles' in props.settings.data) {
@@ -42,16 +46,22 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
 
 
     const roles = [
-        'something',
-        'something1',
-        'something2',
-        'something3',
-        'something4',
-        'something5',
-        'something6',
-        'something7',
-        'something8',
-        'something9',
+        {
+            name: 'Cyl',
+            id: '795033292083822643',
+        },
+        {
+            name: 'adminRole',
+            id: '795749571967582218',
+        },
+        {
+            name: 'serverCommand',
+            id: '795969565167321118',
+        },
+        {
+            name: 'welcome',
+            id: '796025329696899072',
+        },
     ];
 
     const description = 'When enabled, any role that is not in the list will not be able to use the command. ' +
@@ -82,7 +92,7 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
                 <Autocomplete
                     disablePortal
                     disableCloseOnSelect
-                    options={roles}
+                    options={getValueForAutoCompleteFromRoles(roles)}
                     id="combo-box-demo"
                     size="small"
                     multiple
@@ -99,7 +109,8 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
                         );
                     }}
                     onChange={(event, value, reason) => {
-                        setSelectedRoles(value);
+                        const fullRoles = getValueForRolesFromAutoComplete(value, roles);
+                        setSelectedRoles(fullRoles);
                         if (reason === 'clear') {
                             props.onComponentSettingChange(
                                 {
@@ -107,9 +118,16 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
                                     ...{data: editRoleData(props.settings.data, [])},
                                 },
                             );
+                        } else if (reason === 'removeOption') {
+                            props.onComponentSettingChange(
+                                {
+                                    ...props.settings,
+                                    ...{data: editRoleData(props.settings.data, fullRoles)},
+                                },
+                            );
                         }
                     }}
-                    value={selectedRoles}
+                    value={getValueForAutoCompleteFromRoles(selectedRoles)}
                 />
             </StyledAutoComplete>
         </StyledSetting>
@@ -118,7 +136,41 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
 
 const hasCorrectData = (data: object): boolean => 'roles' in data;
 
-const editRoleData = (data: object, roles: string[]): object => {
+const getValueForAutoCompleteFromRoles = (roles: IRolesData[]): string[] => {
+    if (roles.length === 0) {
+        return [];
+    }
+
+    const returnValue: string[] = [];
+    roles.forEach(role => {
+        returnValue.push(role.name);
+    });
+
+    if (returnValue.length === 0) {
+        return [];
+    }
+
+    return returnValue;
+};
+
+const getValueForRolesFromAutoComplete = (roles: string[], allRoles: IRolesData[]): IRolesData[] => {
+    if (roles.length === 0) {
+        return [];
+    }
+
+    const returnValue: IRolesData[] = [];
+
+    roles.forEach(role => {
+        const foundRole = allRoles.find(allRole => allRole.name === role);
+        if (foundRole) {
+            returnValue.push(foundRole);
+        }
+    });
+
+    return returnValue;
+};
+
+const editRoleData = (data: object, roles: IRolesData[]): object => {
     data = {
         ...data,
         roles: roles,
