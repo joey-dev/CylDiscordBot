@@ -1,4 +1,5 @@
 import { IChannelData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/ChannelSetting';
+import { IDeleteReplyData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/DeleteReply';
 import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
 
 export type IComponentTypes =
@@ -12,14 +13,15 @@ export interface IComponent {
     type: IComponentTypes;
 }
 
-export interface IFullComponent extends IComponent{ }
+export interface IFullComponent extends IComponent {
+}
 
-export interface IFullComponentWithData extends IFullComponent{
+export interface IFullComponentWithData extends IFullComponent {
     turned_on: boolean;
     server_data: string;
 }
 
-export type IComponentDataTypes = 'role'|'channel';
+export type IComponentDataTypes = 'role' | 'channel' | 'deleteCommand' | 'deleteReply' | 'ephemeral';
 
 export interface IComponentSettings {
     name: IComponentDataTypes;
@@ -31,4 +33,4 @@ export interface IComponentServerSettings {
     data: IComponentServerSettingsData;
 }
 
-export type IComponentServerSettingsData = object|IRoleData|IChannelData;
+export type IComponentServerSettingsData = object | IRoleData | IChannelData | IDeleteReplyData;

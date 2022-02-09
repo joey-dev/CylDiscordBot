@@ -24,18 +24,18 @@ type Props = {
     isModalOpen: boolean;
 };
 
-const DeleteCommand: React.FC<Props> = (props: Props) => {
-    const deleteCommandsSwitchDescription = 'Delete command after bot reply?';
-    const deleteCommandsSwitchDetailedDescription = 'When enabled, when a user types out a command, their command message will be removed when the bot gives its reply. ' +
-        'When disabled the command the user typed out will stay in chat.';
+const Ephemeral: React.FC<Props> = (props: Props) => {
+    const EphemeralSwitchDescription = 'Send bot reply to user only?';
+    const EphemeralSwitchDetailedDescription = 'When enabled, when a user types out a command, the bot reply will only be visible to the user that typed the command out. ' +
+        'When disabled the bot reply will be visible for everyone.';
 
 
     return (
         <StyledSetting>
             <Text small={true}
                 float="left"
-            >{deleteCommandsSwitchDescription}</Text>
-            <Tooltip title={deleteCommandsSwitchDetailedDescription}>
+            >{EphemeralSwitchDescription}</Text>
+            <Tooltip title={EphemeralSwitchDetailedDescription}>
                 <IconButton sx={{width: '20px', float: 'left'}}>
                     <QuestionMark sx={{width: '20px'}} />
                 </IconButton>
@@ -58,4 +58,4 @@ const DeleteCommand: React.FC<Props> = (props: Props) => {
 };
 
 
-export default DeleteCommand;
+export default Ephemeral;

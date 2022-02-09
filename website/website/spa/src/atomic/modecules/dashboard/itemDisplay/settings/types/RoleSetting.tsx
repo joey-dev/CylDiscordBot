@@ -63,6 +63,21 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
         }
     }, [props.settings.data]);
 
+    useEffect(() => {
+        if (selectedRoles && props.roles) {
+            const newRoles = checkIfRoleNameAsBeenChanged(props.roles, selectedRoles);
+            if (newRoles) {
+                props.onComponentSettingChange(
+                    {
+                        ...props.settings,
+                        ...{data: editRoleData(props.settings.data, newRoles)},
+                    },
+                );
+            }
+        }
+    }, [selectedRoles, props.roles]);
+
+
     const getRoles = (): void => {
         if (params.serverId) {
             props.getServerRolesStart(params.serverId);
@@ -192,6 +207,50 @@ const editRoleData = (data: object, roles: IRolesData[]): object => {
     };
 
     return data;
+};
+
+interface FoundRoleWithId {
+    role?: IRolesData;
+    index?: number;
+}
+
+const checkIfRoleNameAsBeenChanged = (availableRoles: IRolesData[], selectedRoles: IRolesData[]): IRolesData[] | false => {
+    const updatedRoles = selectedRoles;
+    let roleHaveUpdated = false;
+
+    selectedRoles.forEach((selectedRole, selectedRoleIndex) => {
+        let foundRole = false;
+        availableRoles.forEach(availableRole => {
+            if (selectedRole.name === availableRole.name) {
+                foundRole = true;
+            }
+        });
+        if (!foundRole) {
+            let foundRoleWithId: FoundRoleWithId = {};
+            availableRoles.forEach((availableRole, availableRoleIndex) => {
+                if (selectedRole.id === availableRole.id) {
+                    foundRoleWithId = {
+                        role: availableRole,
+                        index: availableRoleIndex,
+                    };
+                }
+            });
+
+            if (foundRoleWithId.role && foundRoleWithId.index) {
+                updatedRoles[selectedRoleIndex].name = foundRoleWithId.role.name;
+            } else {
+                updatedRoles.splice(1, selectedRoleIndex);
+            }
+
+            roleHaveUpdated = true;
+        }
+    });
+
+    if (!roleHaveUpdated) {
+        return false;
+    } else {
+        return updatedRoles;
+    }
 };
 
 const mapStateToProps = (state: MapStateToProps) => {
