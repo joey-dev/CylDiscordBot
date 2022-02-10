@@ -27,7 +27,8 @@ type Props = {
 const Ephemeral: React.FC<Props> = (props: Props) => {
     const EphemeralSwitchDescription = 'Send bot reply to user only?';
     const EphemeralSwitchDetailedDescription = 'When enabled, when a user types out a command, the bot reply will only be visible to the user that typed the command out. ' +
-        'When disabled the bot reply will be visible for everyone.';
+        'When disabled the bot reply will be visible for everyone. ' +
+        '(This only works when the users uses it with a slash command, not with only the prefix)';
 
 
     return (

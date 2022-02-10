@@ -1,25 +1,25 @@
-module.exports.run = async (client, message, args, services, language) => {
+const info = {
+    name: 'HELP',
+    description: 'HELP_DESCRIPTION',
+    title: 'HELP_TITLE',
+    fieldName: 'HELP_FIELD_NAME',
+    ownerOnly: false,
+    testersOnly: true,
+    type: 'public',
+};
+
+const run = async (client, message, args, services, language) => {
     const helpMenu = services.messages.helpMenu(client, message, args, services, language);
 
     if (helpMenu) {
-        message.channel.send({embeds: [helpMenu]}).catch(e => { console.error(e) });
+        message.channel.send({embeds: [helpMenu]}).catch(e => {
+            console.error(e);
+        });
     }
-}
+};
 
-module.exports.help = {
-    name: "help",
-    cmdName: "Help Menu",
-    alias: [],
-    description: "Gives more information about a command.",
-    ownerOnly: false,
-    testersOnly: false,
-    botPermissions: [],
-    userPermissions: [],
-    minAmountOfArguments: 0,
-    usage: ["help <Command>"],
-    example: ["help ping"],
-    deleteCommandMessage: false,
-    returnMessageOnError: true,
-    event: "message",
-}
 
+module.exports = {
+    run,
+    info,
+};

@@ -8,17 +8,17 @@ module.exports.run = () => {
     }
 
     pool = mysql.createPool({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "cyl",
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'cyl',
     });
 
-    pool.getConnection(function(error, connection) {
+    pool.getConnection(function (error, connection) {
         if (error) throw error;
-        console.log("Connected!");
+        console.log('Connected!');
         connection.release();
     });
 
     return pool;
-}
+};

@@ -1,8 +1,7 @@
-const fs = require('fs');
+const LoadEvents = require('./Events');
+const LoadModules = require('./Modules');
 
-
-const modules = fs.readdirSync(__dirname).filter(fileName => fileName !== 'index.js').map(module => module.split('.js')[0]);
-
-modules.forEach(moduleName => {
-    module.exports[moduleName] = require('./' + moduleName).run;
-});
+module.exports = {
+    LoadEvents,
+    LoadModules,
+};
