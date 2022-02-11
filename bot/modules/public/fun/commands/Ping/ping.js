@@ -9,12 +9,8 @@ const info = {
 };
 
 const run = async (client, message, args, language, ephemeral) => {
-    const translatedText = {
-        'PING': 'ping',
-        'PING_TITLE': 'Ping Statistics',
-        'PING_FIELD_NAME': 'Response Time',
-        'PING_DESCRIPTION': 'Checks the ping of the bot.',
-    };
+    const translatedText = require('@cylbot/cyldiscordbotlanguage/' + language.small_name);
+
 
     try {
         const responseMessage = await message.reply({
