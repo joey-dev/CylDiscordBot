@@ -1,8 +1,5 @@
-const fs = require('fs');
+const GetRequest = require('./Get');
 
-
-const modules = fs.readdirSync(__dirname).filter(fileName => fileName !== 'index.js').map(module => module.split('.js')[0]);
-
-modules.forEach(moduleName => {
-    module.exports[moduleName] = require('./' + moduleName).run;
-});
+module.exports = {
+    GetRequest,
+};

@@ -1,7 +1,7 @@
-import { UserStoreState } from '../user/Index';
+import { UserStoreState } from '../user';
 import * as ActionTypes from './ActionTypes';
 import UpdateObject from '../../services/reducer/UpdateObject/UpdateObject';
-import { User } from '../../interfaces/api/User';
+import { IUser } from '../../interfaces/api/User';
 
 const initialState: UserStoreState = {
     user: undefined,
@@ -16,7 +16,7 @@ export type Actions = {
 };
 
 type Payload = {
-    user?: User;
+    user?: IUser;
     error?: string
 };
 

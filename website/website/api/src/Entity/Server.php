@@ -30,9 +30,6 @@ class Server
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'server')]
     private $users;
 
-    #[ORM\OneToOne(mappedBy: 'server', targetEntity: Welcome::class, cascade: ['persist', 'remove'])]
-    private $welcome;
-
     #[ORM\ManyToOne(targetEntity: Language::class, inversedBy: 'servers')]
     #[ORM\JoinColumn(nullable: true)]
     private $language;
@@ -43,12 +40,24 @@ class Server
     #[ORM\OneToMany(mappedBy: 'server', targetEntity: ComponentSettings::class)]
     private $componentSettings;
 
+    #[ORM\OneToMany(mappedBy: 'server', targetEntity: Channel::class, orphanRemoval: true)]
+    private $channels;
+
+    #[ORM\OneToMany(mappedBy: 'server', targetEntity: Emote::class, orphanRemoval: true)]
+    private $emotes;
+
+    #[ORM\OneToMany(mappedBy: 'server', targetEntity: Task::class, orphanRemoval: true)]
+    private $tasks;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->pluginSettings = new ArrayCollection();
         $this->componentSettings = new ArrayCollection();
+        $this->channels = new ArrayCollection();
+        $this->emotes = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,23 +158,6 @@ class Server
         return $this;
     }
 
-    public function getWelcome(): ?Welcome
-    {
-        return $this->welcome;
-    }
-
-    public function setWelcome(Welcome $welcome): self
-    {
-        // set the owning side of the relation if necessary
-        if ($welcome->getServer() !== $this) {
-            $welcome->setServer($this);
-        }
-
-        $this->welcome = $welcome;
-
-        return $this;
-    }
-
     public function getLanguage(): ?Language
     {
         return $this->language;
@@ -232,6 +224,96 @@ class Server
             // set the owning side to null (unless already changed)
             if ($componentSetting->getServer() === $this) {
                 $componentSetting->setServer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Channel[]
+     */
+    public function getChannels(): Collection
+    {
+        return $this->channels;
+    }
+
+    public function addChannel(Channel $channel): self
+    {
+        if (!$this->channels->contains($channel)) {
+            $this->channels[] = $channel;
+            $channel->setServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChannel(Channel $channel): self
+    {
+        if ($this->channels->removeElement($channel)) {
+            // set the owning side to null (unless already changed)
+            if ($channel->getServer() === $this) {
+                $channel->setServer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Emote[]
+     */
+    public function getEmotes(): Collection
+    {
+        return $this->emotes;
+    }
+
+    public function addEmote(Emote $emote): self
+    {
+        if (!$this->emotes->contains($emote)) {
+            $this->emotes[] = $emote;
+            $emote->setServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmote(Emote $emote): self
+    {
+        if ($this->emotes->removeElement($emote)) {
+            // set the owning side to null (unless already changed)
+            if ($emote->getServer() === $this) {
+                $emote->setServer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setServer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getServer() === $this) {
+                $task->setServer(null);
             }
         }
 

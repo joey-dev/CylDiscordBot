@@ -15,14 +15,13 @@ const client = new Discord.Client({
         Discord.Intents.FLAGS.GUILD_SCHEDULED_EVENTS,
     ],
     partials: [
-        "CHANNEL",
-        "MESSAGE"
-    ]
+        'CHANNEL',
+        'MESSAGE',
+    ],
 });
 const mysql = require('mysql');
-
-
-let services = require('./services/index');
+const databaseConnection = require('./services/database/connection/connect');
+const {LoadEvents, LoadModules} = require('./services/load');
 
 client.publicCommands = new Discord.Collection();
 client.privateCommands = new Discord.Collection();
@@ -34,21 +33,36 @@ env('local');
 
 client.login(process.env.DISCORD_TOKEN);
 
-services.load.modules(client, services);
-
-services.load.events(client, services);
-
-services.database.connection.pool = mysql.createPool({
+databaseConnection.pool = mysql.createPool({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
 });
 
-services.database.connection.pool.getConnection(function (error, connection) {
-    if (error) throw error;
+databaseConnection.pool.getConnection(function (error, connection) {
+    if (error) {
+        throw error;
+    }
+
     console.log('Connected!');
     connection.release();
+
+    LoadModules(databaseConnection).then(
+        ({
+             publicGuildMemberAdd,
+             publicCommands,
+             privateCommands,
+             aliases,
+         }) => {
+            client.publicGuildMemberAdd = publicGuildMemberAdd;
+            client.publicCommands = publicCommands;
+            client.privateCommands = privateCommands;
+            client.aliases = aliases;
+
+            LoadEvents(client, databaseConnection).then(() => console.log('Everything is loaded!'));
+        },
+    );
 });
 
 process.on('uncaughtException', (error) => {

@@ -1,74 +1,84 @@
-module.exports.run = async (client, message, args, services, language) => {
+const info = {
+    name: 'QUESTIONS',
+    description: 'QUESTIONS_DESCRIPTION',
+    title: 'QUESTIONS_TITLE',
+    fieldName: 'QUESTIONS_FIELD_NAME',
+    ownerOnly: false,
+    testersOnly: true,
+    type: 'public',
+};
+
+const run = async (client, message, args, services, language) => {
     try {
-        const questions = require("../../../services/questions");
+        const questions = require('../../../services/questions');
 
         const questionsToAsk = [
             {
-                "question": {
-                    "EnglishUs": "Yes, or No?",
-                    "Nederlands": "Ja, of Nee?"
+                'question': {
+                    'EnglishUs': 'Yes, or No?',
+                    'Nederlands': 'Ja, of Nee?',
                 },
-                "nextQuestion": [
+                'nextQuestion': [
                     {
-                        "EnglishUs": "yes",
-                        "Nederlands": "ja",
-                        "goto": 1
+                        'EnglishUs': 'yes',
+                        'Nederlands': 'ja',
+                        'goto': 1,
                     },
                     {
-                        "EnglishUs": "no",
-                        "Nederlands": "nee",
-                        "goto": 2
+                        'EnglishUs': 'no',
+                        'Nederlands': 'nee',
+                        'goto': 2,
                     },
-                    2
+                    2,
                 ],
-            },{
-                "question": {
-                    "EnglishUs": "Yes?",
-                    "Nederlands": "Ja?"
+            }, {
+                'question': {
+                    'EnglishUs': 'Yes?',
+                    'Nederlands': 'Ja?',
                 },
-                "nextQuestion": [
+                'nextQuestion': [
                     {
-                        "EnglishUs": "yes",
-                        "Nederlands": "ja",
-                        "goto": 3
+                        'EnglishUs': 'yes',
+                        'Nederlands': 'ja',
+                        'goto': 3,
                     },
                     {
-                        "EnglishUs": "no",
-                        "Nederlands": "nee",
-                        "goto": 2
+                        'EnglishUs': 'no',
+                        'Nederlands': 'nee',
+                        'goto': 2,
                     },
-                    0
+                    0,
                 ],
-            },{
-                "question": {
-                    "EnglishUs": "No?",
-                    "Nederlands": "Nee?"
+            }, {
+                'question': {
+                    'EnglishUs': 'No?',
+                    'Nederlands': 'Nee?',
                 },
-                "nextQuestion": [
+                'nextQuestion': [
                     {
-                        "EnglishUs": "yes",
-                        "Nederlands": "ja",
-                        "goto": 1
+                        'EnglishUs': 'yes',
+                        'Nederlands': 'ja',
+                        'goto': 1,
                     },
                     {
-                        "EnglishUs": "no",
-                        "Nederlands": "nee",
-                        "goto": 4
+                        'EnglishUs': 'no',
+                        'Nederlands': 'nee',
+                        'goto': 4,
                     },
-                    1
+                    1,
                 ],
-            },{
-                "finish": {
-                    "EnglishUs": "Yes, Finished",
-                    "Nederlands": "Ja, Klaar"
+            }, {
+                'finish': {
+                    'EnglishUs': 'Yes, Finished',
+                    'Nederlands': 'Ja, Klaar',
                 },
-            },{
-                "finish": {
-                    "EnglishUs": "No, Finished",
-                    "Nederlands": "Nee, Klaar"
+            }, {
+                'finish': {
+                    'EnglishUs': 'No, Finished',
+                    'Nederlands': 'Nee, Klaar',
                 },
             },
-            0
+            0,
         ];
 
         questions.askFirstQuestion(message, questionsToAsk, language, (message, answers) => {
@@ -78,7 +88,7 @@ module.exports.run = async (client, message, args, services, language) => {
                     fields.push({
                         name: argument.question[language.name],
                         value: argument.answer,
-                        inline: true
+                        inline: true,
                     });
                 }
             });
@@ -86,36 +96,23 @@ module.exports.run = async (client, message, args, services, language) => {
             fields.push({
                 name: answers[answers[answers.length - 1]].finish[language.name],
                 value: (answers.length - 1).toString(),
-                inline: true
+                inline: true,
             });
 
             message.reply({
                 embeds: [{
                     color: 0xe5cc0b,
                     title: `Here are the args: `,
-                    fields: fields
-                }]
-            })
+                    fields: fields,
+                }],
+            });
         });
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e);
     }
-}
+};
 
-module.exports.help = {
-    name: "test questions",
-    cmdName: "testing questions",
-    alias: [],
-    description: "Checks if the bot is able to handle questions",
-    ownerOnly: false,
-    testersOnly: true,
-    botPermissions: [],
-    userPermissions: [],
-    minAmountOfArguments: 0,
-    usage: ["test questions"],
-    example: ["test questions"],
-    deleteCommandMessage: false,
-    returnMessageOnError: true,
-    event: "message",
-}
+module.exports = {
+    run,
+    info,
+};

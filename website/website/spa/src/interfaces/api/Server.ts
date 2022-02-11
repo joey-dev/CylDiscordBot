@@ -1,6 +1,7 @@
-import { Language } from './Language';
+import { ILanguage } from './Language';
+import { IFullModuleWithData } from './Module';
 
-export interface Server {
+export interface IServer {
     id: string,
     name: string,
     icon: string|null,
@@ -10,8 +11,9 @@ export interface Server {
     alreadyJoined: boolean
 }
 
-export interface DetailedServer {
+export interface IDetailedServer {
     name: string,
     command_prefix: string,
-    language: Language
+    language: ILanguage,
+    modules: IFullModuleWithData[]
 }

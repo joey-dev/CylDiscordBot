@@ -1,7 +1,7 @@
 import * as actionTypes from './ActionTypes';
-import { User, UserLogin } from '../../interfaces/api/User';
+import { IUser, IUserLogin } from '../../interfaces/api/User';
 
-export const getUserState = (user: User) => {
+export const getUserState = (user: IUser) => {
     return {
         type: actionTypes.GET_USER_STATE,
         payload: {
@@ -11,7 +11,7 @@ export const getUserState = (user: User) => {
 };
 
 
-export const setUserStart = (user: User) => {
+export const setUserStart = (user: IUser) => {
     return {
         type: actionTypes.SET_USER_START,
         payload: {
@@ -20,7 +20,7 @@ export const setUserStart = (user: User) => {
     };
 };
 
-export const setUserFinish = (user: User) => {
+export const setUserFinish = (user: IUser) => {
     return {
         type: actionTypes.SET_USER_FINISH,
         payload: {
@@ -29,7 +29,7 @@ export const setUserFinish = (user: User) => {
     };
 };
 
-export const getUserStart = (user: UserLogin) => {
+export const getUserStart = (user: IUserLogin) => {
     return {
         type: actionTypes.GET_USER_START,
         payload: {
@@ -38,7 +38,7 @@ export const getUserStart = (user: UserLogin) => {
     };
 };
 
-export const getUserFinish = (user: User) => {
+export const getUserFinish = (user: IUser) => {
     return {
         type: actionTypes.GET_USER_FINISH,
         payload: {

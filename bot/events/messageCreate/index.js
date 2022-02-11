@@ -1,19 +1,17 @@
-module.exports.run = async (client, services, message) => {
-    let isPublic = true;
+const PublicMessage = require('./public/PublicMessage');
+const PrivateMessage = require('./private/PrivateMessage');
 
-    if (message.author.bot) return;
-    let prefix = '!';
 
-    services.settings.getLanguage(message.guild.id, services, (language => {
-        if (!message.guild) {
-            isPublic = false;
-            return runCommand(client, message, services, language, isPublic, prefix);
-        }
+module.exports.run = async (client, databaseConnection, message) => {
+    if (message.author.bot) {
+        return;
+    }
 
-        services.settings.getCommandPrefix(message.guild.id, services, (prefix => {
-            runCommand(client, message, services, language, isPublic, prefix);
-        }));
-    }));
+    if (message.guild) {
+        PublicMessage(client, databaseConnection, message);
+    } else {
+        // PrivateMessage(client, databaseConnection, message);
+    }
 };
 
 function runCommand(client, message, services, language, isPublic, prefix) {

@@ -1,8 +1,7 @@
-const fs = require('fs');
+const GetLanguageTable = require('./language/Get');
+const GetServerTable = require('./server/Get');
 
-
-const modules = fs.readdirSync(__dirname).filter(module => !module.endsWith(".js"));
-
-modules.forEach(moduleName => {
-    module.exports[moduleName] = require('./' + moduleName);
-});
+module.exports = {
+    GetLanguageTable,
+    GetServerTable,
+};

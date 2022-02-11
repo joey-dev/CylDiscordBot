@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
-import Home from './pages/Home/Home';
+import Button from './atomic/atoms/buttons/Button/Button';
+import Loader from './atomic/atoms/Loader/Loader';
 import Header from './atomic/templates/layout/Header';
+import Layout from './components/layouts/Layout/Layout';
 import AuthRedirect from './pages/Auth/Auth';
 import Dashboard from './pages/Dashboard/Dashboard';
-import { connect } from 'react-redux';
-import { authCheckState } from './store/auth/Action';
+import Home from './pages/Home/Home';
 import { MapStateToProps } from './store';
-import Layout from './components/layouts/Layout/Layout';
-import Loader from './atomic/atoms/Loader/Loader';
-import Button from './atomic/atoms/buttons/Button/Button';
+import { authCheckState } from './store/auth/Action';
 
 type Props = {
     onTryAutoSignUp: () => void;
@@ -21,7 +21,7 @@ type Props = {
 const App: React.FC<Props> = (props: Props) => {
     const navigate = useNavigate();
 
-    const { onTryAutoSignUp } = props;
+    const {onTryAutoSignUp} = props;
 
     useEffect(() => {
         if (!props.isAuthenticated) {
@@ -44,17 +44,22 @@ const App: React.FC<Props> = (props: Props) => {
                     <React.Fragment>
                         <Route path="/dashboard"
                             element={<Dashboard loading={false} />}
-                        />
-                        <Route path="/dashboard/:serverId"
-                            element={<Dashboard loading={false} />}
-                        />
+                        >
+                            <Route path=":serverId"
+                                element={<Dashboard loading={false} />}
+                            >
+                                <Route path=":moduleId/:pluginId"
+                                    element={<Dashboard loading={false} />}
+                                />
+                            </Route>
+                        </Route>
                     </React.Fragment>
-                ): ''}
+                ) : ''}
 
                 <Route
                     path="*"
                     element={
-                        <main style={{ padding: "1rem" }}>
+                        <main style={{padding: '1rem'}}>
                             <p>404 page not found</p>
                             <Button type="button"
                                 onClick={() => {

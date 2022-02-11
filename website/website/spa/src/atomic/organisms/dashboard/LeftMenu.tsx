@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DetailedServer, Server } from '../../../interfaces/api/Server';
-import ServerItems from '../../modecules/server/ServerItems';
+import { IFullModuleWithData } from '../../../interfaces/api/Module';
+import { IDetailedServer, IServer } from '../../../interfaces/api/Server';
+import { IEditServerData } from '../../../store/server/Sagas';
+import ModuleList from '../../modecules/dashboard/leftMenu/modules/ModuleList';
+import ServerItems from '../../modecules/dashboard/leftMenu/server/ServerItems';
 
 
 const StyledBackground = styled.div`
@@ -15,7 +18,7 @@ const StyledBackground = styled.div`
     color: white;
     height: 100%;
     overflow-y: auto;
-    
+
     ::-webkit-scrollbar {
         width: 0;
     }
@@ -26,13 +29,14 @@ const StyledInnerBackground = styled.div`
 `;
 
 type Props = {
-    servers: Server[];
+    servers: IServer[];
     currentServerId?: string;
-    server?: DetailedServer;
+    server?: IDetailedServer;
+    modules?: IFullModuleWithData[];
+    onPluginEnabledChange: (event: IEditServerData) => void;
 };
 
 const LeftMenu: React.FC<Props> = (props: Props) => {
-
     return (
         <StyledBackground>
             <StyledInnerBackground>
@@ -40,6 +44,12 @@ const LeftMenu: React.FC<Props> = (props: Props) => {
                     currentServerId={props.currentServerId}
                     server={props.server}
                 />
+                {(props.server !== undefined && props.modules !== undefined) && (
+                    <ModuleList server={props.server}
+                        modules={props.modules}
+                        onPluginEnabledChange={props.onPluginEnabledChange}
+                    />
+                )}
             </StyledInnerBackground>
         </StyledBackground>
     );

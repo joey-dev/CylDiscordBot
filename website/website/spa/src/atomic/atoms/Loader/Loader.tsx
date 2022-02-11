@@ -1,5 +1,4 @@
 import React from 'react';
-// @ts-ignore
 import styled, { keyframes } from 'styled-components';
 
 const ldsDualRingKeyframe = keyframes`

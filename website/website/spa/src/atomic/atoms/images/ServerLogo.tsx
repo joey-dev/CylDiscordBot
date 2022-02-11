@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Server } from '../../../interfaces/api/Server';
+import { IServer } from '../../../interfaces/api/Server';
 
 
 type EmptyLogoProps = {
@@ -30,7 +30,7 @@ const StyledLogoStyled = styled.img<EmptyLogoProps>`
 
 type Props = {
     size: number;
-    server: Server;
+    server: IServer;
 }
 
 const ServerLogo: React.FC<Props> = (props: Props) => {

@@ -1,4 +1,14 @@
-module.exports.run = async (client, message, args, services) => {
+const info = {
+    name: 'ARGS',
+    description: 'ARGS_DESCRIPTION',
+    title: 'ARGS_TITLE',
+    fieldName: 'ARGS_FIELD_NAME',
+    ownerOnly: false,
+    testersOnly: true,
+    type: 'public',
+};
+
+const run = async (client, message, args, services) => {
     try {
         let fields = [];
         args.forEach((argument, key) => {
@@ -22,19 +32,8 @@ module.exports.run = async (client, message, args, services) => {
     }
 }
 
-module.exports.help = {
-    name: "test args",
-    cmdName: "testing arguments",
-    alias: [],
-    description: "Checks if the bot is able to handle arguments",
-    ownerOnly: false,
-    testersOnly: true,
-    botPermissions: [],
-    userPermissions: [],
-    minAmountOfArguments: 0,
-    usage: ["test args"],
-    example: ["test args"],
-    deleteCommandMessage: false,
-    returnMessageOnError: true,
-    event: "message",
-}
+
+module.exports = {
+    run,
+    info,
+};
