@@ -1,4 +1,4 @@
-const GetLanguage = require('../../../services/settings/GetLanguage');
+const GetLanguage = require('../../../services/settings/language/GetLanguage');
 const GetCommandPrefix = require('../../../services/settings/GetCommandPrefix');
 const RunCommand = require('../command/RunCommand');
 

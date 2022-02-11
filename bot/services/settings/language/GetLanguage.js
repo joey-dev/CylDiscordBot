@@ -1,4 +1,4 @@
-const { GetLanguageTable } = require('../database/tables');
+const { GetLanguageTable } = require('../../database/tables');
 
 
 const GetLanguage = (serverId, databaseConnection, callback) => {
