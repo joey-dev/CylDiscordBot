@@ -21,6 +21,7 @@ const ModuleList: React.FC<Props> = (props: Props) => {
         <React.Fragment>
             {props.modules.map(module =>
                 <Module key={module.id}
+                    detailedServer={props.server}
                     data={module}
                     onPluginEnabledChange={event => props.onPluginEnabledChange({module_id: module.id, ...event})}
                 />,

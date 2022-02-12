@@ -1,3 +1,4 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import { QuestionMark } from '@mui/icons-material';
 import { Autocomplete, AutocompleteRenderInputParams, IconButton, Switch, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -5,6 +6,8 @@ import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { IComponentServerSettings } from '../../../../../../interfaces/api/Component';
+import { IDetailedServer } from '../../../../../../interfaces/api/Server';
+import CapitalizeFirstLetter from '../../../../../../services/stringManipulation/CapitalizeFirstLetter';
 import { MapStateToProps } from '../../../../../../store';
 import { ServerStoreState } from '../../../../../../store/server';
 import { getServerChannelsStart } from '../../../../../../store/server/Action';
@@ -33,6 +36,7 @@ export interface IChannelsData {
 
 type ChannelSettingsProps = {
     settings: IComponentServerSettings;
+    detailedServer: IDetailedServer;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
     isModalOpen: boolean;
 };
@@ -69,12 +73,12 @@ const ChannelSetting: React.FC<Props> = (props: Props) => {
         }
     };
 
-    const channelsName = 'Channels';
-    const channelsSwitchDescription = 'Disable or enable some channels?';
-    const channelsSwitchDetailedDescription = 'When enabled, if a user sends this command to listed channel, they will be able to use the command. ' +
-        'When disabled if a user sends this command to a listed channel, the command wouldn\'t work.';
-    const enabledName = 'Enabled';
-    const disabledName = 'Disabled';
+    const languageName = props.detailedServer.language.small_name;
+    const channelsName = getItemTranslate(languageName, 'CHANNELS');
+    const channelsSwitchDescription = getItemTranslate(languageName, 'SETTINGS_CHANNELS_TITLE');
+    const channelsSwitchDetailedDescription = getItemTranslate(languageName, 'SETTINGS_CHANNELS_DESCRIPTION');
+    const enabledName = CapitalizeFirstLetter(getItemTranslate(languageName, 'ENABLED'));
+    const disabledName = CapitalizeFirstLetter(getItemTranslate(languageName, 'DISABLED'));
 
 
     return (

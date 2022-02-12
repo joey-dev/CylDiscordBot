@@ -1,8 +1,10 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import { QuestionMark } from '@mui/icons-material';
 import { IconButton, Switch, Tooltip } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import { IComponentServerSettings } from '../../../../../../interfaces/api/Component';
+import { IDetailedServer } from '../../../../../../interfaces/api/Server';
 import { ServerStoreState } from '../../../../../../store/server';
 import Text from '../../../../../atoms/text/Text';
 
@@ -20,15 +22,15 @@ const StyledSwitch = styled.div`
 
 type Props = {
     settings: IComponentServerSettings;
+    detailedServer: IDetailedServer;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
     isModalOpen: boolean;
 };
 
 const Ephemeral: React.FC<Props> = (props: Props) => {
-    const EphemeralSwitchDescription = 'Send bot reply to user only?';
-    const EphemeralSwitchDetailedDescription = 'When enabled, when a user types out a command, the bot reply will only be visible to the user that typed the command out. ' +
-        'When disabled the bot reply will be visible for everyone. ' +
-        '(This only works when the users uses it with a slash command, not with only the prefix)';
+    const languageName = props.detailedServer.language.small_name;
+    const EphemeralSwitchDescription = getItemTranslate(languageName, 'SETTINGS_EPHEMERAL_TITLE');
+    const EphemeralSwitchDetailedDescription = getItemTranslate(languageName, 'SETTINGS_EPHEMERAL_DESCRIPTION');
 
 
     return (

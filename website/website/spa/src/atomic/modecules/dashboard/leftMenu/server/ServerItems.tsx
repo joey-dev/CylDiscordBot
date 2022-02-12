@@ -21,7 +21,7 @@ const ServerItems: React.FC<Props> = (props: Props) => {
     const [currentServerId, setCurrentServerId] = useState(props.currentServerId);
 
     let serverList: JSX.Element[] = [];
-    let currentServer: IServer|undefined;
+    let currentServer: IServer | undefined;
 
     useEffect(() => {
         if (currentServerId === undefined) {
@@ -37,6 +37,7 @@ const ServerItems: React.FC<Props> = (props: Props) => {
         } else {
             serverList.push(<ServerItem key={server.id}
                 server={server}
+                detailedServer={props.server}
                 isCurrentServer={false}
                 listOpen={isListOpened}
                 onArrowClick={() => setIsListOpened(!isListOpened)}

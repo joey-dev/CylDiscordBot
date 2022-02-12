@@ -1,3 +1,4 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import React from 'react';
 import styled from 'styled-components';
 import Button from '../../atoms/buttons/Button/Button';
@@ -36,7 +37,7 @@ const Header: React.FC<Props> = (props: Props) => {
                 window.location.href = 'https://discord.com/api/oauth2/authorize?client_id=794964425819160587&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fredirect&response_type=code&scope=identify%20guilds';
             }}
         >
-            Login with Discord
+            {getItemTranslate('enUS', 'LOGIN_BUTTON')}
         </Button>
     );
 
@@ -49,7 +50,7 @@ const Header: React.FC<Props> = (props: Props) => {
                         props.logout();
                     }}
                 >
-                    Logout
+                    {getItemTranslate('enUS', 'LOGOUT')}
                 </Button>
             </ButtonDiv>
         </React.Fragment>

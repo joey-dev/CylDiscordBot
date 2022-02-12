@@ -1,9 +1,9 @@
+import { getItemTranslate, ILanguage } from '@cylbot/cyldiscordbotlanguage/index';
 import React from 'react';
 import styled from 'styled-components';
-import { IFullModuleWithData } from '../../../../interfaces/api/Module';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
+import CapitalizeFirstLetter from '../../../../services/stringManipulation/CapitalizeFirstLetter';
 import Text from '../../../atoms/text/Text';
-import Component from './Component';
 
 
 const StyledBackground = styled.div`
@@ -14,15 +14,21 @@ const StyledBackground = styled.div`
 `;
 
 type Props = {
-    pluginName: string
+    pluginName: keyof ILanguage;
+    detailedServer: IDetailedServer;
 };
 
 const PluginHeader: React.FC<Props> = (props: Props) => {
+    const languageName = props.detailedServer.language.small_name;
 
     return (
         <StyledBackground>
-            <Text color="white" large={true} margin={'50px 0 0'} padding={'0'}>
-                {props.pluginName}
+            <Text color="white"
+                large={true}
+                margin={'50px 0 0'}
+                padding={'0'}
+            >
+                {CapitalizeFirstLetter(getItemTranslate(languageName, props.pluginName))}
             </Text>
         </StyledBackground>
     );

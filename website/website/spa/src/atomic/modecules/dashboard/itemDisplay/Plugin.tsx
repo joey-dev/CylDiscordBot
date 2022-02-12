@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IComponentServerSettings } from '../../../../interfaces/api/Component';
 import { IFullModuleWithData } from '../../../../interfaces/api/Module';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
 import { IEditServerData } from '../../../../store/server/Sagas';
@@ -33,7 +32,9 @@ const Plugin: React.FC<Props> = (props: Props) => {
         <React.Fragment>
             {plugin && (
                 <StyledBackground>
-                    <PluginHeader pluginName={plugin.name} />
+                    <PluginHeader pluginName={plugin.name}
+                        detailedServer={props.detailedServer}
+                    />
                     {plugin.components.map(component =>
                         <Component key={component.id}
                             component={component}

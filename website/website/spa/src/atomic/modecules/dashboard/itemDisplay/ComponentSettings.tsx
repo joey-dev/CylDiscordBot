@@ -1,3 +1,4 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import { Modal } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
@@ -7,6 +8,8 @@ import {
     IComponentSettings,
     IFullComponentWithData,
 } from '../../../../interfaces/api/Component';
+import { IDetailedServer } from '../../../../interfaces/api/Server';
+import CapitalizeFirstLetter from '../../../../services/stringManipulation/CapitalizeFirstLetter';
 import Text from '../../../atoms/text/Text';
 import ComponentSetting from './settings/ComponentSetting';
 
@@ -42,6 +45,7 @@ const StyledSettings = styled.div`
 type Props = {
     open: boolean;
     onClose: () => void;
+    detailedServer: IDetailedServer;
     component: IFullComponentWithData;
     onComponentSettingChange: (data: IComponentServerSettings[]) => void;
 };
@@ -49,6 +53,12 @@ type Props = {
 const ComponentSettings: React.FC<Props> = (props: Props) => {
     const data = JSON.parse(props.component.data);
     const serverData = JSON.parse(props.component.server_data);
+
+    const languageName = props.detailedServer.language.small_name;
+    const settingsTitleEditWord: string = CapitalizeFirstLetter(getItemTranslate(languageName, 'EDIT'));
+    const settingsTitleNameWord: string = getItemTranslate(languageName, props.component.name);
+    const settingsTitleSettingsWord: string = getItemTranslate(languageName, 'SETTINGS');
+    const settingsTitle = `${settingsTitleEditWord} ${settingsTitleNameWord} ${settingsTitleSettingsWord}`;
 
     return (
         <Modal
@@ -63,11 +73,12 @@ const ComponentSettings: React.FC<Props> = (props: Props) => {
                     border_direction="-bottom"
                     border="1px solid darkgrey"
                 >
-                    Edit {props.component.name} settings
+                    {settingsTitle}
                 </Text>
                 <StyledSettings>
                     {data.map((item: IComponentSettings) =>
                         <ComponentSetting key={item.name}
+                            detailedServer={props.detailedServer}
                             data={item}
                             serverData={currentServerData(serverData, item.name)}
                             onComponentSettingChange={newSettings =>

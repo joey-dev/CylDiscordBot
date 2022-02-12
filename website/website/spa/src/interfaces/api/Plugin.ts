@@ -1,8 +1,9 @@
+import { ILanguage } from '@cylbot/cyldiscordbotlanguage/index';
 import { IFullComponent, IFullComponentWithData } from './Component';
 
 export interface IPlugin {
     id: number;
-    name: string;
+    name: keyof ILanguage;
     order_id: number;
 }
 

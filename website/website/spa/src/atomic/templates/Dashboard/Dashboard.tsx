@@ -1,10 +1,9 @@
 import React from 'react';
-import { IComponentServerSettings } from '../../../interfaces/api/Component';
 import { IFullModuleWithData } from '../../../interfaces/api/Module';
 import { IDetailedServer, IServer } from '../../../interfaces/api/Server';
 import { IEditServerData } from '../../../store/server/Sagas';
 import ItemDisplay from '../../organisms/dashboard/ItemDisplay';
-import LeftMenu  from '../../organisms/dashboard/LeftMenu';
+import LeftMenu from '../../organisms/dashboard/LeftMenu';
 
 
 type Props = {

@@ -1,7 +1,8 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import React from 'react';
 import styled from 'styled-components';
 import ServerLogo from '../../../../atoms/images/ServerLogo';
-import { IServer } from '../../../../../interfaces/api/Server';
+import { IDetailedServer, IServer } from '../../../../../interfaces/api/Server';
 import arrowDown from '../../../../../assets/icons/arrowDown.svg';
 import check from '../../../../../assets/icons/check.svg';
 import uncheck from '../../../../../assets/icons/uncheck.svg';
@@ -66,6 +67,7 @@ const StyledUnCheckImg = styled.img`
 
 type Props = {
     server?: IServer;
+    detailedServer?: IDetailedServer;
     isCurrentServer: boolean;
     listOpen: boolean;
     onArrowClick: () => void;
@@ -76,7 +78,7 @@ const ServerItem: React.FC<Props> = (props: Props) => {
     const size = 40;
 
     let serverLogo;
-    let serverName = 'Select a server';
+    let serverName = getItemTranslate('enUS', 'SELECT_SERVER');
 
     if (props.server) {
         serverLogo = <ServerLogo size={size} server={props.server} />;

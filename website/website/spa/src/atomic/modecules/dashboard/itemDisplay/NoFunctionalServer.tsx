@@ -1,3 +1,4 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import React from 'react';
 import styled from 'styled-components';
 import { IServer } from '../../../../interfaces/api/Server';
@@ -14,19 +15,23 @@ const NoFunctionalServer: React.FC<Props> = (props: Props) => {
         onClick={() => {
             window.open('https://discord.com/api/oauth2/authorize?client_id=794964425819160587&permissions=2080374975&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fserver%2Fredirect&scope=bot%20applications.commands&guild_id=' + props.currentServerId, '_blank');
         }}
-    >Setup bot</Button>;
+    >
+        {getItemTranslate('enUS', 'BOT_SETUP_BUTTON')}
+    </Button>;
     const finishButton = <Button type="button"
         onClick={() => {
             window.location.reload();
         }}
-    >Finish</Button>;
+    >
+        {getItemTranslate('enUS', 'FINISH')}
+    </Button>;
     let message: string | undefined;
     let showAddBotButton: boolean = false;
 
     if (props.server === undefined) {
-        message = 'no server is selected, please select a server in the top left';
+        message = getItemTranslate('enUS', 'NO_SERVER_SELECTED');;
     } else if (!props.server.alreadyJoined) {
-        message = 'the bot is currently not setup in your server jet, click on setup bot to get the bot in your server. after finishing that prompt, please click on the finish button next to it.';
+        message = getItemTranslate('enUS', 'BOT_NOT_SETUP');
         showAddBotButton = true;
     }
 
@@ -38,7 +43,7 @@ const NoFunctionalServer: React.FC<Props> = (props: Props) => {
             {showAddBotButton && (
                 <React.Fragment>
                     {addBotButton}
-                    <p>When finished with Setup bot, click on finish:</p>
+                    <p>${getItemTranslate('enUS', 'WHEN_FINISHED_BOT_SETUP')}</p>
                     {finishButton}
                 </React.Fragment>
             )}
