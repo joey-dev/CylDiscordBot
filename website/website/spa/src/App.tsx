@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
-import Button from './atomic/atoms/buttons/Button/Button';
+import { Button } from '@mui/material';
 import Loader from './atomic/atoms/Loader/Loader';
 import Header from './atomic/templates/layout/Header';
 import Layout from './components/layouts/Layout/Layout';
@@ -61,7 +61,9 @@ const App: React.FC<Props> = (props: Props) => {
                     element={
                         <main style={{padding: '1rem'}}>
                             <p>404 page not found</p>
-                            <Button type="button"
+                            <Button
+                                variant="outlined"
+                                color="secondary"
                                 onClick={() => {
                                     navigate('/');
                                 }}
