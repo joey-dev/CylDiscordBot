@@ -1,8 +1,10 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import { QuestionMark } from '@mui/icons-material';
 import { Autocomplete, AutocompleteRenderInputParams, IconButton, Switch, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IComponentServerSettings } from '../../../../../../interfaces/api/Component';
+import { IDetailedServer } from '../../../../../../interfaces/api/Server';
 import Text from '../../../../../atoms/text/Text';
 
 
@@ -23,6 +25,7 @@ export interface IDeleteReplyData {
 
 type Props = {
     settings: IComponentServerSettings;
+    detailedServer: IDetailedServer;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
     isModalOpen: boolean;
 };
@@ -41,10 +44,10 @@ const DeleteReply: React.FC<Props> = (props: Props) => {
     }, [props.settings.data]);
 
 
-    const deleteReplySecondsLabel = 'Delete Bot Reply after how many seconds?';
-    const deleteReplySwitchDescription = 'Delete bot reply after some time?';
-    const deleteReplySwitchDetailedDescription = 'When enabled, when the bot reply\'s to a command, that reply will be deleted after some seconds. ' +
-        'When disabled the bot reply will stay in chat.';
+    const languageName = props.detailedServer.language.small_name;
+    const deleteReplySecondsLabel = getItemTranslate(languageName, 'SETTINGS_DELETE_REPLY_TITLE');
+    const deleteReplySwitchDescription = getItemTranslate(languageName, 'SETTINGS_DELETE_REPLY_DESCRIPTION');
+    const deleteReplySwitchDetailedDescription = getItemTranslate(languageName, 'SETTINGS_DELETE_REPLY_SECONDS');
     const secondsAUserCanChoose = 10;
     const numberOptions = Array(secondsAUserCanChoose).fill(1).map((x, y) => (x + y).toString());
 

@@ -1,7 +1,8 @@
+import { getItemTranslate, ILanguage } from '@cylbot/cyldiscordbotlanguage/index';
 import { Button, Switch } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IComponentServerSettings, IFullComponentWithData } from '../../../../interfaces/api/Component';
+import { IFullComponentWithData } from '../../../../interfaces/api/Component';
 import { IDetailedServer } from '../../../../interfaces/api/Server';
 import { IEditServerData } from '../../../../store/server/Sagas';
 import Text from '../../../atoms/text/Text';
@@ -38,13 +39,13 @@ type Props = {
 
 const Component: React.FC<Props> = (props: Props) => {
     const [componentSettingsOpen, setComponentSettingsOpen] = useState(false);
+    const languageName = props.detailedServer.language.small_name;
+    const descriptionKey = `${props.component.name}_DESCRIPTION` as keyof ILanguage;
 
-    let componentName = '';
+    let prefix = '';
     if (props.component.type === 'command') {
-        componentName += props.detailedServer.command_prefix;
+        prefix = props.detailedServer.command_prefix;
     }
-
-    componentName += props.component.name;
 
     return (
         <StyledBackground>
@@ -53,14 +54,14 @@ const Component: React.FC<Props> = (props: Props) => {
                     padding={'15px 0px'}
                     color="white"
                 >
-                    {componentName}
+                    {prefix}{getItemTranslate(languageName, props.component.name)}
                 </Text>
                 <Text margin={'0'}
                     padding={'0px 0px 15px'}
                     color="darkGrey"
                     small={true}
                 >
-                    this is the description
+                    {getItemTranslate(languageName, descriptionKey)}
                 </Text>
             </StyledLeftDiv>
             <StyledRightDiv>
@@ -71,6 +72,7 @@ const Component: React.FC<Props> = (props: Props) => {
                     edit
                 </Button>
                 <ComponentSettings open={componentSettingsOpen}
+                    detailedServer={props.detailedServer}
                     onClose={() => setComponentSettingsOpen(false)}
                     component={props.component}
                     onComponentSettingChange={data => props.onComponentSettingChange({

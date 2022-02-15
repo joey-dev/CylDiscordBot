@@ -1,3 +1,4 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import { QuestionMark } from '@mui/icons-material';
 import { Autocomplete, AutocompleteRenderInputParams, IconButton, Switch, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -5,6 +6,8 @@ import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { IComponentServerSettings } from '../../../../../../interfaces/api/Component';
+import { IDetailedServer } from '../../../../../../interfaces/api/Server';
+import CapitalizeFirstLetter from '../../../../../../services/stringManipulation/CapitalizeFirstLetter';
 import { MapStateToProps } from '../../../../../../store';
 import { ServerStoreState } from '../../../../../../store/server';
 import { getServerRolesStart } from '../../../../../../store/server/Action';
@@ -33,6 +36,7 @@ export interface IRolesData {
 
 type RoleSettingsProps = {
     settings: IComponentServerSettings;
+    detailedServer: IDetailedServer;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
     isModalOpen: boolean;
 };
@@ -84,12 +88,12 @@ const RoleSetting: React.FC<Props> = (props: Props) => {
         }
     };
 
-    const rolesName = 'Roles';
-    const rolesSwitchDescription = 'Disable or enable some roles?';
-    const rolesSwitchDetailedDescription = 'When enabled, if a user has at least one of these roles, they will be able to use the command. ' +
-        'When disabled if a user has at least one of these roles, they will not be able to use this command.';
-    const enabledName = 'Enabled';
-    const disabledName = 'Disabled';
+    const languageName = props.detailedServer.language.small_name;
+    const rolesName = getItemTranslate(languageName, 'ROLES');
+    const rolesSwitchDescription = getItemTranslate(languageName, 'SETTINGS_ROLES_TITLE');
+    const rolesSwitchDetailedDescription = getItemTranslate(languageName, 'SETTINGS_ROLES_DESCRIPTION');
+    const enabledName = CapitalizeFirstLetter(getItemTranslate(languageName, 'ENABLED'));
+    const disabledName = CapitalizeFirstLetter(getItemTranslate(languageName, 'DISABLED'));
 
 
     return (

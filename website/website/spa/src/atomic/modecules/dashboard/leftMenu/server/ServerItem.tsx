@@ -1,7 +1,11 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { MapStateToProps } from '../../../../../store';
+import { websiteStoreState } from '../../../../../store/website';
 import ServerLogo from '../../../../atoms/images/ServerLogo';
-import { IServer } from '../../../../../interfaces/api/Server';
+import { IDetailedServer, IServer } from '../../../../../interfaces/api/Server';
 import arrowDown from '../../../../../assets/icons/arrowDown.svg';
 import check from '../../../../../assets/icons/check.svg';
 import uncheck from '../../../../../assets/icons/uncheck.svg';
@@ -64,19 +68,22 @@ const StyledUnCheckImg = styled.img`
     padding: 2.5px
 `;
 
-type Props = {
+type ServerItemProps = {
     server?: IServer;
+    detailedServer?: IDetailedServer;
     isCurrentServer: boolean;
     listOpen: boolean;
     onArrowClick: () => void;
     onServerClick: (serverId: string|undefined) => void;
 };
 
+type Props = ServerItemProps & websiteStoreState;
+
 const ServerItem: React.FC<Props> = (props: Props) => {
     const size = 40;
 
     let serverLogo;
-    let serverName = 'Select a server';
+    let serverName = getItemTranslate(props.language.key, 'SELECT_SERVER');
 
     if (props.server) {
         serverLogo = <ServerLogo size={size} server={props.server} />;
@@ -110,4 +117,10 @@ const ServerItem: React.FC<Props> = (props: Props) => {
     );
 };
 
-export default ServerItem;
+const mapStateToProps = (state: MapStateToProps) => {
+    return {
+        language: state.website.language,
+    };
+};
+
+export default connect(mapStateToProps)(ServerItem);

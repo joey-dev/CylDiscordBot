@@ -73,7 +73,11 @@ class ServerController extends AbstractController
                     "command_prefix" => $requestedServer->getCommandPrefix(),
                     "language" => [
                         "name" => $requestedServer->getLanguage()->getName(),
-                        "small_name" => $requestedServer->getLanguage()->getSmallName()
+                        "small_name" => str_replace(
+                            '-',
+                            '',
+                            $requestedServer->getLanguage()->getSmallName()
+                        ),
                     ]
                 ]
             ]);

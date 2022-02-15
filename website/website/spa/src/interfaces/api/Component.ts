@@ -1,3 +1,4 @@
+import { ILanguage } from '@cylbot/cyldiscordbotlanguage';
 import { IChannelData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/ChannelSetting';
 import { IDeleteReplyData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/DeleteReply';
 import { IRoleData } from '../../atomic/modecules/dashboard/itemDisplay/settings/types/RoleSetting';
@@ -7,7 +8,7 @@ export type IComponentTypes =
 
 export interface IComponent {
     id: number,
-    name: string,
+    name: keyof ILanguage,
     order_id: number;
     data: string;
     type: IComponentTypes;

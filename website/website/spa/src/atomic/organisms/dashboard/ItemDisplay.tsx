@@ -13,7 +13,7 @@ const StyledBackground = styled.div`
     width: calc(100vw - 300px);
     position: absolute;
     left: 300px;
-    height: calc(95vh - 32px);
+    height: calc(95vh - 56px);
     overflow-y: auto;
 
     ::-webkit-scrollbar {

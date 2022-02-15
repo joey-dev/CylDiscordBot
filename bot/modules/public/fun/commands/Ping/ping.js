@@ -1,3 +1,6 @@
+const GetTranslatedText = require('../../../../../services/settings/language/GetTranslatedText');
+
+
 const info = {
     name: 'PING',
     description: 'PING_DESCRIPTION',
@@ -9,13 +12,6 @@ const info = {
 };
 
 const run = async (client, message, args, language, ephemeral) => {
-    const translatedText = {
-        'PING': 'ping',
-        'PING_TITLE': 'Ping Statistics',
-        'PING_FIELD_NAME': 'Response Time',
-        'PING_DESCRIPTION': 'Checks the ping of the bot.',
-    };
-
     try {
         const responseMessage = await message.reply({
             embeds: [{
@@ -27,10 +23,10 @@ const run = async (client, message, args, language, ephemeral) => {
         await responseMessage.edit({
             embeds: [{
                 color: 0xe5cc0b,
-                title: `${client.user.tag} ${translatedText[info.title]}`,
+                title: `${client.user.tag} ${GetTranslatedText(language, info.title)}`,
                 fields: [
                     {
-                        name: translatedText[info.fieldName],
+                        name: GetTranslatedText(language, info.fieldName),
                         value: `${responseMessage.createdTimestamp - message.createdTimestamp}ms`,
                         inline: true,
                     },
@@ -39,7 +35,7 @@ const run = async (client, message, args, language, ephemeral) => {
         });
         return responseMessage;
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 };
 

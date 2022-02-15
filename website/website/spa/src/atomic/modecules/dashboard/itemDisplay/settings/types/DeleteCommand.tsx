@@ -1,8 +1,10 @@
+import { getItemTranslate } from '@cylbot/cyldiscordbotlanguage/index';
 import { QuestionMark } from '@mui/icons-material';
 import { IconButton, Switch, Tooltip } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import { IComponentServerSettings } from '../../../../../../interfaces/api/Component';
+import { IDetailedServer } from '../../../../../../interfaces/api/Server';
 import { ServerStoreState } from '../../../../../../store/server';
 import Text from '../../../../../atoms/text/Text';
 
@@ -20,14 +22,15 @@ const StyledSwitch = styled.div`
 
 type Props = {
     settings: IComponentServerSettings;
+    detailedServer: IDetailedServer;
     onComponentSettingChange: (data: IComponentServerSettings) => void;
     isModalOpen: boolean;
 };
 
 const DeleteCommand: React.FC<Props> = (props: Props) => {
-    const deleteCommandsSwitchDescription = 'Delete command after bot reply?';
-    const deleteCommandsSwitchDetailedDescription = 'When enabled, when a user types out a command, their command message will be removed when the bot gives its reply. ' +
-        'When disabled the command the user typed out will stay in chat.';
+    const languageName = props.detailedServer.language.small_name;
+    const deleteCommandsSwitchDescription = getItemTranslate(languageName, 'SETTINGS_DELETE_COMMAND_TITLE');
+    const deleteCommandsSwitchDetailedDescription = getItemTranslate(languageName, 'SETTINGS_DELETE_COMMAND_DESCRIPTION');
 
 
     return (
