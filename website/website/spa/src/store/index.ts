@@ -7,6 +7,8 @@ import { UserStoreState, watchUserSagas } from './user';
 import userReducer from './user/Reducers';
 import { ServerStoreState, watchServerSagas } from './server';
 import serverReducer from './server/Reducers';
+import { websiteStoreState } from './website';
+import websiteReducer from './website/Reducers';
 
 let composeEnhancers = compose;
 
@@ -22,12 +24,14 @@ export interface MapStateToProps {
     auth: AuthStoreState;
     user: UserStoreState;
     server: ServerStoreState;
+    website: websiteStoreState;
 }
 
 const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
     server: serverReducer,
+    website: websiteReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
