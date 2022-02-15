@@ -1,5 +1,5 @@
 import { getItemTranslate, ILanguages } from '@cylbot/cyldiscordbotlanguage/index';
-import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -8,7 +8,6 @@ import { AuthStoreState } from '../../../store/auth';
 import { logout } from '../../../store/auth/Action';
 import { IDisplayLanguage, websiteStoreState } from '../../../store/website';
 import { setWebsiteLanguage } from '../../../store/website/Action';
-import Button from '../../atoms/buttons/Button/Button';
 import Icon from '../../atoms/images/Icon';
 
 const OuterDiv = styled.div`
@@ -17,10 +16,14 @@ const OuterDiv = styled.div`
     background-color: #202225;
     padding-top: 2.5vh;
     padding-bottom: 2.5vh;
-`;
 
-const StyledH1 = styled.h1`
-    display: inline-block;
+    button {
+        margin: 0 15px;
+    }
+
+    div {
+        margin: 0 5px;
+    }
 `;
 
 const ButtonDiv = styled.div`
@@ -50,7 +53,9 @@ const Header: React.FC<Props> = (props: Props) => {
     ];
 
     const loginButton = (
-        <Button type="button"
+        <Button
+            variant="outlined"
+            color="secondary"
             onClick={() => {
                 window.location.href = 'https://discord.com/api/oauth2/authorize?client_id=794964425819160587&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fredirect&response_type=code&scope=identify%20guilds';
             }}
@@ -61,13 +66,14 @@ const Header: React.FC<Props> = (props: Props) => {
 
     const welcomeMessage = (
         <React.Fragment>
-            {/*<StyledH1>Hello, {props.user?.username}</StyledH1>*/}
-            <Button type="button"
+            <Button variant="text"
+                color={'secondary'}
                 onClick={() => {
                     props.logout();
                 }}
             >
-                {getItemTranslate(props.language.key, 'LOGOUT')}
+
+                &nbsp;{getItemTranslate(props.language.key, 'LOGOUT')}
             </Button>
         </React.Fragment>
     );
@@ -86,6 +92,7 @@ const Header: React.FC<Props> = (props: Props) => {
             <OuterDiv>
                 {!props.isAuthenticated && loginButton}
                 <ButtonDiv>
+                    {props.isAuthenticated && welcomeMessage}
                     <Select
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
@@ -99,12 +106,12 @@ const Header: React.FC<Props> = (props: Props) => {
                             >
                                 <Icon name={language.flag}
                                     float="left"
+                                    margin="0 5px"
                                 />
                                 {language.name}
                             </MenuItem>
                         ))}
                     </Select>
-                    {props.isAuthenticated && welcomeMessage}
                 </ButtonDiv>
             </OuterDiv>
         </React.Fragment>
