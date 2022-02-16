@@ -1,9 +1,8 @@
-import { ICommandRun } from '../../../../../types/Commands';
+import { getItemTranslate, ILanguages } from '@cylbot/cyldiscordbotlanguage/index';
+import { Message } from 'discord.js';
+import { ICommandRun, IInfo } from '../../../../../types/Commands';
 
-const GetTranslatedText = require('../../../../../services/settings/language/GetTranslatedText');
-
-
-export const info = {
+export const info: IInfo = {
     name: 'PING',
     description: 'PING_DESCRIPTION',
     title: 'PING_TITLE',
@@ -13,33 +12,38 @@ export const info = {
     type: 'public',
 };
 
-export const run: ICommandRun = async (client, message, args, language, ephemeral) => {
-    try {
-        const responseMessage = await message.reply({
-            embeds: [{
-                color: 0xe5cc0b,
-                description: 'Pinging!',
-            }],
-        });
-        if (!client.user) {
-            return responseMessage;
-        }
+export const run: ICommandRun = async (client, message, args, language, ephemeral): Promise<Message> => {
+    return new Promise((async (resolve, reject) => {
+        try {
+            const languageKey = language.small_name.replace('-', '') as keyof ILanguages;
+            const responseMessage = await message.reply({
+                embeds: [{
+                    color: 0xe5cc0b,
+                    description: 'Pinging!',
+                }],
+            });
+            if (!client.user) {
+                resolve(responseMessage);
+                return;
+            }
 
-        await responseMessage.edit({
-            embeds: [{
-                color: 0xe5cc0b,
-                title: `${client.user.tag} ${GetTranslatedText(language, info.title)}`,
-                fields: [
-                    {
-                        name: GetTranslatedText(language, info.fieldName),
-                        value: `${responseMessage.createdTimestamp - message.createdTimestamp}ms`,
-                        inline: true,
-                    },
-                ],
-            }],
-        });
-        return responseMessage;
-    } catch (e) {
-        console.error(e);
-    }
+            await responseMessage.edit({
+                embeds: [{
+                    color: 0xe5cc0b,
+                    title: `${client.user.tag} ${getItemTranslate(languageKey, info.title)}`,
+                    fields: [
+                        {
+                            name: getItemTranslate(languageKey, info.fieldName),
+                            value: `${responseMessage.createdTimestamp - message.createdTimestamp}ms`,
+                            inline: true,
+                        },
+                    ],
+                }],
+            });
+            resolve(responseMessage);
+        } catch (error) {
+            reject(error)
+            console.error(error);
+        }
+    }));
 };

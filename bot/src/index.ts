@@ -46,7 +46,7 @@ const RunBot = async (): Promise<void> => {
 
     const commands = LoadModules();
 
-    LoadEvents(client, databaseConnection)
+    LoadEvents(client, databaseConnection, commands)
         .then(() => console.log('Everything is loaded!'));
 
 

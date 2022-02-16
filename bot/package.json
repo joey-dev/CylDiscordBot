@@ -9,7 +9,7 @@
   "author": "Joey Stil",
   "license": "ISC",
   "dependencies": {
-    "@cylbot/cyldiscordbotlanguage": "^1.1.1",
+    "@cylbot/cyldiscordbotlanguage": "^2.0.1",
     "@types/node": "^17.0.18",
     "canvas": "^2.8.0",
     "discord.js": "^13.6.0",
