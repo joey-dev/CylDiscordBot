@@ -1,7 +1,7 @@
 import { Client, Message } from 'discord.js';
 import { Pool } from 'mysql';
 import GetDataAndTurnedOnForComponent
-    from '../../../services/settings/database/commands/security/getDataAndTurnedOnForComponent';
+    from '../../../services/database/components/security/getDataAndTurnedOnForComponent';
 import { ICommandObject, IComponent } from '../../../types/Commands';
 import { DatabaseReturnValue, ILanguage } from '../../../types/Database';
 import AfterCommandFinished from './afterCommandFinished/AfterCommandFinished';

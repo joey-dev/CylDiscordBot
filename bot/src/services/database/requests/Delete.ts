@@ -3,8 +3,7 @@ import { DatabaseReturnValue, IWhereItem } from '../../../types/Database';
 import Command from '../connection/Command';
 
 
-
-const Get = <T>(table: string, databaseConnection: Pool, data: IWhereItem[] = []): Promise<MysqlError | DatabaseReturnValue<T>> => {
+const Delete = async <T>(table: string, databaseConnection: Pool, data: IWhereItem[] = []): Promise<MysqlError | DatabaseReturnValue<T>> => {
     let where = '';
 
     if (data.length > 0) {
@@ -14,7 +13,8 @@ const Get = <T>(table: string, databaseConnection: Pool, data: IWhereItem[] = []
         });
     }
 
-    return Command<T>(`select * from ${table} ${where}`, databaseConnection);
+    return Command<T>(`DELETE
+                       FROM ${table} ${where}`, databaseConnection);
 };
 
-export default Get;
+export default Delete;

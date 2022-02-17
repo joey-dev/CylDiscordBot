@@ -20,3 +20,7 @@ export interface IServer {
     name?: string;
     command_prefix?: string;
 }
+
+export interface IDatabaseDeleteSuccess {
+    success: boolean;
+}

@@ -1,7 +1,8 @@
-import { Client, GuildMember, Message } from 'discord.js';
+import { Client, GuildMember, GuildUnavailable, Message } from 'discord.js';
 import { Pool } from 'mysql';
+import { ICommands } from './Commands';
 
-export type IEventTypes = 'messageCreate' | 'guildMemberCreate';
+export type IEventTypes = 'messageCreate' | 'guildMemberAdd' | 'ready' | 'guildDelete';
 
 export type IEvent = (
     client: Client,
@@ -12,11 +13,21 @@ export type IEventMessageCreate = (
     client: Client,
     databaseConnection: Pool,
     message: Message,
-) => void;
+    commands: ICommands,
+) => Promise<void>;
 
 export type IEventGuildMemberAdd = (
     client: Client,
     databaseConnection: Pool,
     guildMember: GuildMember,
-    guildId: string,
-) => void;
+) => Promise<void>;
+
+export type IEventGuildRemove = (
+    client: Client,
+    databaseConnection: Pool,
+    guild: GuildUnavailable,
+) => Promise<void>;
+
+export type IEventReact = (
+    client: Client,
+) => Promise<void>;
