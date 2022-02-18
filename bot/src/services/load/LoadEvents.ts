@@ -1,11 +1,13 @@
-import { Client, GuildUnavailable, Message } from 'discord.js';
+import { Client, Guild, Message } from 'discord.js';
 import { readdir } from 'fs';
 import { Pool } from 'mysql';
+import DiscordError from '../../events/error/DiscordError';
 import GuildDelete from '../../events/guildDelete/GuildDelete';
 import GuildMemberAdd from '../../events/guildMemberAdd/GuildMemberAdd';
 import MessageCreate from '../../events/messageCreate/MessageCreate';
 import Ready from '../../events/ready/Ready';
 import { ICommands } from '../../types/Commands';
+import { GuildUnavailable } from '../../types/Discord.ds';
 import { IEventTypes } from '../../types/Event';
 
 
@@ -31,9 +33,19 @@ const LoadEvents = async (client: Client, databaseConnection: Pool, commands: IC
                         GuildDelete(client, databaseConnection, guild);
                     });
                     break;
+                case 'guildCreate':
+                    client.on('guildCreate', (guild: Guild) => {
+                        GuildDelete(client, databaseConnection, guild);
+                    });
+                    break;
                 case 'ready':
                     client.on('ready', () => {
                         Ready(client);
+                    });
+                    break;
+                case 'error':
+                    client.on('error', (discordError: Error) => {
+                        DiscordError(discordError);
                     });
                     break;
                 default:

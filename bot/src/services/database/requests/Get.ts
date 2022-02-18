@@ -3,7 +3,6 @@ import { DatabaseReturnValue, IWhereItem } from '../../../types/Database';
 import Command from '../connection/Command';
 
 
-
 const Get = <T>(table: string, databaseConnection: Pool, data: IWhereItem[] = []): Promise<MysqlError | DatabaseReturnValue<T>> => {
     let where = '';
 

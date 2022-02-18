@@ -1,6 +1,6 @@
 export interface IWhereItem {
     key: string;
-    value: string;
+    value: string|number;
 }
 
 export interface DatabaseReturnValue<Database> {
