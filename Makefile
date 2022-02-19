@@ -1,35 +1,35 @@
-install: create_apps create_packages
+download: create_apps create_packages
+	echo "add the .env files and enter make install"
+
+install:
+	cd apps/backend && make
+	cd apps/frontend && make
+	cd apps/bot && make
 
 create_apps: create_backend create_frontend create_bot
 
 create_packages: create_languages
 
-create_backend: create_directories
+create_backend:
 	echo 'creating backend'
 	git clone git@github.com:joey-dev/CylDiscordBot-backend.git
+	rm -rf apps/backend
 	mv CylDiscordBot-backend apps/backend
-	cd apps/backend && make
 
-create_frontend: create_directories
+create_frontend:
 	echo 'creating frontend'
 	git clone git@github.com:joey-dev/CylDiscordBot-frontend.git
+	rm -rf apps/frontend
 	mv CylDiscordBot-frontend apps/frontend
-	cd apps/frontend && make
 
-create_bot: create_directories
+create_bot:
 	echo 'creating bot'
 	git clone git@github.com:joey-dev/CylDiscordBot-bot.git
+	rm -rf apps/bot
 	mv CylDiscordBot-bot apps/bot
-	cd apps/bot && make
 
-create_languages: create_directories
+create_languages:
 	echo 'creating languages'
 	git clone git@github.com:joey-dev/CylDiscordBotLanguage.git
+	rm -rf packages/languages
 	mv CylDiscordBotLanguage packages/languages
-	# cd packages/languages && make
-
-create_directories:
-	echo "creating directories..."
-	mkdir 'apps'
-	mkdir 'packages'
-
