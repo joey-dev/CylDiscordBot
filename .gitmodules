@@ -14,3 +14,6 @@
     path = packages/languages
     url = git@github.com:joey-dev/CylDiscordBotLanguage.git
 
+[submodule "packages/types"]
+    path = packages/types
+    url = git@github.com:joey-dev/CylDiscordBot-types.git
