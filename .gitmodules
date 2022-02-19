@@ -10,7 +10,7 @@
     path = apps/frontend
     url = git@github.com:joey-dev/CylDiscordBot-frontend.git
 
-[submodule "package/languages"]
-    path = package/languages
+[submodule "packages/languages"]
+    path = packages/languages
     url = git@github.com:joey-dev/CylDiscordBotLanguage.git
 
