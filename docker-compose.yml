@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+    db:
+        image: mysql:5.7
+        container_name: db
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "6033:3306"
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - main
+
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: pma
+        links:
+            - db
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+        restart: always
+        ports:
+            - 8081:80
+        networks:
+            - main
+
+    web:
+        image: nginx:latest
+        volumes:
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./apps/backend:/api
+        ports:
+            - 8080:80
+        depends_on:
+            - php
+        networks:
+            - main
+
+    php:
+        build:
+            context: ./php
+            dockerfile: ./Dockerfile
+        volumes:
+            - ./apps/backend:/api
+        env_file:
+            - ./.env
+        environment:
+            - MYSQL_DATABASE=testDatabase
+        depends_on:
+            - db
+        networks:
+            - main
+
+volumes:
+    dbdata:
+
+networks:
+    main:
+        external: true
