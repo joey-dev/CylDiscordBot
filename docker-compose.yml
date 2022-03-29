@@ -56,6 +56,22 @@ services:
         networks:
             - main
 
+    frontend:
+        build:
+            context: ./apps/frontend
+            dockerfile: ./Dockerfile
+        volumes:
+            - ./apps/frontend:/react:delegated
+            - ./apps/frontend/node_modules
+        ports:
+            - 3000:3000
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+        depends_on:
+            -   web
+        networks:
+            - main
+
 volumes:
     dbdata:
 
