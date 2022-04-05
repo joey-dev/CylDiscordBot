@@ -2,6 +2,7 @@ info:
 	echo "to get all the code from github type: make download"
 	echo "(can prob skip if using docker) to setup the files type: make install"
 	echo "to run in docker type: make runDocker"
+	echo "to rebuild the bot type: make rebuildBot"
 
 download: create_apps create_packages
 	echo "add the .env files and enter make install"
@@ -15,6 +16,10 @@ install:
 
 runDocker:
 	docker-compose up
+
+rebuildBot:
+	docker-compose up --build bot
+	exit
 
 # only for extra use inside of the makefile, not to run in command line
 

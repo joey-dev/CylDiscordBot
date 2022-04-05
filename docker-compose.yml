@@ -75,6 +75,18 @@ services:
         networks:
             - main
 
+    bot:
+        container_name: bot
+        build:
+            context: ./apps/bot
+            dockerfile: ./Dockerfile
+#        restart: always
+        env_file: .env
+        depends_on:
+            - db
+        networks:
+            - main
+
 volumes:
     dbdata:
 
