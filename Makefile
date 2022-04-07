@@ -3,6 +3,8 @@ info:
 	echo "(can prob skip if using docker) to setup the files type: make install"
 	echo "to run in docker type: make runDocker"
 	echo "to rebuild the bot type: make rebuildBot"
+	echo "to get into the backEnd container type: make backEndSh"
+	echo "to get into the frontEnd container type: make frontEndSh"
 
 download: create_apps create_packages
 	echo "add the .env files and enter make install"
@@ -20,6 +22,12 @@ runDocker:
 rebuildBot:
 	docker-compose up --build bot
 	exit
+
+backEndSh:
+	docker exec -it cyldiscordbot_web_1 sh
+
+frontEndSh:
+	docker exec -it cyldiscordbot_frontend_1 sh
 
 # only for extra use inside of the makefile, not to run in command line
 
