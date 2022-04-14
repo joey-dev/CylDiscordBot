@@ -48,8 +48,6 @@ services:
             - ./apps/backend:/api
         env_file:
             - ./.env
-        environment:
-            - MYSQL_DATABASE=testDatabase
         depends_on:
             - db
         networks:
@@ -82,6 +80,11 @@ services:
         env_file: .env
         volumes:
             - ./apps/bot:/usr/src/app
+        environment:
+            DATABASE_HOST: host.docker.internal
+            DATABASE_PORT: 6033
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         depends_on:
             - db
         networks:
