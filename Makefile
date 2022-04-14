@@ -10,7 +10,7 @@ download: create_apps create_packages
 	echo "add the .env files and enter make install"
 
 install:
-	cd apps/backend && make
+	cd apps/backend && make install
 	cd apps/frontend && make
 	cd apps/bot && make
 	cd packages/languages && make

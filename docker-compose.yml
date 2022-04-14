@@ -68,7 +68,6 @@ services:
             - API_BASE_URL=host.docker.internal:8080/api
         extra_hosts:
             - "host.docker.internal:host-gateway"
-#        stdin_open: true
         depends_on:
             - db
         networks:
@@ -80,6 +79,8 @@ services:
             context: ./apps/bot
             dockerfile: ./Dockerfile
         env_file: .env
+        volumes:
+            - ./apps/bot:/usr/src/app
         depends_on:
             - db
         networks:
