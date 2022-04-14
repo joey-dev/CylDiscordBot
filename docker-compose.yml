@@ -36,11 +36,11 @@ services:
         ports:
             - 8080:80
         depends_on:
-            - backend
+            - php
         networks:
             - main
 
-    backend:
+    php:
         build:
             context: ./apps/backend
             dockerfile: ./Dockerfile
@@ -60,8 +60,7 @@ services:
             context: ./apps/frontend
             dockerfile: ./Dockerfile
         volumes:
-            - ./apps/frontend:/react:delegated
-            - ./apps/frontend/node_modules
+            - ./apps/frontend:/usr/src/app
         ports:
             - 3000:3000
         environment:
@@ -69,8 +68,9 @@ services:
             - API_BASE_URL=host.docker.internal:8080/api
         extra_hosts:
             - "host.docker.internal:host-gateway"
+#        stdin_open: true
         depends_on:
-            - nginx
+            - db
         networks:
             - main
 
