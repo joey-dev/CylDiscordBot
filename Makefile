@@ -1,10 +1,5 @@
 info:
-	echo "to get all the code from github type: make download"
-	echo "(can prob skip if using docker) to setup the files type: make install"
-	echo "to run in docker type: make runDocker"
-	echo "to rebuild the bot type: make rebuildBot"
-	echo "to get into the backEnd container type: make backEndSh"
-	echo "to get into the frontEnd container type: make frontEndSh"
+	echo "read the README.md for info about the commands"
 
 download: create_apps create_packages
 	echo "add the .env files and enter make install"
@@ -19,15 +14,33 @@ install:
 runDocker:
 	docker-compose up
 
+stopDocker:
+	docker-compose down
+
 rebuildBot:
 	docker-compose up --build bot
 	exit
 
-backEndSh:
-	docker exec -it cyldiscordbot_web_1 sh
+shBackend:
+	docker exec -it cyldiscordbot_php_1 sh
 
-frontEndSh:
+shFrontend:
 	docker exec -it cyldiscordbot_frontend_1 sh
+
+shBot:
+	docker exec -it bot sh
+
+cmdBackend:
+	docker exec -it cyldiscordbot_php_1 ${cmd}
+
+cmdFrontend:
+	docker exec -it cyldiscordbot_frontend_1 ${cmd}
+
+cmdBot:
+	docker exec -it bot ${cmd}
+
+frontend:
+	cd apps/frontend && make ${command}
 
 # only for extra use inside of the makefile, not to run in command line
 
