@@ -47,7 +47,7 @@ make commands (start all commands with `make `):
   - runs a command in the bot container
 
 
-extra commands:
+cmd command examples:
 - make cmdFrontend cmd="npm run storybook"
 - make cmdFrontend cmd="npm run test"
 - make cmdFrontend cmd="npm run test:watch"
