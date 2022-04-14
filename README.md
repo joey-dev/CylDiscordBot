@@ -3,11 +3,14 @@ required programs to run (no clue what version, so just do the latest lts):
 - git
 - makefile
 
-to install:
+to install: (only first time)
+- add the env files: `backend.env` and `bot.env`. to the root of the project (where this file is located)
 - make download
-- add the .env files to the correct folders
-- make install
 - make runDocker (will return a error at first, and stating a command that you need to run)
+- make install
+
+to run: (only if you havnt run the install commands this session)
+- make runDocker
 
 Every url starts with localhost:{port}
 
@@ -16,6 +19,7 @@ ports:
 - back-end: 8080
 - php my admin: 8081
 - mysql: 6033
+- storybook: 6006
 
 
 make commands (start all commands with `make `):

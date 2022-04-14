@@ -1,8 +1,8 @@
 info:
 	echo "read the README.md for info about the commands"
 
-download: create_apps create_packages
-	echo "add the .env files and enter make install"
+download: create_apps create_packages add_env
+	echo "add the .env files and enter make install (like in the readme.md)"
 
 install:
 	cd apps/backend && make install
@@ -77,3 +77,7 @@ create_types:
 	git clone git@github.com:joey-dev/CylDiscordBot-types.git
 	rm -rf packages/types
 	mv CylDiscordBot-types packages/types
+
+add_env:
+	mv backend.env apps/backend/.env
+	mv bot.env apps/bot/.env
