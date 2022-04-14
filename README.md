@@ -49,5 +49,5 @@ make commands (start all commands with `make `):
 
 extra commands:
 - make cmdFrontend cmd="npm run storybook"
-- make cmdFrontend cmd="test"
-- make cmdFrontend cmd="test:watch"
+- make cmdFrontend cmd="npm run test"
+- make cmdFrontend cmd="npm run test:watch"
