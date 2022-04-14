@@ -6,7 +6,7 @@ required programs to run (no clue what version, so just do the latest lts):
 to install: (only first time)
 - add the env files: `backend.env` and `bot.env`. to the root of the project (where this file is located)
 - make download
-- make runDocker (will return a error at first, and stating a command that you need to run)
+- make runDocker (will return a error at first, and stating a command that you need to run. After you run that command, run `make runDocker` again)
 - make install
 
 to run: (only if you havnt run the install commands this session)

@@ -2,7 +2,7 @@ info:
 	echo "read the README.md for info about the commands"
 
 download: create_apps create_packages add_env
-	echo "add the .env files and enter make install (like in the readme.md)"
+	echo "downloading completed!"
 
 install:
 	cd apps/backend && make install
