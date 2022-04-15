@@ -1,0 +1,98 @@
+version: '3'
+
+services:
+    db:
+        image: mysql:5.7
+        container_name: db
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "6033:3306"
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - main
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: pma
+        links:
+            - db
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+        restart: always
+        ports:
+            - 8081:80
+        networks:
+            - main
+
+    nginx:
+        image: nginx:latest
+        volumes:
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./apps/backend:/api
+        ports:
+            - 8080:80
+        depends_on:
+            - php
+        networks:
+            - main
+
+    php:
+        build:
+            context: ./apps/backend
+            dockerfile: ./Dockerfile
+        volumes:
+            - ./apps/backend:/api
+        env_file:
+            - ./.env
+        depends_on:
+            - db
+        networks:
+            - main
+
+    frontend:
+        build:
+            context: ./apps/frontend
+            dockerfile: ./Dockerfile
+        volumes:
+            - ./apps/frontend:/usr/src/app
+        ports:
+            - 3000:3000
+            - 6006:6006
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+            - API_BASE_URL=host.docker.internal:8080/api
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        depends_on:
+            - db
+        networks:
+            - main
+
+    bot:
+        container_name: bot
+        build:
+            context: ./apps/bot
+            dockerfile: ./Dockerfile
+        env_file: .env
+        volumes:
+            - ./apps/bot:/usr/src/app
+        environment:
+            DATABASE_HOST: host.docker.internal
+            DATABASE_PORT: 6033
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        depends_on:
+            - db
+        networks:
+            - main
+
+volumes:
+    dbdata:
+
+networks:
+    main:
+        driver: bridge
